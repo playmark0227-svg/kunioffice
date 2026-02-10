@@ -309,13 +309,26 @@
 
         // Supabaseが設定されているかチェック
         function checkSupabaseConfig() {
-            if (typeof SUPABASE_CONFIG === 'undefined' || 
-                SUPABASE_CONFIG.url === 'YOUR_SUPABASE_URL') {
+            console.log('Checking Supabase config...');
+            console.log('SUPABASE_CONFIG:', typeof SUPABASE_CONFIG !== 'undefined' ? SUPABASE_CONFIG : 'undefined');
+            
+            if (typeof SUPABASE_CONFIG === 'undefined') {
+                console.error('SUPABASE_CONFIG is undefined');
                 document.getElementById('configNotice').style.display = 'block';
                 document.getElementById('workForm').style.display = 'none';
                 document.getElementById('worksList').innerHTML = '<p>Supabaseの設定が必要です。</p>';
                 return false;
             }
+            
+            if (SUPABASE_CONFIG.url === 'YOUR_SUPABASE_URL') {
+                console.error('SUPABASE_CONFIG.url is not set');
+                document.getElementById('configNotice').style.display = 'block';
+                document.getElementById('workForm').style.display = 'none';
+                document.getElementById('worksList').innerHTML = '<p>Supabaseの設定が必要です。</p>';
+                return false;
+            }
+            
+            console.log('Supabase config OK');
             isSupabaseConfigured = true;
             return true;
         }
@@ -598,15 +611,27 @@
 
         // ページ読み込み時
         window.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded');
+            console.log('Checking Supabase configuration...');
+            
             if (checkSupabaseConfig()) {
+                console.log('Config check passed, initializing Supabase...');
+                
                 // Supabase初期化を待つ
                 setTimeout(() => {
+                    console.log('Attempting to initialize Supabase...');
+                    
                     if (initSupabase()) {
+                        console.log('Supabase initialized successfully');
+                        console.log('Loading works list...');
                         loadWorksList();
                     } else {
+                        console.error('Supabase initialization failed');
                         showMessage('Supabaseの初期化に失敗しました', 'error');
                     }
                 }, 500);
+            } else {
+                console.error('Config check failed');
             }
         });
     </script>

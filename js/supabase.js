@@ -10,18 +10,28 @@ const SUPABASE_CONFIG = {
 let supabase = null;
 
 function initSupabase() {
-    if (typeof supabase === 'undefined' || supabase === null) {
+    console.log('initSupabase called');
+    console.log('Current supabase value:', supabase);
+    console.log('window.supabase:', typeof window.supabase);
+    
+    if (supabase === null) {
         try {
             // Supabase JSクライアントが読み込まれているか確認
             if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
+                console.log('Creating Supabase client...');
+                console.log('URL:', SUPABASE_CONFIG.url);
+                console.log('Key exists:', !!SUPABASE_CONFIG.anonKey);
+                
                 supabase = window.supabase.createClient(
                     SUPABASE_CONFIG.url,
                     SUPABASE_CONFIG.anonKey
                 );
+                console.log('Supabase client created:', supabase);
                 console.log('Supabase initialized successfully');
                 return true;
             } else {
-                console.warn('Supabase JS client not loaded yet');
+                console.error('Supabase JS client not loaded yet');
+                console.log('window.supabase type:', typeof window.supabase);
                 return false;
             }
         } catch (error) {
@@ -29,6 +39,7 @@ function initSupabase() {
             return false;
         }
     }
+    console.log('Supabase already initialized');
     return true;
 }
 
