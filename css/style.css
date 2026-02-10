@@ -67,6 +67,19 @@ ul {
     background-color: var(--bg-light);
 }
 
+.bg-dark {
+    background-color: var(--bg-dark);
+    color: white;
+}
+
+.bg-dark .section-title {
+    color: white;
+}
+
+.bg-dark .section-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+}
+
 .bg-primary {
     background-color: var(--primary-color);
     color: white;
@@ -329,10 +342,20 @@ ul {
     text-align: center;
 }
 
+.bg-dark .service-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .service-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-red);
     border-top: 3px solid var(--primary-color);
+}
+
+.bg-dark .service-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px rgba(204, 0, 0, 0.4);
 }
 
 .service-icon {
@@ -346,9 +369,17 @@ ul {
     color: var(--primary-color);
 }
 
+.bg-dark .service-card h3 {
+    color: var(--accent-color);
+}
+
 .service-card p {
     color: var(--text-light);
     line-height: 1.6;
+}
+
+.bg-dark .service-card p {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 /* ========================================
@@ -417,6 +448,10 @@ ul {
     line-height: 1.8;
 }
 
+.bg-dark .company-text p {
+    color: rgba(255, 255, 255, 0.85);
+}
+
 .cta-buttons {
     display: flex;
     gap: 1rem;
@@ -432,8 +467,8 @@ ul {
 /* ========================================
    代表挨拶
 ======================================== */
-.greeting-section {
-    background-color: var(--bg-white);
+.greeting-section.bg-dark {
+    background-color: var(--bg-dark);
 }
 
 .greeting-content {
@@ -455,9 +490,13 @@ ul {
 
 .greeting-text h3 {
     font-size: 1.8rem;
-    color: var(--primary);
+    color: var(--primary-color);
     margin-bottom: 2rem;
     font-weight: 700;
+}
+
+.bg-dark .greeting-text h3 {
+    color: var(--accent-color);
 }
 
 .greeting-text p {
@@ -467,16 +506,28 @@ ul {
     font-size: 1.05rem;
 }
 
+.bg-dark .greeting-text p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
 .signature {
     margin-top: 3rem;
     padding-top: 2rem;
-    border-top: 2px solid var(--primary);
+    border-top: 2px solid var(--primary-color);
     text-align: right;
 }
 
 .signature p {
     font-size: 1.2rem;
     color: var(--text-color);
+}
+
+.bg-dark .signature {
+    border-top-color: var(--primary-color);
+}
+
+.bg-dark .signature p {
+    color: white;
 }
 
 @media (max-width: 968px) {
@@ -624,11 +675,18 @@ ul {
     transition: all 0.3s ease;
 }
 
+.bg-dark .filter-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
 .filter-btn:hover,
 .filter-btn.active {
     background-color: var(--primary-color);
     color: white;
     border-color: var(--primary-color);
+    box-shadow: var(--shadow-red);
 }
 
 .works-grid-large {
@@ -643,11 +701,23 @@ ul {
     overflow: hidden;
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
+    border-top: 3px solid transparent;
+}
+
+.bg-dark .work-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .work-item:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-red);
+    border-top-color: var(--primary-color);
+}
+
+.bg-dark .work-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px rgba(204, 0, 0, 0.4);
 }
 
 .work-details {
@@ -670,9 +740,17 @@ ul {
     color: var(--text-color);
 }
 
+.bg-dark .work-details h3 {
+    color: white;
+}
+
 .work-details p {
     color: var(--text-light);
     line-height: 1.6;
+}
+
+.bg-dark .work-details p {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 /* ========================================
@@ -706,10 +784,19 @@ ul {
     margin-bottom: 1rem;
 }
 
+.bg-dark .service-number {
+    color: var(--accent-color);
+    opacity: 0.5;
+}
+
 .service-detail-text h2 {
     font-size: 2rem;
     margin-bottom: 1.5rem;
     color: var(--text-color);
+}
+
+.bg-dark .service-detail-text h2 {
+    color: white;
 }
 
 .service-description {
@@ -718,10 +805,18 @@ ul {
     margin-bottom: 2rem;
 }
 
+.bg-dark .service-description {
+    color: rgba(255, 255, 255, 0.85);
+}
+
 .service-features h3 {
     font-size: 1.2rem;
     margin-bottom: 1rem;
     color: var(--primary-color);
+}
+
+.bg-dark .service-features h3 {
+    color: var(--accent-color);
 }
 
 .service-features ul {
@@ -734,6 +829,10 @@ ul {
     padding-left: 24px;
     position: relative;
     color: var(--text-light);
+}
+
+.bg-dark .service-features li {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .service-features li::before {
@@ -812,6 +911,10 @@ ul {
     margin-bottom: 1.5rem;
 }
 
+.bg-dark .intro-text {
+    color: rgba(255, 255, 255, 0.85);
+}
+
 .company-info-table {
     max-width: 900px;
     margin: 0 auto 4rem;
@@ -826,8 +929,17 @@ ul {
     box-shadow: var(--shadow);
 }
 
+.bg-dark .info-table {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .info-table tr {
     border-bottom: 1px solid var(--border-color);
+}
+
+.bg-dark .info-table tr {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 .info-table tr:last-child {
@@ -843,10 +955,19 @@ ul {
     color: var(--text-color);
 }
 
+.bg-dark .info-table th {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--accent-color);
+}
+
 .info-table td {
     padding: 1.5rem;
     color: var(--text-light);
     line-height: 1.8;
+}
+
+.bg-dark .info-table td {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 /* 強み */
@@ -903,6 +1024,10 @@ ul {
     color: var(--primary-color);
 }
 
+.bg-dark .access-info h3 {
+    color: var(--accent-color);
+}
+
 .access-info h3:first-child {
     margin-top: 0;
 }
@@ -914,6 +1039,10 @@ ul {
     margin-bottom: 2rem;
 }
 
+.bg-dark .address {
+    color: rgba(255, 255, 255, 0.85);
+}
+
 .contact-details {
     background-color: var(--bg-light);
     padding: 1.5rem;
@@ -921,10 +1050,19 @@ ul {
     margin-bottom: 2rem;
 }
 
+.bg-dark .contact-details {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .contact-details p {
     margin-bottom: 0.75rem;
     color: var(--text-color);
     font-size: 1rem;
+}
+
+.bg-dark .contact-details p {
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .contact-details p:last-child {
@@ -937,6 +1075,10 @@ ul {
     width: 90px;
 }
 
+.bg-dark .contact-details strong {
+    color: var(--accent-color);
+}
+
 .access-list {
     list-style: none;
     padding: 0;
@@ -947,6 +1089,10 @@ ul {
     padding-left: 24px;
     position: relative;
     color: var(--text-light);
+}
+
+.bg-dark .access-list li {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .access-list li::before {
