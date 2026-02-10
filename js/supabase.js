@@ -2,8 +2,8 @@
 // 本番環境では環境変数を使用してください
 
 const SUPABASE_CONFIG = {
-    url: 'YOUR_SUPABASE_URL', // 例: https://xxxxx.supabase.co
-    anonKey: 'YOUR_SUPABASE_ANON_KEY'
+    url: 'https://rmfkcnyyixjmbitvyjqu.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtZmtjbnl5aXhqbWJpdHZ5anF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MDMwNjYsImV4cCI6MjA4NjI3OTA2Nn0.mwgogkbe4YKnCfvLrIW1ei6fu3xnDtB5nGymxBeTz5c'
 };
 
 // Supabaseクライアントの初期化
