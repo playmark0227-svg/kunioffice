@@ -2,36 +2,36 @@
 // 本番環境では環境変数を使用してください
 
 const SUPABASE_CONFIG = {
-    url: 'https://rmfkcnyyixjmbitvyjqu.supabase.co',
+    url: 'https://rmfkcnyyixjmbitvyjqu.supabaseClient.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtZmtjbnl5aXhqbWJpdHZ5anF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MDMwNjYsImV4cCI6MjA4NjI3OTA2Nn0.mwgogkbe4YKnCfvLrIW1ei6fu3xnDtB5nGymxBeTz5c'
 };
 
 // Supabaseクライアントの初期化
-let supabase = null;
+let supabaseClient = null;
 
 function initSupabase() {
     console.log('initSupabase called');
-    console.log('Current supabase value:', supabase);
-    console.log('window.supabase:', typeof window.supabase);
+    console.log('Current supabaseClient value:', supabaseClient);
+    console.log('window.supabaseClient:', typeof window.supabaseClient);
     
-    if (supabase === null) {
+    if (supabaseClient === null) {
         try {
             // Supabase JSクライアントが読み込まれているか確認
-            if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
+            if (typeof window.supabaseClient !== 'undefined' && typeof window.supabaseClient.createClient === 'function') {
                 console.log('Creating Supabase client...');
                 console.log('URL:', SUPABASE_CONFIG.url);
                 console.log('Key exists:', !!SUPABASE_CONFIG.anonKey);
                 
-                supabase = window.supabase.createClient(
+                supabaseClient = window.supabaseClient.createClient(
                     SUPABASE_CONFIG.url,
                     SUPABASE_CONFIG.anonKey
                 );
-                console.log('Supabase client created:', supabase);
+                console.log('Supabase client created:', supabaseClient);
                 console.log('Supabase initialized successfully');
                 return true;
             } else {
                 console.error('Supabase JS client not loaded yet');
-                console.log('window.supabase type:', typeof window.supabase);
+                console.log('window.supabaseClient type:', typeof window.supabaseClient);
                 return false;
             }
         } catch (error) {
@@ -51,7 +51,7 @@ async function fetchWorks(category = 'all') {
     }
 
     try {
-        let query = supabase
+        let query = supabaseClient
             .from('works')
             .select('*')
             .order('created_at', { ascending: false });
@@ -188,7 +188,7 @@ async function loadWorksPreview(limit = 4) {
             return;
         }
 
-        const { data: works, error } = await supabase
+        const { data: works, error } = await supabaseClient
             .from('works')
             .select('*')
             .order('created_at', { ascending: false })
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
         } else {
-            console.warn('Supabase not configured. Please update SUPABASE_CONFIG in js/supabase.js');
+            console.warn('Supabase not configured. Please update SUPABASE_CONFIG in js/supabaseClient.js');
         }
     }
 
