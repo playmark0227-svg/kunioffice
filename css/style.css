@@ -410,6 +410,84 @@ ul {
     line-height: 1.8;
 }
 
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .cta-buttons {
+        flex-direction: column;
+    }
+}
+
+/* ========================================
+   代表挨拶
+======================================== */
+.greeting-section {
+    background-color: var(--bg-white);
+}
+
+.greeting-content {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.greeting-image {
+    position: sticky;
+    top: 100px;
+}
+
+.greeting-image .placeholder-image {
+    aspect-ratio: 3/4;
+    min-height: 500px;
+}
+
+.greeting-text h3 {
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.greeting-text p {
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    line-height: 2;
+    font-size: 1.05rem;
+}
+
+.signature {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--primary);
+    text-align: right;
+}
+
+.signature p {
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+@media (max-width: 968px) {
+    .greeting-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .greeting-image {
+        position: static;
+    }
+    
+    .greeting-image .placeholder-image {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+}
+
 /* ========================================
    CTAセクション
 ======================================== */
