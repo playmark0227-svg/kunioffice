@@ -895,6 +895,30 @@ ul {
     font-size: 1.1rem;
     color: var(--text-light);
     line-height: 1.8;
+    margin-bottom: 2rem;
+}
+
+.contact-details {
+    background-color: var(--bg-light);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.contact-details p {
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+.contact-details p:last-child {
+    margin-bottom: 0;
+}
+
+.contact-details strong {
+    color: var(--primary-color);
+    display: inline-block;
+    width: 90px;
 }
 
 .access-list {
@@ -933,6 +957,34 @@ ul {
 
 .access-note p:last-child {
     margin-bottom: 0;
+}
+
+.access-map {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.access-map iframe {
+    display: block;
+    width: 100%;
+    min-height: 450px;
+    border: none;
+}
+
+@media (max-width: 968px) {
+    .access-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .access-map {
+        position: static;
+        order: -1;
+    }
 }
 
 /* ========================================
