@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問い合わせ - KUNI OFFICE | 標津町</title>
+    <meta name="description" content="KUNI OFFICEへのお問い合わせはこちらから。">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <h1>KUNI OFFICE</h1>
+                        <p class="tagline">クリエイティブソリューション</p>
+                    </a>
+                </div>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <nav class="nav" id="mainNav">
+                    <ul>
+                        <li><a href="index.html">ホーム</a></li>
+                        <li><a href="works.html">実績</a></li>
+                        <li><a href="services.html">事業内容</a></li>
+                        <li><a href="company.html">会社情報</a></li>
+                        <li><a href="contact.html" class="btn-contact active">お問い合わせ</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- ページヘッダー -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">お問い合わせ</h1>
+            <p class="page-subtitle">Contact</p>
+        </div>
+    </section>
+
+    <!-- お問い合わせフォーム -->
+    <section class="contact-form-section section">
+        <div class="container">
+            <div class="contact-intro">
+                <p>
+                    KUNI OFFICEへのお問い合わせは、下記フォームよりお願いいたします。<br>
+                    内容を確認次第、担当者よりご連絡させていただきます。<br>
+                    お急ぎの場合は、お電話にてお問い合わせください。
+                </p>
+            </div>
+
+            <div class="contact-content">
+                <div class="contact-form-wrapper">
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-group">
+                            <label for="name" class="required">お名前</label>
+                            <input type="text" id="name" name="name" required placeholder="山田 太郎">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company">会社名・団体名</label>
+                            <input type="text" id="company" name="company" placeholder="株式会社〇〇">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email" class="required">メールアドレス</label>
+                                <input type="email" id="email" name="email" required placeholder="example@example.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">電話番号</label>
+                                <input type="tel" id="phone" name="phone" placeholder="000-0000-0000">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="service" class="required">お問い合わせ種類</label>
+                            <select id="service" name="service" required>
+                                <option value="">選択してください</option>
+                                <option value="photo">写真撮影について</option>
+                                <option value="print">印刷サービスについて</option>
+                                <option value="video">映像制作について</option>
+                                <option value="signboard">看板制作について</option>
+                                <option value="goods">オリジナルグッズについて</option>
+                                <option value="other">その他</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject" class="required">件名</label>
+                            <input type="text" id="subject" name="subject" required placeholder="〇〇についてのお見積り依頼">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message" class="required">お問い合わせ内容</label>
+                            <textarea id="message" name="message" rows="8" required placeholder="お問い合わせ内容をできるだけ詳しくご記入ください。&#10;&#10;例：&#10;・ご希望のサービス内容&#10;・ご予算&#10;・ご希望納期&#10;・その他ご要望"></textarea>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="privacy" name="privacy" required>
+                                <span>個人情報の取り扱いについて同意する</span>
+                            </label>
+                            <p class="privacy-note">
+                                ご入力いただいた個人情報は、お問い合わせへの対応およびご連絡のためにのみ使用し、
+                                適切に管理いたします。第三者に開示・提供することはありません。
+                            </p>
+                        </div>
+
+                        <div class="form-submit">
+                            <button type="submit" class="btn btn-primary btn-large">送信する</button>
+                        </div>
+                    </form>
+
+                    <div id="formMessage" class="form-message" style="display: none;"></div>
+                </div>
+
+                <div class="contact-info-sidebar">
+                    <div class="sidebar-card">
+                        <h3>📞 お電話でのお問い合わせ</h3>
+                        <p class="contact-tel">準備中</p>
+                        <p class="contact-hours">営業時間: 平日 9:00〜18:00</p>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3>📧 メールでのお問い合わせ</h3>
+                        <p class="contact-email">info@kunioffice.jp</p>
+                        <p class="note">※メールでのお問い合わせも受け付けております</p>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3>📍 所在地</h3>
+                        <p>
+                            〒086-1600<br>
+                            北海道標津郡標津町
+                        </p>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3>⏰ 営業時間</h3>
+                        <p>
+                            平日 9:00〜18:00<br>
+                            土日祝日は要相談
+                        </p>
+                    </div>
+
+                    <div class="sidebar-note">
+                        <p>
+                            <strong>ご来社の際は事前にご連絡をお願いいたします。</strong><br>
+                            お客様のご都合に合わせて対応させていただきます。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- よくある質問 -->
+    <section class="faq-section section bg-light">
+        <div class="container">
+            <h2 class="section-title">よくあるご質問</h2>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3 class="faq-question">Q. 見積もりは無料ですか?</h3>
+                    <p class="faq-answer">A. はい、お見積もりは無料です。お気軽にご相談ください。</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Q. 納期はどのくらいかかりますか?</h3>
+                    <p class="faq-answer">A. 内容や時期により異なりますが、通常1〜2週間程度です。お急ぎの場合はご相談ください。</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Q. 小ロットでも対応可能ですか?</h3>
+                    <p class="faq-answer">A. はい、小ロットから対応しております。1枚からでもお気軽にご相談ください。</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Q. 標津町以外でも対応していますか?</h3>
+                    <p class="faq-answer">A. はい、近隣地域はもちろん、遠方の方もご相談ください。オンラインでの打ち合わせも可能です。</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Q. デザインの相談もできますか?</h3>
+                    <p class="faq-answer">A. はい、デザインのご相談も承ります。イメージをお聞かせいただければ、最適なデザインをご提案いたします。</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Q. 支払い方法は?</h3>
+                    <p class="faq-answer">A. 銀行振込、現金でのお支払いが可能です。詳細はお問い合わせ時にご説明いたします。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>KUNI OFFICE</h3>
+                    <p>〒086-1600<br>北海道標津郡標津町</p>
+                    <p>TEL: 準備中<br>Email: info@kunioffice.jp</p>
+                </div>
+                <div class="footer-links">
+                    <h4>サイトマップ</h4>
+                    <ul>
+                        <li><a href="index.html">ホーム</a></li>
+                        <li><a href="works.html">実績</a></li>
+                        <li><a href="services.html">事業内容</a></li>
+                        <li><a href="company.html">会社情報</a></li>
+                        <li><a href="contact.html">お問い合わせ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-services">
+                    <h4>サービス</h4>
+                    <ul>
+                        <li>写真撮影</li>
+                        <li>印刷サービス</li>
+                        <li>映像制作</li>
+                        <li>看板制作</li>
+                        <li>オリジナルTシャツ</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 KUNI OFFICE. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
