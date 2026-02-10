@@ -12,17 +12,17 @@ let supabaseClient = null;
 function initSupabase() {
     console.log('initSupabase called');
     console.log('Current supabaseClient value:', supabaseClient);
-    console.log('window.supabaseClient:', typeof window.supabaseClient);
+    console.log('window.supabase:', typeof window.supabase);  // これが正しい
     
     if (supabaseClient === null) {
         try {
             // Supabase JSクライアントが読み込まれているか確認
-            if (typeof window.supabaseClient !== 'undefined' && typeof window.supabaseClient.createClient === 'function') {
+            if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
                 console.log('Creating Supabase client...');
                 console.log('URL:', SUPABASE_CONFIG.url);
                 console.log('Key exists:', !!SUPABASE_CONFIG.anonKey);
                 
-                supabaseClient = window.supabaseClient.createClient(
+                supabaseClient = window.supabase.createClient(
                     SUPABASE_CONFIG.url,
                     SUPABASE_CONFIG.anonKey
                 );
@@ -31,7 +31,7 @@ function initSupabase() {
                 return true;
             } else {
                 console.error('Supabase JS client not loaded yet');
-                console.log('window.supabaseClient type:', typeof window.supabaseClient);
+                console.log('window.supabase type:', typeof window.supabase);
                 return false;
             }
         } catch (error) {
