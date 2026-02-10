@@ -8,17 +8,19 @@
 }
 
 :root {
-    --primary-color: #003d7a;
-    --secondary-color: #002952;
-    --accent-color: #e60012;
-    --text-color: #333333;
+    --primary-color: #cc0000;
+    --secondary-color: #990000;
+    --accent-color: #ff3333;
+    --text-color: #1a1a1a;
     --text-light: #666666;
-    --bg-light: #f5f5f5;
+    --bg-light: #f9f9f9;
     --bg-white: #ffffff;
     --bg-dark: #1a1a1a;
-    --border-color: #dddddd;
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+    --bg-black: #000000;
+    --border-color: #e0e0e0;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+    --shadow-red: 0 4px 12px rgba(204, 0, 0, 0.2);
 }
 
 html {
@@ -139,7 +141,7 @@ ul {
 
 /* プレースホルダー画像 */
 .placeholder-image {
-    background: linear-gradient(135deg, #003d7a 0%, #005aa7 100%);
+    background: linear-gradient(135deg, #cc0000 0%, #990000 100%);
     color: white;
     display: flex;
     align-items: center;
@@ -161,8 +163,8 @@ ul {
    ヘッダー
 ======================================== */
 .header {
-    background-color: white;
-    box-shadow: var(--shadow);
+    background-color: var(--bg-black);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -207,7 +209,7 @@ ul {
 
 .nav a {
     font-weight: 500;
-    color: var(--text-color);
+    color: #ffffff;
     position: relative;
 }
 
@@ -231,10 +233,12 @@ ul {
     color: white !important;
     padding: 10px 24px;
     border-radius: 8px;
+    box-shadow: var(--shadow-red);
 }
 
 .btn-contact:hover {
     background-color: var(--secondary-color);
+    box-shadow: 0 6px 16px rgba(153, 0, 0, 0.3);
 }
 
 .btn-contact.active {
@@ -269,9 +273,9 @@ ul {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba(0, 61, 122, 0.7) 0%, rgba(0, 31, 63, 0.7) 100%), 
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%), 
                 url('../images/logo1.jpg') center center / cover no-repeat;
-    background-color: #001f3f;
+    background-color: var(--bg-black);
     color: white;
     text-align: center;
     overflow: hidden;
@@ -327,7 +331,8 @@ ul {
 
 .service-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-red);
+    border-top: 3px solid var(--primary-color);
 }
 
 .service-icon {
@@ -362,11 +367,13 @@ ul {
     overflow: hidden;
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
+    border-top: 3px solid transparent;
 }
 
 .work-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-red);
+    border-top-color: var(--primary-color);
 }
 
 .work-image {
@@ -494,6 +501,11 @@ ul {
 .cta-section {
     text-align: center;
     padding: 100px 0;
+    background: linear-gradient(135deg, var(--bg-black) 0%, #1a1a1a 100%);
+}
+
+.cta-section.bg-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
 }
 
 .cta-title {
@@ -512,9 +524,10 @@ ul {
    フッター
 ======================================== */
 .footer {
-    background-color: #1f2937;
+    background-color: var(--bg-black);
     color: white;
     padding: 60px 0 30px;
+    border-top: 3px solid var(--primary-color);
 }
 
 .footer-content {
@@ -548,7 +561,7 @@ ul {
 }
 
 .footer-links a:hover {
-    color: white;
+    color: var(--primary-color);
     padding-left: 5px;
 }
 
@@ -567,10 +580,11 @@ ul {
    ページヘッダー
 ======================================== */
 .page-header {
-    background: linear-gradient(135deg, #003d7a 0%, #001f3f 100%);
+    background: linear-gradient(135deg, var(--bg-black) 0%, #1a1a1a 100%);
     color: white;
     text-align: center;
     padding: 80px 0;
+    border-bottom: 3px solid var(--primary-color);
 }
 
 .page-title {
@@ -849,11 +863,13 @@ ul {
     box-shadow: var(--shadow);
     text-align: center;
     transition: all 0.3s ease;
+    border-top: 3px solid transparent;
 }
 
 .strength-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-red);
+    border-top-color: var(--primary-color);
 }
 
 .strength-icon {
