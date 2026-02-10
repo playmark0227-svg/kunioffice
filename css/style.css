@@ -8,16 +8,17 @@
 }
 
 :root {
-    --primary-color: #2563eb;
-    --secondary-color: #1e40af;
-    --accent-color: #f59e0b;
-    --text-color: #1f2937;
-    --text-light: #6b7280;
-    --bg-light: #f9fafb;
+    --primary-color: #003d7a;
+    --secondary-color: #002952;
+    --accent-color: #e60012;
+    --text-color: #333333;
+    --text-light: #666666;
+    --bg-light: #f5f5f5;
     --bg-white: #ffffff;
-    --border-color: #e5e7eb;
-    --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --bg-dark: #1a1a1a;
+    --border-color: #dddddd;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 html {
@@ -138,7 +139,7 @@ ul {
 
 /* プレースホルダー画像 */
 .placeholder-image {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #003d7a 0%, #005aa7 100%);
     color: white;
     display: flex;
     align-items: center;
@@ -261,7 +262,7 @@ ul {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #003d7a 0%, #001f3f 100%);
     color: white;
     text-align: center;
     overflow: hidden;
@@ -479,7 +480,7 @@ ul {
    ページヘッダー
 ======================================== */
 .page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #003d7a 0%, #001f3f 100%);
     color: white;
     text-align: center;
     padding: 80px 0;

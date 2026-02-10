@@ -6,13 +6,22 @@
 
 このウェブサイトは、KUNI OFFICEの事業内容、制作実績、会社情報を紹介し、お客様からのお問い合わせを受け付けるために作成されました。
 
+**新機能**: Supabaseを使用した実績の動的管理機能を実装しました！
+
+## 🎨 デザインコンセプト
+
+- **落ち着いた色使い**: 深い青色（#003d7a）をメインカラーに採用
+- **大人っぽい雰囲気**: プロフェッショナルな印象を重視
+- **アートリンク風**: 業界標準の洗練されたデザイン
+
 ## 📄 ページ構成
 
 - **ホーム (index.html)**: トップページ。サービス概要と会社紹介
-- **実績 (works.html)**: これまでの制作実績を紹介
+- **実績 (works.html)**: これまでの制作実績を紹介（Supabase連携）
 - **事業内容 (services.html)**: 提供サービスの詳細説明
 - **会社情報 (company.html)**: 会社概要、アクセス情報
 - **お問い合わせ (contact.html)**: お問い合わせフォーム
+- **管理画面 (admin.html)**: 実績の追加・削除（要Supabase設定）
 
 ## 🎨 デザインの特徴
 
@@ -27,6 +36,7 @@
 - **CSS3**: モダンなスタイリングとレスポンシブデザイン
 - **JavaScript (Vanilla)**: インタラクティブな機能
 - **Google Fonts**: Noto Sans JPフォント
+- **Supabase**: バックエンドデータベース（実績管理）
 
 ## 📱 主な機能
 
@@ -38,16 +48,22 @@
 - カテゴリ別に実績を絞り込み表示
 - スムーズなトランジション効果
 
-### 3. お問い合わせフォーム
+### 3. **Supabase連携（NEW!）**
+- 実績をデータベースで管理
+- 管理画面から簡単に追加・削除
+- 画像アップロード機能
+- リアルタイムでの表示更新
+
+### 4. お問い合わせフォーム
 - 入力バリデーション機能
 - リアルタイムエラー表示
 - 送信完了メッセージ
 
-### 4. スクロールアニメーション
+### 5. スクロールアニメーション
 - カードのフェードイン効果
 - ページトップへ戻るボタン
 
-### 5. スムーズスクロール
+### 6. スムーズスクロール
 - ページ内リンクのスムーズな移動
 
 ## 📂 ファイル構造
@@ -55,16 +71,19 @@
 ```
 /home/user/webapp/
 ├── index.html          # ホームページ
-├── works.html          # 実績ページ
+├── works.html          # 実績ページ（Supabase連携）
 ├── services.html       # 事業内容ページ
 ├── company.html        # 会社情報ページ
 ├── contact.html        # お問い合わせページ
+├── admin.html          # 管理画面（実績追加・削除）
 ├── css/
 │   └── style.css      # メインスタイルシート
 ├── js/
-│   └── main.js        # メインJavaScript
-├── images/            # 画像ファイル用（今後追加）
-└── README.md          # このファイル
+│   ├── main.js        # メインJavaScript
+│   └── supabase.js    # Supabase連携
+├── images/            # 画像ファイル用
+├── README.md          # このファイル
+└── SUPABASE_SETUP.md  # Supabase設定ガイド
 ```
 
 ## 🚀 使い方
@@ -90,6 +109,35 @@ npx http-server -p 8000
 
 その後、ブラウザで `http://localhost:8000` にアクセスしてください。
 
+### 🔧 Supabase連携の設定
+
+実績管理機能を使用するには、Supabaseのセットアップが必要です。
+
+**詳細な手順は [SUPABASE_SETUP.md](SUPABASE_SETUP.md) をご覧ください。**
+
+#### クイックスタート
+
+1. [Supabase](https://supabase.com/)でプロジェクトを作成
+2. `works` テーブルを作成（SQLは SUPABASE_SETUP.md 参照）
+3. `js/supabase.js` の設定を更新：
+
+```javascript
+const SUPABASE_CONFIG = {
+    url: 'https://your-project.supabase.co',
+    anonKey: 'your-anon-key'
+};
+```
+
+4. `admin.html` にアクセスして実績を追加
+
+#### 管理画面の使い方
+
+1. ブラウザで `admin.html` を開く
+2. タイトル、説明、カテゴリを入力
+3. 画像をアップロード（任意）
+4. 「実績を追加」ボタンをクリック
+5. `works.html` に自動的に表示されます！
+
 ## 🔧 カスタマイズ方法
 
 ### 色の変更
@@ -97,9 +145,9 @@ npx http-server -p 8000
 
 ```css
 :root {
-    --primary-color: #2563eb;    /* メインカラー */
-    --secondary-color: #1e40af;  /* セカンダリーカラー */
-    --accent-color: #f59e0b;     /* アクセントカラー */
+    --primary-color: #003d7a;    /* メインカラー（深い青） */
+    --secondary-color: #002952;  /* セカンダリーカラー */
+    --accent-color: #e60012;     /* アクセントカラー（赤） */
 }
 ```
 
@@ -107,6 +155,13 @@ npx http-server -p 8000
 各HTMLファイルのフッター部分と `company.html` で会社情報を更新してください。
 
 ### 画像の追加
+
+#### 方法1: Supabaseを使用（推奨）
+
+管理画面（`admin.html`）から画像付きで実績を追加できます。
+
+#### 方法2: 静的画像の追加
+
 `images/` フォルダに画像を追加し、HTMLファイル内の `.placeholder-image` を `<img>` タグに置き換えてください。
 
 例：
@@ -135,6 +190,9 @@ npx http-server -p 8000
 
 ## 🎯 今後の改善案
 
+- [x] Supabase連携実装
+- [x] 実績の動的管理
+- [x] 管理画面の実装
 - [ ] 実際の写真・画像の追加
 - [ ] お問い合わせフォームのバックエンド実装
 - [ ] ブログ・ニュース機能の追加

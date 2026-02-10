@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>実績管理 - KUNI OFFICE</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .admin-header h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .admin-header p {
+            color: var(--text-light);
+        }
+
+        .admin-form {
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 61, 122, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .image-preview {
+            margin-top: 10px;
+            max-width: 300px;
+        }
+
+        .image-preview img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-submit:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .works-list {
+            margin-top: 40px;
+        }
+
+        .works-list h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .work-item-admin {
+            background: var(--bg-light);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .work-item-admin .work-info-admin {
+            flex: 1;
+        }
+
+        .work-item-admin .work-info-admin h3 {
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
+        .work-item-admin .work-info-admin p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .work-item-admin .work-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-delete {
+            padding: 8px 16px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background-color: #cc0000;
+        }
+
+        .message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+
+        .message.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #ef4444;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+        }
+
+        .config-notice {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .config-notice h3 {
+            margin-bottom: 10px;
+        }
+
+        .config-notice code {
+            background: #fff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>🛠️ 実績管理画面</h1>
+            <p>KUNI OFFICE</p>
+        </div>
+
+        <div id="configNotice" class="config-notice" style="display: none;">
+            <h3>⚠️ Supabase設定が必要です</h3>
+            <p>
+                実績管理機能を使用するには、<code>js/supabase.js</code>ファイルでSupabaseの設定を行ってください。<br>
+                詳しくは<a href="SUPABASE_SETUP.md" target="_blank">SUPABASE_SETUP.md</a>をご覧ください。
+            </p>
+        </div>
+
+        <div id="messageContainer"></div>
+
+        <form id="workForm" class="admin-form">
+            <h2>新しい実績を追加</h2>
+
+            <div class="form-group">
+                <label for="title">タイトル *</label>
+                <input type="text" id="title" name="title" required placeholder="例: 地域イベント撮影">
+            </div>
+
+            <div class="form-group">
+                <label for="description">説明</label>
+                <textarea id="description" name="description" placeholder="実績の詳細説明を入力してください"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="category">カテゴリ *</label>
+                <select id="category" name="category" required>
+                    <option value="">選択してください</option>
+                    <option value="photo">📷 写真撮影</option>
+                    <option value="print">🖨️ 印刷物</option>
+                    <option value="video">🎬 映像制作</option>
+                    <option value="signboard">🪧 看板</option>
+                    <option value="goods">👕 オリジナルグッズ</option>
+                    <option value="other">✨ その他</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="image">画像</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <div id="imagePreview" class="image-preview"></div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">実績を追加</button>
+        </form>
+
+        <div class="works-list">
+            <h2>登録済みの実績</h2>
+            <div id="worksList">
+                <div class="loading">読み込み中...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script>
+        let isSupabaseConfigured = false;
+
+        // Supabaseが設定されているかチェック
+        function checkSupabaseConfig() {
+            if (typeof SUPABASE_CONFIG === 'undefined' || 
+                SUPABASE_CONFIG.url === 'YOUR_SUPABASE_URL') {
+                document.getElementById('configNotice').style.display = 'block';
+                document.getElementById('workForm').style.display = 'none';
+                document.getElementById('worksList').innerHTML = '<p>Supabaseの設定が必要です。</p>';
+                return false;
+            }
+            isSupabaseConfigured = true;
+            return true;
+        }
+
+        // メッセージ表示
+        function showMessage(message, type = 'success') {
+            const container = document.getElementById('messageContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            container.innerHTML = '';
+            container.appendChild(messageDiv);
+
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
+        // 画像プレビュー
+        document.getElementById('image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('imagePreview');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="プレビュー">`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = '';
+            }
+        });
+
+        // 画像アップロード関数
+        async function uploadImage(file) {
+            if (!supabase) {
+                throw new Error('Supabase not initialized');
+            }
+
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+            
+            const { data, error } = await supabase.storage
+                .from('works-images')
+                .upload(fileName, file);
+
+            if (error) {
+                console.error('Upload error:', error);
+                throw error;
+            }
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('works-images')
+                .getPublicUrl(fileName);
+
+            return publicUrl;
+        }
+
+        // フォーム送信
+        document.getElementById('workForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!isSupabaseConfigured || !supabase) {
+                showMessage('Supabaseが設定されていません', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '追加中...';
+
+            try {
+                const formData = new FormData(e.target);
+                
+                // 画像をアップロード
+                let imageUrl = null;
+                const imageFile = formData.get('image');
+                if (imageFile && imageFile.size > 0) {
+                    try {
+                        imageUrl = await uploadImage(imageFile);
+                    } catch (uploadError) {
+                        console.error('Image upload failed:', uploadError);
+                        showMessage('画像のアップロードに失敗しました。画像なしで登録します。', 'error');
+                    }
+                }
+
+                // データを追加
+                const { data, error } = await supabase
+                    .from('works')
+                    .insert([{
+                        title: formData.get('title'),
+                        description: formData.get('description') || '',
+                        category: formData.get('category'),
+                        image_url: imageUrl
+                    }])
+                    .select();
+
+                if (error) {
+                    throw error;
+                }
+
+                showMessage('✅ 実績を追加しました！', 'success');
+                e.target.reset();
+                document.getElementById('imagePreview').innerHTML = '';
+                
+                // リストを更新
+                loadWorksList();
+
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('❌ エラーが発生しました: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '実績を追加';
+            }
+        });
+
+        // 実績リストを読み込み
+        async function loadWorksList() {
+            if (!isSupabaseConfigured || !supabase) {
+                return;
+            }
+
+            const worksList = document.getElementById('worksList');
+            worksList.innerHTML = '<div class="loading">読み込み中...</div>';
+
+            try {
+                const { data: works, error } = await supabase
+                    .from('works')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    throw error;
+                }
+
+                if (works.length === 0) {
+                    worksList.innerHTML = '<p>まだ実績が登録されていません。</p>';
+                    return;
+                }
+
+                worksList.innerHTML = '';
+                works.forEach(work => {
+                    const workItem = document.createElement('div');
+                    workItem.className = 'work-item-admin';
+                    workItem.innerHTML = `
+                        <div class="work-info-admin">
+                            <h3>${work.title}</h3>
+                            <p>${getCategoryName(work.category)} | ${new Date(work.created_at).toLocaleDateString('ja-JP')}</p>
+                        </div>
+                        <div class="work-actions">
+                            <button class="btn-delete" onclick="deleteWork('${work.id}')">削除</button>
+                        </div>
+                    `;
+                    worksList.appendChild(workItem);
+                });
+
+            } catch (error) {
+                console.error('Error loading works:', error);
+                worksList.innerHTML = '<p>実績の読み込みに失敗しました。</p>';
+            }
+        }
+
+        // 実績を削除
+        async function deleteWork(id) {
+            if (!confirm('本当に削除しますか？')) {
+                return;
+            }
+
+            if (!supabase) {
+                showMessage('Supabaseが初期化されていません', 'error');
+                return;
+            }
+
+            try {
+                const { error } = await supabase
+                    .from('works')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) {
+                    throw error;
+                }
+
+                showMessage('✅ 実績を削除しました', 'success');
+                loadWorksList();
+
+            } catch (error) {
+                console.error('Error deleting work:', error);
+                showMessage('❌ 削除に失敗しました: ' + error.message, 'error');
+            }
+        }
+
+        // ページ読み込み時
+        window.addEventListener('DOMContentLoaded', function() {
+            if (checkSupabaseConfig()) {
+                // Supabase初期化を待つ
+                setTimeout(() => {
+                    if (initSupabase()) {
+                        loadWorksList();
+                    } else {
+                        showMessage('Supabaseの初期化に失敗しました', 'error');
+                    }
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>
