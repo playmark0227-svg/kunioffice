@@ -2134,6 +2134,243 @@ ul {
     max-height: 500px;
 }
 
+/* 定期購入プラン */
+.subscription-plan {
+    background-color: var(--bg-black);
+    color: white;
+}
+
+.plan-comparison {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.plan-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.plan-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-red);
+}
+
+.plan-recommended {
+    border: 3px solid var(--primary-color);
+    background: rgba(204, 0, 0, 0.1);
+}
+
+.plan-recommended::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+}
+
+.plan-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.plan-badge.recommended {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: var(--shadow-red);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.plan-card h3 {
+    font-size: 1.6rem;
+    color: white;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.plan-price {
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.price-original {
+    display: block;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: line-through;
+    margin-bottom: 0.5rem;
+}
+
+.plan-price .price {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    text-shadow: 0 0 20px rgba(204, 0, 0, 0.3);
+}
+
+.plan-price .unit {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-left: 0.5rem;
+}
+
+.plan-discount {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-red);
+}
+
+.plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.plan-features li {
+    padding: 0.75rem 0;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.plan-features li:last-child {
+    border-bottom: none;
+}
+
+.feature-positive {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
+}
+
+.feature-negative {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.plan-savings {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(204, 0, 0, 0.2);
+    border-radius: 12px;
+    border: 2px solid var(--primary-color);
+}
+
+.plan-savings strong {
+    display: block;
+    font-size: 1.3rem;
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.plan-savings p {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+.subscription-info {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 3rem;
+    margin-bottom: 3rem;
+}
+
+.subscription-info h3 {
+    font-size: 1.8rem;
+    color: white;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.info-item {
+    text-align: center;
+}
+
+.info-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.info-item h4 {
+    font-size: 1.2rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.info-item p {
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.8;
+    font-size: 0.95rem;
+}
+
+.cta-subscription {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.btn-subscription {
+    padding: 1.5rem 4rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-red);
+    margin-bottom: 1rem;
+}
+
+.btn-subscription:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(204, 0, 0, 0.5);
+}
+
+.cta-note {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
 /* レスポンシブ */
 @media (max-width: 968px) {
     .product-content {
@@ -2147,6 +2384,14 @@ ul {
     
     .highlights-grid,
     .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .plan-comparison {
+        grid-template-columns: 1fr;
+    }
+    
+    .info-grid {
         grid-template-columns: 1fr;
     }
 }

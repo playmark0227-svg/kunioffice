@@ -88,3 +88,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// 定期購入申し込み
+function subscribeNow() {
+    const confirmMessage = `定期購入プランのお申し込み
+
+【プラン内容】
+・価格：¥2,680/月（通常価格より10% OFF）
+・送料：無料（ずっと）
+・お届けサイクル：毎月1回
+・いつでも休止・解約OK
+
+【年間お得額】
+約6,600円（送料6,000円 + 割引600円）
+
+お問い合わせフォームから申し込みますか？`;
+    
+    if (confirm(confirmMessage)) {
+        // お問い合わせフォームに定期購入情報を渡して遷移
+        window.location.href = `contact.html?plan=subscription&product=若葉のしずく&price=2680&note=定期購入プラン`;
+    }
+}
