@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>若葉のしずく - オンラインショップ | KUNI OFFICE</title>
+    <meta name="description" content="北海道産100%の青汁「若葉のしずく」をオンラインで購入できます。">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="images/logo2.png" alt="KUNI OFFICE" class="logo-img">
+                    </a>
+                </div>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <nav class="nav" id="mainNav">
+                    <ul>
+                        <li><a href="index.html">ホーム</a></li>
+                        <li><a href="works.html">実績</a></li>
+                        <li><a href="services.html">事業内容</a></li>
+                        <li><a href="company.html">会社情報</a></li>
+                        <li><a href="shop.html" class="active">ショップ</a></li>
+                        <li><a href="contact.html" class="btn-contact">お問い合わせ</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- ページヘッダー -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">オンラインショップ</h1>
+            <p class="page-subtitle">Online Shop</p>
+        </div>
+    </section>
+
+    <!-- 商品詳細 -->
+    <section class="product-detail section">
+        <div class="container">
+            <div class="product-content">
+                <div class="product-gallery">
+                    <div class="product-main-image">
+                        <img src="images/product-package.jpg" alt="若葉のしずく" id="mainImage">
+                    </div>
+                    <div class="product-thumbnails">
+                        <img src="images/product-package.jpg" alt="パッケージ" class="thumbnail active" onclick="changeImage(this)">
+                        <img src="images/product-drink.jpg" alt="青汁ドリンク" class="thumbnail" onclick="changeImage(this)">
+                        <img src="images/product-logo.png" alt="ロゴ" class="thumbnail" onclick="changeImage(this)">
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <div class="product-logo">
+                        <img src="images/product-logo.png" alt="若葉のしずく">
+                    </div>
+                    <h1 class="product-title">若葉のしずく</h1>
+                    <p class="product-subtitle">北海道産100% なんぽろちょう</p>
+                    
+                    <div class="product-price">
+                        <span class="price-label">価格</span>
+                        <span class="price-value">¥2,980</span>
+                        <span class="price-tax">（税込）</span>
+                    </div>
+
+                    <div class="product-description">
+                        <h3>商品説明</h3>
+                        <p>
+                            北海道南幌町で大切に育てられた若葉を使用した青汁です。
+                            新鮮な若葉をそのまま粉末にし、栄養素を凝縮しました。
+                        </p>
+                        <ul class="product-features">
+                            <li>✓ 北海道産100%使用</li>
+                            <li>✓ 無着色・無香料</li>
+                            <li>✓ 農薬不使用</li>
+                            <li>✓ 栄養価が高い若葉を厳選</li>
+                        </ul>
+                    </div>
+
+                    <div class="product-specs">
+                        <h3>商品仕様</h3>
+                        <table class="specs-table">
+                            <tr>
+                                <th>内容量</th>
+                                <td>3g × 30包</td>
+                            </tr>
+                            <tr>
+                                <th>原材料</th>
+                                <td>大麦若葉（北海道南幌町産）</td>
+                            </tr>
+                            <tr>
+                                <th>保存方法</th>
+                                <td>直射日光、高温多湿を避けて保存</td>
+                            </tr>
+                            <tr>
+                                <th>賞味期限</th>
+                                <td>製造日より1年</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="product-purchase">
+                        <div class="quantity-selector">
+                            <label>数量</label>
+                            <div class="quantity-controls">
+                                <button class="qty-btn" onclick="decreaseQuantity()">-</button>
+                                <input type="number" id="quantity" value="1" min="1" max="99">
+                                <button class="qty-btn" onclick="increaseQuantity()">+</button>
+                            </div>
+                        </div>
+
+                        <button class="btn-add-cart" onclick="addToCart()">
+                            <span class="cart-icon">🛒</span>
+                            カートに追加
+                        </button>
+
+                        <button class="btn-buy-now" onclick="buyNow()">
+                            今すぐ購入
+                        </button>
+                    </div>
+
+                    <div class="shipping-info">
+                        <p>🚚 送料：全国一律 500円（税込）</p>
+                        <p>📦 5,000円以上のご購入で送料無料</p>
+                        <p>🎁 まとめ買いがお得です</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- おすすめポイント -->
+    <section class="product-highlights section bg-dark">
+        <div class="container">
+            <h2 class="section-title">若葉のしずくの3つのポイント</h2>
+            
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <div class="highlight-icon">🌱</div>
+                    <h3>北海道産100%</h3>
+                    <p>南幌町の豊かな大地で育った新鮮な若葉のみを使用。安心・安全な国産原料です。</p>
+                </div>
+                
+                <div class="highlight-card">
+                    <div class="highlight-icon">✨</div>
+                    <h3>栄養たっぷり</h3>
+                    <p>ビタミン、ミネラル、食物繊維が豊富。毎日の健康習慣にぴったりです。</p>
+                </div>
+                
+                <div class="highlight-card">
+                    <div class="highlight-icon">😊</div>
+                    <h3>飲みやすい</h3>
+                    <p>クセが少なく、すっきりとした味わい。水やミルクに溶かすだけで簡単に楽しめます。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- お客様の声 -->
+    <section class="reviews section">
+        <div class="container">
+            <h2 class="section-title">お客様の声</h2>
+            
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-rating">⭐⭐⭐⭐⭐</div>
+                    <h3>毎朝の習慣になりました</h3>
+                    <p>飲みやすくて続けやすいです。体調が良くなった気がします。北海道産というのも安心できます。</p>
+                    <p class="reviewer">40代女性 / 東京都</p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-rating">⭐⭐⭐⭐⭐</div>
+                    <h3>家族みんなで愛用中</h3>
+                    <p>子供も抵抗なく飲んでくれます。野菜不足が気になっていたので助かっています。</p>
+                    <p class="reviewer">30代女性 / 神奈川県</p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-rating">⭐⭐⭐⭐⭐</div>
+                    <h3>リピート決定です</h3>
+                    <p>他の青汁よりも飲みやすくて美味しい！毎日続けられるのが嬉しいです。</p>
+                    <p class="reviewer">50代女性 / 大阪府</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- よくある質問 -->
+    <section class="faq section bg-light">
+        <div class="container">
+            <h2 class="section-title">よくある質問</h2>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3 class="faq-question">Q. どのように飲めばいいですか？</h3>
+                    <p class="faq-answer">A. 1包を100〜150mlの水やお湯に溶かしてお飲みください。牛乳や豆乳に混ぜても美味しくお召し上がりいただけます。</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3 class="faq-question">Q. 1日何包飲めばいいですか？</h3>
+                    <p class="faq-answer">A. 1日1〜2包を目安にお飲みください。お好みに合わせて量を調整していただけます。</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3 class="faq-question">Q. 賞味期限はどのくらいですか？</h3>
+                    <p class="faq-answer">A. 製造日より1年間です。開封後はお早めにお召し上がりください。</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3 class="faq-question">Q. 送料はかかりますか？</h3>
+                    <p class="faq-answer">A. 全国一律500円（税込）です。5,000円以上のご購入で送料無料になります。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- お問い合わせCTA -->
+    <section class="cta-section section bg-primary">
+        <div class="container">
+            <h2 class="cta-title">商品についてのお問い合わせ</h2>
+            <p class="cta-subtitle">ご不明な点がございましたらお気軽にお問い合わせください</p>
+            <a href="contact.html" class="btn btn-white">お問い合わせフォームへ</a>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>KUNI OFFICE</h3>
+                    <p>〒086-1631<br>北海道標津郡標津町北1条西2丁目3-2</p>
+                    <p>TEL: 0153-82-1538<br>FAX: 0153-85-7040<br>携帯: 090-7519-5705（高桑）<br>Email: info@kunioffice.jp</p>
+                </div>
+                <div class="footer-links">
+                    <h4>サイトマップ</h4>
+                    <ul>
+                        <li><a href="index.html">ホーム</a></li>
+                        <li><a href="works.html">実績</a></li>
+                        <li><a href="services.html">事業内容</a></li>
+                        <li><a href="company.html">会社情報</a></li>
+                        <li><a href="shop.html">ショップ</a></li>
+                        <li><a href="contact.html">お問い合わせ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-services">
+                    <h4>サービス</h4>
+                    <ul>
+                        <li>写真撮影</li>
+                        <li>印刷サービス</li>
+                        <li>映像制作</li>
+                        <li>看板制作</li>
+                        <li>オリジナルTシャツ</li>
+                        <li>ホームページ制作</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 KUNI OFFICE. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/shop.js"></script>
+</body>
+</html>
