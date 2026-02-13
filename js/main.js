@@ -32,6 +32,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const workItems = document.querySelectorAll('.work-item');
     
     if (filterButtons.length > 0 && workItems.length > 0) {
+        // URLパラメータからフィルターを取得
+        const urlParams = new URLSearchParams(window.location.search);
+        const filterParam = urlParams.get('filter');
+        
+        // URLパラメータがあれば、そのフィルターを適用
+        if (filterParam) {
+            const targetButton = document.querySelector(`.filter-btn[data-filter="${filterParam}"]`);
+            if (targetButton) {
+                // アクティブボタンを切り替え
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                targetButton.classList.add('active');
+                
+                // フィルタリング実行
+                applyFilter(filterParam, workItems);
+            }
+        }
+        
         filterButtons.forEach(button => {
             button.addEventListener('click', function() {
                 // アクティブボタンの切り替え
@@ -40,25 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const filterValue = this.getAttribute('data-filter');
                 
-                // フィルタリング処理
-                workItems.forEach(item => {
-                    const category = item.getAttribute('data-category');
-                    
-                    if (filterValue === 'all' || category === filterValue) {
-                        item.style.display = 'block';
-                        // フェードインアニメーション
-                        setTimeout(() => {
-                            item.style.opacity = '1';
-                            item.style.transform = 'translateY(0)';
-                        }, 10);
-                    } else {
-                        item.style.opacity = '0';
-                        item.style.transform = 'translateY(20px)';
-                        setTimeout(() => {
-                            item.style.display = 'none';
-                        }, 300);
-                    }
-                });
+                // フィルタリング実行
+                applyFilter(filterValue, workItems);
             });
         });
         
@@ -68,6 +68,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// フィルタリング処理を関数化
+function applyFilter(filterValue, workItems) {
+    workItems.forEach(item => {
+        const category = item.getAttribute('data-category');
+        
+        if (filterValue === 'all' || category === filterValue) {
+            item.style.display = 'block';
+            // フェードインアニメーション
+            setTimeout(() => {
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+            }, 10);
+        } else {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                item.style.display = 'none';
+            }, 300);
+        }
+    });
+}
 
 // ========================================
 // お問い合わせフォームの送信処理
