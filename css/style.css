@@ -2409,3 +2409,161 @@ ul {
         max-width: 200px;
     }
 }
+
+/* ========================================
+   決済成功ページ
+======================================== */
+.success-page {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+}
+
+.success-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.success-icon {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.success-title {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.success-message {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    line-height: 2;
+    margin-bottom: 3rem;
+}
+
+.order-info {
+    background: var(--bg-light);
+    padding: 2.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.order-info h2 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.order-steps {
+    list-style: none;
+    padding: 0;
+    counter-reset: step-counter;
+}
+
+.order-steps li {
+    counter-increment: step-counter;
+    position: relative;
+    padding-left: 3.5rem;
+    margin-bottom: 2rem;
+}
+
+.order-steps li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.order-steps li strong {
+    display: block;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.order-steps li p {
+    color: var(--text-light);
+    line-height: 1.8;
+    margin: 0;
+}
+
+.contact-support {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 2px solid var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.contact-support h3 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.contact-support p {
+    color: var(--text-color);
+    line-height: 2;
+    margin-bottom: 0.5rem;
+}
+
+.success-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+@media (max-width: 640px) {
+    .success-icon {
+        font-size: 4rem;
+    }
+    
+    .success-title {
+        font-size: 2rem;
+    }
+    
+    .success-message {
+        font-size: 1rem;
+    }
+    
+    .order-info {
+        padding: 1.5rem;
+    }
+    
+    .success-actions {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "kunioffice-shop",
+  "version": "1.0.0",
+  "description": "KUNI OFFICE オンラインショップ with Stripe決済",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": ["stripe", "ecommerce", "online-shop"],
+  "author": "KUNI OFFICE",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "stripe": "^14.10.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

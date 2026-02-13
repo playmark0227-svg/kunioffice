@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
     <!-- ヘッダー -->
@@ -121,13 +124,13 @@
                             </div>
                         </div>
 
-                        <button class="btn-add-cart" onclick="addToCart()">
+                        <button class="btn-add-cart" onclick="addToCartWithStripe()">
                             <span class="cart-icon">🛒</span>
                             カートに追加
                         </button>
 
-                        <button class="btn-buy-now" onclick="buyNow()">
-                            今すぐ購入
+                        <button class="btn-buy-now" onclick="buyWithStripe()">
+                            💳 Stripeで今すぐ購入
                         </button>
                     </div>
 
@@ -248,10 +251,10 @@
             </div>
 
             <div class="cta-subscription">
-                <button class="btn-subscription" onclick="subscribeNow()">
-                    定期購入を申し込む
+                <button class="btn-subscription" onclick="subscribeWithStripe()">
+                    💳 Stripe定期購入を申し込む
                 </button>
-                <p class="cta-note">※お問い合わせフォームから申し込みいただけます</p>
+                <p class="cta-note">※Stripeの安全な決済ページに移動します</p>
             </div>
         </div>
     </section>
@@ -374,5 +377,6 @@
 
     <script src="js/main.js"></script>
     <script src="js/shop.js"></script>
+    <script src="js/stripe-checkout.js"></script>
 </body>
 </html>

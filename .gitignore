@@ -1,0 +1,21 @@
+# 環境変数（機密情報）
+.env
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# ログファイル
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# エディタ
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
