@@ -596,7 +596,7 @@ ul {
 
 .greeting-image {
     position: sticky;
-    top: 100px;
+    top: 20px;
     overflow: hidden;
     border-radius: 8px;
     box-shadow: var(--shadow-lg);
