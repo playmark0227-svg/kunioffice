@@ -597,6 +597,27 @@ ul {
 .greeting-image {
     position: sticky;
     top: 100px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    cursor: pointer;
+}
+
+.greeting-image .ceo-photo {
+    width: 100%;
+    height: auto;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+}
+
+.greeting-image .ceo-photo.active {
+    position: relative;
+    opacity: 1;
 }
 
 .greeting-image .placeholder-image {

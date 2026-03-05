@@ -25,6 +25,29 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ========================================
+// 代表挨拶写真の切り替え
+// ========================================
+document.addEventListener('DOMContentLoaded', function() {
+    const greetingImage = document.getElementById('greetingImage');
+    
+    if (greetingImage) {
+        const photos = greetingImage.querySelectorAll('.ceo-photo');
+        
+        greetingImage.addEventListener('mouseenter', function() {
+            photos.forEach(photo => {
+                photo.classList.toggle('active');
+            });
+        });
+        
+        greetingImage.addEventListener('mouseleave', function() {
+            photos.forEach(photo => {
+                photo.classList.toggle('active');
+            });
+        });
+    }
+});
+
+// ========================================
 // 実績ページのフィルター機能
 // ========================================
 document.addEventListener('DOMContentLoaded', function() {
