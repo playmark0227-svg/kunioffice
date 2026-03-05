@@ -597,11 +597,11 @@ ul {
 .greeting-image {
     position: sticky;
     top: 100px;
-    position: relative;
     overflow: hidden;
     border-radius: 8px;
     box-shadow: var(--shadow-lg);
     cursor: pointer;
+    position: relative;
 }
 
 .greeting-image .ceo-photo {
@@ -615,9 +615,13 @@ ul {
     transition: opacity 0.6s ease-in-out;
 }
 
-.greeting-image .ceo-photo.active {
+.greeting-image .ceo-photo:first-child {
     position: relative;
+}
+
+.greeting-image .ceo-photo.active {
     opacity: 1;
+    z-index: 1;
 }
 
 .greeting-image .placeholder-image {
