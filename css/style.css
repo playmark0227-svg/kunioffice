@@ -596,12 +596,13 @@ ul {
 
 .greeting-image {
     position: sticky;
-    top: 20px;
+    top: 0;
     overflow: hidden;
     border-radius: 8px;
     box-shadow: var(--shadow-lg);
     cursor: pointer;
     position: relative;
+    align-self: start;
 }
 
 .greeting-image .ceo-photo {
