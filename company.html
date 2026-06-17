@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- ヘッダー -->
@@ -20,7 +20,7 @@
                         <img src="images/logo-white.png" alt="KUNI OFFICE" class="logo-img">
                     </a>
                 </div>
-                <button class="menu-toggle" id="menuToggle">
+                <button class="menu-toggle" id="menuToggle" aria-label="メニュー">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -48,10 +48,10 @@
     </section>
 
     <!-- 会社概要 -->
-    <section class="company-profile section bg-dark">
+    <section class="company-profile section bg-paper">
         <div class="container">
             <div class="profile-intro">
-                <h2 class="section-title">KUNI OFFICEについて</h2>
+                <span class="sec-eyebrow">About us</span>
                 <p class="intro-text">
                     KUNI OFFICEは、北海道標津町を拠点に、写真撮影、印刷、映像制作、看板制作、オリジナルグッズ制作など、
                     幅広いクリエイティブサービスを提供している会社です。
@@ -67,7 +67,6 @@
             </div>
 
             <div class="company-info-table">
-                <h2 class="section-title">会社概要</h2>
                 <table class="info-table">
                     <tr>
                         <th>会社名</th>
@@ -88,12 +87,9 @@
                     <tr>
                         <th>事業内容</th>
                         <td>
-                            写真撮影<br>
-                            印刷サービス<br>
-                            映像制作<br>
-                            看板制作<br>
-                            オリジナルTシャツ・グッズ制作<br>
-                            デザイン業務全般
+                            写真撮影／印刷サービス／映像制作<br>
+                            看板制作／オリジナルTシャツ・グッズ制作<br>
+                            ホームページ制作／デザイン業務全般
                         </td>
                     </tr>
                     <tr>
@@ -110,56 +106,56 @@
     </section>
 
     <!-- 強み -->
-    <section class="company-strengths section bg-light">
+    <section class="company-strengths section bg-paper-2">
         <div class="container">
-            <h2 class="section-title">KUNI OFFICEの強み</h2>
-            <p class="section-subtitle">私たちが選ばれる理由</p>
-            
+            <div class="sec-head center">
+                <span class="sec-eyebrow">Strengths</span>
+                <h2 class="sec-title">私たちが選ばれる理由</h2>
+            </div>
+
             <div class="strengths-grid">
                 <div class="strength-card">
-                    <div class="strength-icon">💪</div>
+                    <span class="strength-no">01</span>
                     <h3>総合力</h3>
                     <p>写真・印刷・映像・看板・グッズ制作まで、トータルでサポート。一貫したクオリティでお届けします。</p>
                 </div>
-                
                 <div class="strength-card">
-                    <div class="strength-icon">🤝</div>
+                    <span class="strength-no">02</span>
                     <h3>地域密着</h3>
                     <p>標津町を拠点に、地域の皆様に寄り添ったサービスを提供。きめ細やかな対応が可能です。</p>
                 </div>
-                
                 <div class="strength-card">
-                    <div class="strength-icon">⚡</div>
+                    <span class="strength-no">03</span>
                     <h3>スピード対応</h3>
                     <p>お急ぎの案件にも柔軟に対応。迅速かつ丁寧な仕事を心がけています。</p>
                 </div>
-                
                 <div class="strength-card">
-                    <div class="strength-icon">💡</div>
+                    <span class="strength-no">04</span>
                     <h3>提案力</h3>
                     <p>豊富な経験を活かし、お客様のニーズに合わせた最適なプランをご提案します。</p>
                 </div>
-                
                 <div class="strength-card">
-                    <div class="strength-icon">✨</div>
+                    <span class="strength-no">05</span>
                     <h3>品質へのこだわり</h3>
                     <p>確かな技術と経験で、高品質な制作物をお届け。細部までこだわります。</p>
                 </div>
-                
                 <div class="strength-card">
-                    <div class="strength-icon">📱</div>
+                    <span class="strength-no">06</span>
                     <h3>柔軟な対応</h3>
-                    <p>小規模案件から大型プロジェクトまで、幅広く対応。お客様の予算に合わせたプランもご用意。</p>
+                    <p>小規模案件から大型プロジェクトまで幅広く対応。ご予算に合わせたプランもご用意します。</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- アクセス -->
-    <section class="company-access section bg-dark">
+    <section class="company-access section bg-ink">
         <div class="container">
-            <h2 class="section-title">アクセス</h2>
-            
+            <div class="sec-head">
+                <span class="sec-eyebrow">Access</span>
+                <h2 class="sec-title">アクセス</h2>
+            </div>
+
             <div class="access-content">
                 <div class="access-info">
                     <h3>所在地</h3>
@@ -167,33 +163,33 @@
                         〒086-1631<br>
                         北海道標津郡標津町北1条西2丁目3-2
                     </p>
-                    
+
                     <div class="contact-details">
-                        <p><strong>TEL:</strong> 0153-82-1538</p>
-                        <p><strong>FAX:</strong> 0153-85-7040</p>
-                        <p><strong>携帯:</strong> 090-7519-5705（高桑）</p>
-                        <p><strong>営業時間:</strong> 月～金 8:30～17:30</p>
+                        <p><strong>TEL</strong> 0153-82-1538</p>
+                        <p><strong>FAX</strong> 0153-85-7040</p>
+                        <p><strong>携帯</strong> 090-7519-5705（高桑）</p>
+                        <p><strong>営業時間</strong> 月～金 8:30～17:30</p>
                     </div>
-                    
+
                     <h3>交通アクセス</h3>
                     <ul class="access-list">
                         <li>標津バスターミナルより徒歩圏内</li>
                         <li>お車でお越しの場合は駐車場あり（要事前連絡）</li>
                     </ul>
-                    
+
                     <div class="access-note">
                         <p>※ご来社の際は事前にご連絡をお願いいたします。</p>
                     </div>
                 </div>
-                
+
                 <div class="access-map">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2850.7956948776844!2d145.13018137585974!3d43.66103765211953!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5f9d0b9e3e3f3f3f%3A0x0!2zNDPCsDM5JzM5LjciTiAxNDXCsDA3JzU4LjgiRQ!5e0!3m2!1sja!2sjp!4v1707545000000!5m2!1sja!2sjp" 
-                        width="100%" 
-                        height="450" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy" 
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2850.7956948776844!2d145.13018137585974!3d43.66103765211953!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5f9d0b9e3e3f3f3f%3A0x0!2zNDPCsDM5JzM5LjciTiAxNDXCsDA3JzU4LjgiRQ!5e0!3m2!1sja!2sjp!4v1707545000000!5m2!1sja!2sjp"
+                        width="100%"
+                        height="450"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
@@ -202,10 +198,11 @@
     </section>
 
     <!-- お問い合わせCTA -->
-    <section class="cta-section section bg-primary">
+    <section class="cta-section bg-primary">
         <div class="container">
-            <h2 class="cta-title">ご不明な点がございましたら<br>お気軽にお問い合わせください</h2>
-            <p class="cta-subtitle">お客様のご相談をお待ちしております</p>
+            <span class="cta-eyebrow">Contact</span>
+            <h2 class="cta-title">ご不明な点はお気軽に</h2>
+            <p class="cta-subtitle">お客様のご相談をお待ちしております。</p>
             <a href="contact.html" class="btn btn-white">お問い合わせフォームへ</a>
         </div>
     </section>
@@ -220,7 +217,7 @@
                     <p>TEL: 0153-82-1538<br>FAX: 0153-85-7040<br>携帯: 090-7519-5705（高桑）<br>Email: info@kunioffice.jp</p>
                 </div>
                 <div class="footer-links">
-                    <h4>サイトマップ</h4>
+                    <h4>Sitemap</h4>
                     <ul>
                         <li><a href="index.html">ホーム</a></li>
                         <li><a href="works.html">実績</a></li>
@@ -231,7 +228,7 @@
                     </ul>
                 </div>
                 <div class="footer-services">
-                    <h4>サービス</h4>
+                    <h4>Services</h4>
                     <ul>
                         <li>写真撮影</li>
                         <li>印刷サービス</li>

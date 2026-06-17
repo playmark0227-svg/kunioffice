@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- ヘッダー -->
@@ -20,7 +20,7 @@
                         <img src="images/logo-white.png" alt="KUNI OFFICE" class="logo-img">
                     </a>
                 </div>
-                <button class="menu-toggle" id="menuToggle">
+                <button class="menu-toggle" id="menuToggle" aria-label="メニュー">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -48,7 +48,7 @@
     </section>
 
     <!-- フィルター -->
-    <section class="works-filter section bg-dark">
+    <section class="works-filter bg-paper">
         <div class="container">
             <div class="filter-buttons">
                 <button class="filter-btn active" data-filter="all">すべて</button>
@@ -62,7 +62,7 @@
     </section>
 
     <!-- 実績一覧 -->
-    <section class="works-list section bg-dark">
+    <section class="works-list bg-paper">
         <div class="container">
             <div class="works-grid-large">
                 <!-- 写真撮影 -->
@@ -84,7 +84,7 @@
                     <div class="work-details">
                         <span class="work-category">写真撮影</span>
                         <h3>商品撮影</h3>
-                        <p>地域特産品のプロモーション用商品撮影。美しい構図で商品の魅力を引き出しました。</p>
+                        <p>地域特産品のプロモーション用商品撮影。美しい構図で魅力を引き出しました。</p>
                     </div>
                 </div>
 
@@ -124,7 +124,7 @@
 
                 <div class="work-item" data-category="print">
                     <div class="work-image">
-                        <div class="placeholder-image">印刷物</div>
+                        <div class="placeholder-image">名刺・ショップカード</div>
                     </div>
                     <div class="work-details">
                         <span class="work-category">印刷物</span>
@@ -170,7 +170,7 @@
                 <!-- 看板 -->
                 <div class="work-item" data-category="signboard">
                     <div class="work-image">
-                        <div class="placeholder-image">看板制作</div>
+                        <img src="images/service-signboard.jpg" alt="店舗看板">
                     </div>
                     <div class="work-details">
                         <span class="work-category">看板</span>
@@ -193,7 +193,7 @@
                 <!-- オリジナルグッズ -->
                 <div class="work-item" data-category="goods">
                     <div class="work-image">
-                        <div class="placeholder-image">Tシャツ</div>
+                        <img src="images/service-goods.jpg" alt="イベントTシャツ">
                     </div>
                     <div class="work-details">
                         <span class="work-category">オリジナルグッズ</span>
@@ -204,7 +204,7 @@
 
                 <div class="work-item" data-category="goods">
                     <div class="work-image">
-                        <div class="placeholder-image">グッズ</div>
+                        <div class="placeholder-image">グッズ制作</div>
                     </div>
                     <div class="work-details">
                         <span class="work-category">オリジナルグッズ</span>
@@ -217,10 +217,11 @@
     </section>
 
     <!-- お問い合わせCTA -->
-    <section class="cta-section section bg-primary">
+    <section class="cta-section bg-primary">
         <div class="container">
+            <span class="cta-eyebrow">Contact</span>
             <h2 class="cta-title">制作のご相談はお気軽に</h2>
-            <p class="cta-subtitle">お客様のご要望に合わせた最適なプランをご提案いたします</p>
+            <p class="cta-subtitle">お客様のご要望に合わせた最適なプランをご提案いたします。</p>
             <a href="contact.html" class="btn btn-white">お問い合わせフォームへ</a>
         </div>
     </section>
@@ -235,7 +236,7 @@
                     <p>TEL: 0153-82-1538<br>FAX: 0153-85-7040<br>携帯: 090-7519-5705（高桑）<br>Email: info@kunioffice.jp</p>
                 </div>
                 <div class="footer-links">
-                    <h4>サイトマップ</h4>
+                    <h4>Sitemap</h4>
                     <ul>
                         <li><a href="index.html">ホーム</a></li>
                         <li><a href="works.html">実績</a></li>
@@ -246,7 +247,7 @@
                     </ul>
                 </div>
                 <div class="footer-services">
-                    <h4>サービス</h4>
+                    <h4>Services</h4>
                     <ul>
                         <li>写真撮影</li>
                         <li>印刷サービス</li>

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- ヘッダー -->
@@ -20,7 +20,7 @@
                         <img src="images/logo-white.png" alt="KUNI OFFICE" class="logo-img">
                     </a>
                 </div>
-                <button class="menu-toggle" id="menuToggle">
+                <button class="menu-toggle" id="menuToggle" aria-label="メニュー">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -48,7 +48,7 @@
     </section>
 
     <!-- お問い合わせフォーム -->
-    <section class="contact-form-section section">
+    <section class="contact-form-section section bg-paper">
         <div class="container">
             <div class="contact-intro">
                 <p>
@@ -127,30 +127,31 @@
 
                 <div class="contact-info-sidebar">
                     <div class="sidebar-card">
-                        <h3>📞 お電話でのお問い合わせ</h3>
-                        <p class="contact-tel">準備中</p>
-                        <p class="contact-hours">営業時間: 平日 9:00〜18:00</p>
+                        <h3>お電話でのお問い合わせ</h3>
+                        <p class="contact-tel">0153-82-1538</p>
+                        <p class="contact-hours">携帯: 090-7519-5705（高桑）</p>
+                        <p class="note">営業時間: 月～金 8:30〜17:30</p>
                     </div>
 
                     <div class="sidebar-card">
-                        <h3>📧 メールでのお問い合わせ</h3>
+                        <h3>メールでのお問い合わせ</h3>
                         <p class="contact-email">info@kunioffice.jp</p>
                         <p class="note">※メールでのお問い合わせも受け付けております</p>
                     </div>
 
                     <div class="sidebar-card">
-                        <h3>📍 所在地</h3>
+                        <h3>所在地</h3>
                         <p>
-                            〒086-1600<br>
-                            北海道標津郡標津町
+                            〒086-1631<br>
+                            北海道標津郡標津町北1条西2丁目3-2
                         </p>
                     </div>
 
                     <div class="sidebar-card">
-                        <h3>⏰ 営業時間</h3>
+                        <h3>営業時間</h3>
                         <p>
-                            平日 9:00〜18:00<br>
-                            土日祝日は要相談
+                            月～金 8:30〜17:30<br>
+                            土日祝は要相談
                         </p>
                     </div>
 
@@ -166,39 +167,42 @@
     </section>
 
     <!-- よくある質問 -->
-    <section class="faq-section section bg-light">
+    <section class="faq-section section bg-paper-2">
         <div class="container">
-            <h2 class="section-title">よくあるご質問</h2>
-            
+            <div class="sec-head center">
+                <span class="sec-eyebrow">FAQ</span>
+                <h2 class="sec-title">よくあるご質問</h2>
+            </div>
+
             <div class="faq-list">
                 <div class="faq-item">
-                    <h3 class="faq-question">Q. 見積もりは無料ですか?</h3>
-                    <p class="faq-answer">A. はい、お見積もりは無料です。お気軽にご相談ください。</p>
+                    <h3 class="faq-question">見積もりは無料ですか?</h3>
+                    <p class="faq-answer">はい、お見積もりは無料です。お気軽にご相談ください。</p>
                 </div>
 
                 <div class="faq-item">
-                    <h3 class="faq-question">Q. 納期はどのくらいかかりますか?</h3>
-                    <p class="faq-answer">A. 内容や時期により異なりますが、通常1〜2週間程度です。お急ぎの場合はご相談ください。</p>
+                    <h3 class="faq-question">納期はどのくらいかかりますか?</h3>
+                    <p class="faq-answer">内容や時期により異なりますが、通常1〜2週間程度です。お急ぎの場合はご相談ください。</p>
                 </div>
 
                 <div class="faq-item">
-                    <h3 class="faq-question">Q. 小ロットでも対応可能ですか?</h3>
-                    <p class="faq-answer">A. はい、小ロットから対応しております。1枚からでもお気軽にご相談ください。</p>
+                    <h3 class="faq-question">小ロットでも対応可能ですか?</h3>
+                    <p class="faq-answer">はい、小ロットから対応しております。1枚からでもお気軽にご相談ください。</p>
                 </div>
 
                 <div class="faq-item">
-                    <h3 class="faq-question">Q. 標津町以外でも対応していますか?</h3>
-                    <p class="faq-answer">A. はい、近隣地域はもちろん、遠方の方もご相談ください。オンラインでの打ち合わせも可能です。</p>
+                    <h3 class="faq-question">標津町以外でも対応していますか?</h3>
+                    <p class="faq-answer">はい、近隣地域はもちろん、遠方の方もご相談ください。オンラインでの打ち合わせも可能です。</p>
                 </div>
 
                 <div class="faq-item">
-                    <h3 class="faq-question">Q. デザインの相談もできますか?</h3>
-                    <p class="faq-answer">A. はい、デザインのご相談も承ります。イメージをお聞かせいただければ、最適なデザインをご提案いたします。</p>
+                    <h3 class="faq-question">デザインの相談もできますか?</h3>
+                    <p class="faq-answer">はい、デザインのご相談も承ります。イメージをお聞かせいただければ、最適なデザインをご提案いたします。</p>
                 </div>
 
                 <div class="faq-item">
-                    <h3 class="faq-question">Q. 支払い方法は?</h3>
-                    <p class="faq-answer">A. 銀行振込、現金でのお支払いが可能です。詳細はお問い合わせ時にご説明いたします。</p>
+                    <h3 class="faq-question">支払い方法は?</h3>
+                    <p class="faq-answer">銀行振込、現金でのお支払いが可能です。詳細はお問い合わせ時にご説明いたします。</p>
                 </div>
             </div>
         </div>
@@ -214,7 +218,7 @@
                     <p>TEL: 0153-82-1538<br>FAX: 0153-85-7040<br>携帯: 090-7519-5705（高桑）<br>Email: info@kunioffice.jp</p>
                 </div>
                 <div class="footer-links">
-                    <h4>サイトマップ</h4>
+                    <h4>Sitemap</h4>
                     <ul>
                         <li><a href="index.html">ホーム</a></li>
                         <li><a href="works.html">実績</a></li>
@@ -225,7 +229,7 @@
                     </ul>
                 </div>
                 <div class="footer-services">
-                    <h4>サービス</h4>
+                    <h4>Services</h4>
                     <ul>
                         <li>写真撮影</li>
                         <li>印刷サービス</li>

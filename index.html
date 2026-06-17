@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- ヘッダー -->
@@ -20,7 +20,7 @@
                         <img src="images/logo-white.png" alt="KUNI OFFICE" class="logo-img">
                     </a>
                 </div>
-                <button class="menu-toggle" id="menuToggle">
+                <button class="menu-toggle" id="menuToggle" aria-label="メニュー">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -41,172 +41,204 @@
 
     <!-- メインビジュアル -->
     <section class="hero">
-        <div class="hero-content">
-            <h2 class="hero-title">あなたの想いを<br>カタチにします</h2>
-            <p class="hero-subtitle">写真・印刷・映像・看板・オリジナルグッズ制作</p>
-            <a href="contact.html" class="btn btn-primary">お問い合わせはこちら</a>
+        <div class="hero__media">
+            <img src="images/logo1.jpg" alt="KUNI OFFICE 看板">
         </div>
-        <div class="hero-overlay"></div>
+        <div class="hero__inner container">
+            <p class="hero__eyebrow">北海道・標津町 — Creative Production</p>
+            <h1 class="hero__title">想いを、<br><em>カタチ</em>にする。</h1>
+            <p class="hero__lead">写真・印刷・映像・看板・オリジナルグッズ・ホームページ</p>
+            <div class="hero__actions">
+                <a href="works.html" class="btn btn-primary">実績を見る</a>
+                <a href="contact.html" class="btn btn-ghost-light">お問い合わせ</a>
+            </div>
+        </div>
+        <a href="#services" class="hero__scroll">SCROLL</a>
     </section>
 
     <!-- サービス紹介 -->
-    <section class="services-preview section bg-dark">
+    <section class="services-preview section bg-paper" id="services">
         <div class="container">
-            <h2 class="section-title">事業内容</h2>
-            <p class="section-subtitle">様々なニーズにお応えします</p>
-            
-            <div class="services-grid">
-                <a href="works.html?filter=photo" class="service-card service-card-link">
-                    <div class="service-icon">📷</div>
-                    <h3>写真撮影</h3>
-                    <p>プロフェッショナルな写真撮影で、大切な瞬間を美しく残します。</p>
+            <div class="sec-head">
+                <span class="sec-eyebrow">Services</span>
+                <h2 class="sec-title">できることを、ひとつの場所で。</h2>
+                <p class="sec-desc">撮る・刷る・つくる・建てる。標津町の小さな制作会社が、写真から看板まで一貫してお手伝いします。</p>
+            </div>
+
+            <div class="svc-grid">
+                <a href="works.html?filter=photo" class="svc-card reveal">
+                    <div class="svc-thumb"><img src="images/service-photo.jpg" alt="写真撮影"></div>
+                    <div class="svc-body">
+                        <span class="svc-no">01</span>
+                        <span class="svc-arrow">→</span>
+                        <h3>写真撮影</h3>
+                        <p>商品・イベント・店舗まで。大切な瞬間を、確かな技術で残します。</p>
+                    </div>
                 </a>
-                
-                <a href="works.html?filter=print" class="service-card service-card-link">
-                    <div class="service-icon">🖨️</div>
-                    <h3>印刷サービス</h3>
-                    <p>名刺、チラシ、ポスターなど、高品質な印刷物を提供いたします。</p>
+
+                <a href="works.html?filter=print" class="svc-card reveal">
+                    <div class="svc-thumb"><img src="images/service-print.jpg" alt="印刷サービス"></div>
+                    <div class="svc-body">
+                        <span class="svc-no">02</span>
+                        <span class="svc-arrow">→</span>
+                        <h3>印刷サービス</h3>
+                        <p>名刺・チラシ・ポスターなど、デザインから印刷まで一貫対応。</p>
+                    </div>
                 </a>
-                
-                <a href="works.html?filter=video" class="service-card service-card-link">
-                    <div class="service-icon">🎬</div>
-                    <h3>映像制作</h3>
-                    <p>企業PR、イベント記録など、心に響く映像を制作します。</p>
+
+                <a href="works.html?filter=video" class="svc-card reveal">
+                    <div class="svc-thumb"><img src="images/service-video.jpg" alt="映像制作"></div>
+                    <div class="svc-body">
+                        <span class="svc-no">03</span>
+                        <span class="svc-arrow">→</span>
+                        <h3>映像制作</h3>
+                        <p>企画から撮影・編集まで。心に響く映像を企画・制作します。</p>
+                    </div>
                 </a>
-                
-                <a href="works.html?filter=signboard" class="service-card service-card-link">
-                    <div class="service-icon">🪧</div>
-                    <h3>看板制作</h3>
-                    <p>店舗看板から屋外広告まで、目を引く看板を制作します。</p>
+
+                <a href="works.html?filter=signboard" class="svc-card reveal">
+                    <div class="svc-thumb"><img src="images/service-signboard.jpg" alt="看板制作"></div>
+                    <div class="svc-body">
+                        <span class="svc-no">04</span>
+                        <span class="svc-arrow">→</span>
+                        <h3>看板制作</h3>
+                        <p>店舗看板から屋外広告まで。視認性とデザイン性を両立。</p>
+                    </div>
                 </a>
-                
-                <a href="works.html?filter=goods" class="service-card service-card-link">
-                    <div class="service-icon">👕</div>
-                    <h3>オリジナルTシャツ</h3>
-                    <p>イベント、チーム、記念品など、オリジナルグッズを制作します。</p>
+
+                <a href="works.html?filter=goods" class="svc-card reveal">
+                    <div class="svc-thumb"><img src="images/service-goods.jpg" alt="オリジナルグッズ"></div>
+                    <div class="svc-body">
+                        <span class="svc-no">05</span>
+                        <span class="svc-arrow">→</span>
+                        <h3>オリジナルグッズ</h3>
+                        <p>Tシャツ・ノベルティなど、1枚から。記念品の制作も承ります。</p>
+                    </div>
                 </a>
-                
-                <a href="works.html" class="service-card service-card-link">
-                    <div class="service-icon">💻</div>
-                    <h3>ホームページ制作</h3>
-                    <p>ビジネスを効果的にアピールする、レスポンシブ対応のWebサイトを制作します。</p>
-                </a>
-                
-                <a href="works.html" class="service-card service-card-link">
-                    <div class="service-icon">✨</div>
-                    <h3>その他サービス</h3>
-                    <p>幅広いクリエイティブニーズに柔軟に対応いたします。</p>
+
+                <a href="services.html" class="svc-card reveal">
+                    <div class="svc-thumb"><img src="images/service-website.jpg" alt="ホームページ制作"></div>
+                    <div class="svc-body">
+                        <span class="svc-no">06</span>
+                        <span class="svc-arrow">→</span>
+                        <h3>ホームページ制作</h3>
+                        <p>スマホ対応のレスポンシブサイトで、ビジネスを効果的に発信。</p>
+                    </div>
                 </a>
             </div>
-            
-            <div class="text-center">
-                <a href="services.html" class="btn btn-secondary">詳しく見る</a>
+
+            <div class="center" style="margin-top:56px;">
+                <a href="services.html" class="btn btn-outline">事業内容をすべて見る</a>
             </div>
         </div>
     </section>
 
     <!-- 実績紹介 -->
-    <section class="works-preview section">
+    <section class="works-preview section bg-paper-2">
         <div class="container">
-            <h2 class="section-title">制作実績</h2>
-            <p class="section-subtitle">これまでの制作事例をご紹介</p>
-            
-            <div class="works-grid">
-                <div class="work-card">
-                    <div class="work-image">
-                        <div class="placeholder-image">写真撮影</div>
-                    </div>
-                    <div class="work-info">
-                        <h3>イベント撮影</h3>
-                        <p>地域イベントの記録撮影</p>
-                    </div>
-                </div>
-                
-                <div class="work-card">
-                    <div class="work-image">
-                        <div class="placeholder-image">印刷物</div>
-                    </div>
-                    <div class="work-info">
-                        <h3>企業パンフレット</h3>
-                        <p>高品質な印刷で企業PRをサポート</p>
-                    </div>
-                </div>
-                
-                <div class="work-card">
-                    <div class="work-image">
-                        <div class="placeholder-image">映像制作</div>
-                    </div>
-                    <div class="work-info">
-                        <h3>プロモーション映像</h3>
-                        <p>企業PRビデオの企画・制作</p>
-                    </div>
-                </div>
-                
-                <div class="work-card">
-                    <div class="work-image">
-                        <div class="placeholder-image">看板</div>
-                    </div>
-                    <div class="work-info">
-                        <h3>店舗看板</h3>
-                        <p>目を引くデザインの看板制作</p>
-                    </div>
-                </div>
+            <div class="sec-head">
+                <span class="sec-eyebrow">Works</span>
+                <h2 class="sec-title">これまでの仕事。</h2>
+                <p class="sec-desc">地域のイベント、お店、企業のために。私たちが手がけた制作の一部をご紹介します。</p>
             </div>
-            
-            <div class="text-center">
-                <a href="works.html" class="btn btn-secondary">実績一覧を見る</a>
+
+            <div class="work-feature-grid">
+                <a href="works.html?filter=photo" class="work-tile reveal">
+                    <img src="images/work-event.jpg" alt="地域イベント撮影">
+                    <div class="work-tile-meta">
+                        <span class="tag">写真撮影</span>
+                        <h3>地域イベント撮影</h3>
+                    </div>
+                </a>
+                <a href="works.html?filter=print" class="work-tile reveal">
+                    <img src="images/work-brochure.jpg" alt="企業パンフレット">
+                    <div class="work-tile-meta">
+                        <span class="tag">印刷物</span>
+                        <h3>企業パンフレット</h3>
+                    </div>
+                </a>
+                <a href="works.html?filter=video" class="work-tile reveal">
+                    <img src="images/work-video.jpg" alt="企業PR映像">
+                    <div class="work-tile-meta">
+                        <span class="tag">映像制作</span>
+                        <h3>企業PR映像</h3>
+                    </div>
+                </a>
+                <a href="works.html?filter=photo" class="work-tile reveal">
+                    <img src="images/work-store.jpg" alt="店舗撮影">
+                    <div class="work-tile-meta">
+                        <span class="tag">写真撮影</span>
+                        <h3>店舗・料理撮影</h3>
+                    </div>
+                </a>
+                <a href="works.html?filter=photo" class="work-tile reveal">
+                    <img src="images/work-product.jpg" alt="商品撮影">
+                    <div class="work-tile-meta">
+                        <span class="tag">写真撮影</span>
+                        <h3>商品撮影</h3>
+                    </div>
+                </a>
+                <a href="works.html?filter=print" class="work-tile reveal">
+                    <img src="images/work-flyer.jpg" alt="イベントチラシ">
+                    <div class="work-tile-meta">
+                        <span class="tag">印刷物</span>
+                        <h3>イベントチラシ</h3>
+                    </div>
+                </a>
+            </div>
+
+            <div class="center" style="margin-top:56px;">
+                <a href="works.html" class="btn btn-outline">実績一覧を見る</a>
             </div>
         </div>
     </section>
 
     <!-- 代表挨拶 -->
-    <section class="greeting-section section bg-dark">
+    <section class="greeting-section section bg-ink">
         <div class="container">
-            <h2 class="section-title">代表挨拶</h2>
-            <div class="greeting-content">
-                <div class="greeting-image">
-                    <img src="images/ceo-photo.jpg" alt="代表者写真" class="ceo-photo">
+            <div class="greeting-grid">
+                <div class="greeting-photo">
+                    <img src="images/ceo-photo.jpg" alt="代表者写真">
                 </div>
-                <div class="greeting-text">
-                    <h3>お客様の「想い」をカタチにする</h3>
-                    <p>KUNI OFFICEのホームページをご覧いただき、誠にありがとうございます。</p>
-                    <p>私たちは標津町を拠点に、写真撮影から印刷、映像制作、看板制作まで、お客様のあらゆるクリエイティブニーズにお応えしてまいりました。</p>
-                    <p>大切なのは、お客様が「何を伝えたいのか」「どんな想いを形にしたいのか」。私たちは単なる技術提供ではなく、お客様と一緒に考え、最適な表現方法をご提案することを大切にしています。</p>
-                    <p>地域に根ざした企業として、一つひとつのご依頼に真摯に向き合い、お客様に喜んでいただける仕事を続けてまいります。</p>
-                    <p>どんな小さなことでも、お気軽にご相談ください。</p>
-                    <div class="signature">
-                        <p><strong>KUNI OFFICE 代表<br>高桑</strong></p>
-                    </div>
+                <div class="greeting-body">
+                    <span class="sec-eyebrow">Message</span>
+                    <h2 class="sec-title">お客様の「想い」を<br>カタチにする。</h2>
+                    <p>KUNI OFFICEのホームページをご覧いただき、誠にありがとうございます。私たちは標津町を拠点に、写真撮影から印刷、映像制作、看板制作まで、お客様のあらゆるクリエイティブニーズにお応えしてまいりました。</p>
+                    <p>大切なのは、お客様が「何を伝えたいのか」「どんな想いを形にしたいのか」。単なる技術提供ではなく、お客様と一緒に考え、最適な表現方法をご提案することを大切にしています。</p>
+                    <p>地域に根ざした企業として、一つひとつのご依頼に真摯に向き合ってまいります。どんな小さなことでも、お気軽にご相談ください。</p>
+                    <p class="signature"><small>Representative</small>KUNI OFFICE 代表　高桑</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- 会社紹介 -->
-    <section class="company-preview section bg-dark">
+    <section class="company-preview section bg-paper">
         <div class="container">
-            <div class="company-intro">
-                <div class="company-text">
-                    <h2 class="section-title">KUNI OFFICEについて</h2>
+            <div class="about-grid">
+                <div class="about-figure">
+                    <img src="images/service-signboard.jpg" alt="KUNI OFFICEの制作">
+                </div>
+                <div class="about-body">
+                    <span class="sec-eyebrow">About</span>
+                    <h2 class="sec-title">KUNI OFFICE について</h2>
                     <p>標津町を拠点に、写真撮影、印刷、映像制作、看板制作、オリジナルグッズ制作など、幅広いクリエイティブサービスを提供しています。</p>
                     <p>お客様の「想い」や「伝えたいこと」を、確かな技術と豊富な経験でカタチにします。小さなご依頼から大きなプロジェクトまで、お気軽にご相談ください。</p>
-                    <div class="cta-buttons">
+                    <div class="about-actions">
                         <a href="works.html" class="btn btn-primary">実績一覧を見る</a>
-                        <a href="company.html" class="btn btn-secondary">会社情報を見る</a>
+                        <a href="company.html" class="btn btn-outline">会社情報を見る</a>
                     </div>
-                </div>
-                <div class="company-image">
-                    <div class="placeholder-image large">KUNI OFFICE</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- お問い合わせCTA -->
-    <section class="cta-section section bg-primary">
+    <section class="cta-section bg-primary">
         <div class="container">
-            <h2 class="cta-title">お気軽にお問い合わせください</h2>
-            <p class="cta-subtitle">お客様のニーズに合わせた最適なソリューションをご提案いたします</p>
+            <span class="cta-eyebrow">Contact</span>
+            <h2 class="cta-title">まずは、お気軽にご相談を。</h2>
+            <p class="cta-subtitle">お客様のニーズに合わせた最適なご提案をいたします。</p>
             <a href="contact.html" class="btn btn-white">お問い合わせフォームへ</a>
         </div>
     </section>
@@ -221,7 +253,7 @@
                     <p>TEL: 0153-82-1538<br>FAX: 0153-85-7040<br>携帯: 090-7519-5705（高桑）<br>Email: info@kunioffice.jp</p>
                 </div>
                 <div class="footer-links">
-                    <h4>サイトマップ</h4>
+                    <h4>Sitemap</h4>
                     <ul>
                         <li><a href="index.html">ホーム</a></li>
                         <li><a href="works.html">実績</a></li>
@@ -232,7 +264,7 @@
                     </ul>
                 </div>
                 <div class="footer-services">
-                    <h4>サービス</h4>
+                    <h4>Services</h4>
                     <ul>
                         <li>写真撮影</li>
                         <li>印刷サービス</li>

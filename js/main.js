@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // アニメーション対象の要素
     const animateElements = document.querySelectorAll(
-        '.service-card, .work-card, .work-item, .strength-card, .workflow-step, .faq-item'
+        '.reveal, .svc-card, .work-tile, .work-item, .strength-card, .workflow-step, .service-detail-item, .faq-item'
     );
     
     animateElements.forEach((element, index) => {
@@ -304,21 +304,27 @@ document.addEventListener('DOMContentLoaded', function() {
     backToTopButton.className = 'back-to-top';
     backToTopButton.style.cssText = `
         position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 50px;
-        height: 50px;
-        background-color: var(--primary-color, #2563eb);
+        bottom: 28px;
+        right: 28px;
+        width: 46px;
+        height: 46px;
+        background-color: #0b0b0b;
         color: white;
-        border: none;
-        border-radius: 50%;
-        font-size: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 2px;
+        font-size: 1.2rem;
+        line-height: 1;
         cursor: pointer;
         opacity: 0;
-        transition: opacity 0.3s ease, transform 0.3s ease;
+        transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
         z-index: 999;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     `;
+    backToTopButton.addEventListener('mouseenter', function() {
+        this.style.backgroundColor = '#cc0000';
+    });
+    backToTopButton.addEventListener('mouseleave', function() {
+        this.style.backgroundColor = '#0b0b0b';
+    });
     
     document.body.appendChild(backToTopButton);
     
