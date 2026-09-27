@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ご注文について｜なんと！おいしい 若葉のしずく 公式オンラインショップ</title>
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#0f3d2c">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/wakaba.css">
+    <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+    <a class="skip-link" href="#main">本文へスキップ</a>
+
+    <header class="site-header">
+        <div class="container site-header__inner">
+            <a class="site-logo" href="index.html"><img src="images/logo.png" alt="なんと！おいしい 若葉のしずく" width="442" height="225"></a>
+            <div class="header-actions">
+                <a class="cart-btn" href="cart.html" data-cart-label aria-label="カート">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+                    <span class="cart-count" data-cart-count hidden>0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" data-thanks>
+        <section class="page-body">
+            <div class="container container--narrow">
+                <ol class="steps">
+                    <li class="is-done">お客様情報</li>
+                    <li class="is-done">ご確認</li>
+                    <li class="is-current">完了</li>
+                </ol>
+
+                <!-- email order -->
+                <div class="panel thanks-card" data-thanks-email hidden>
+                    <div class="mark" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="11" width="36" height="26" rx="4"/><path d="M7 13l17 13 17-13"/></svg></div>
+                    <h1 class="sec-title" style="margin-top:0">ご注文メールの送信をお願いします</h1>
+                    <p class="order-no">注文番号 <span data-order-no></span></p>
+                    <p>メールアプリにご注文内容が入った状態で開いています。<strong>内容をご確認のうえ、そのまま送信してください。</strong><br>メール到着後、担当者よりご注文の受付とお支払い方法をご連絡します。</p>
+                    <div class="thanks-actions">
+                        <a class="btn btn--buy" href="#" data-mail-again>メールをもう一度開く</a>
+                        <button class="btn btn--outline" type="button" data-copy-order>注文内容をコピー</button>
+                    </div>
+                    <p class="note">メールアプリが開かない場合は、下の内容をコピーして <a href="mailto:info@kunioffice.jp">info@kunioffice.jp</a> へお送りいただくか、お電話（<a href="tel:0153821538">0153-82-1538</a>・平日 8:30〜17:30）でご注文ください。</p>
+                    <pre class="order-text" data-order-text></pre>
+                </div>
+
+                <!-- online payment completed -->
+                <div class="panel thanks-card" data-thanks-paid hidden>
+                    <div class="mark" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 25l8 8 16-18"/></svg></div>
+                    <h1 class="sec-title" style="margin-top:0">ご注文ありがとうございます</h1>
+                    <p class="order-no">注文番号 <span data-order-no>—</span></p>
+                    <p>お支払いが完了しました。ご登録のメールアドレスに確認メールをお送りします。<br>ご注文の確認後、1〜3営業日以内に発送いたします。</p>
+                    <div class="thanks-actions"><a class="btn btn--buy" href="index.html">トップページへ</a></div>
+                </div>
+
+                <!-- nothing to show -->
+                <div class="panel thanks-card" data-thanks-none hidden>
+                    <h1 class="sec-title" style="margin-top:0">ご注文情報が見つかりません</h1>
+                    <p>ご注文手続きの途中でページを閉じた可能性があります。お手数ですが、もう一度お手続きください。</p>
+                    <div class="thanks-actions"><a class="btn btn--buy" href="cart.html">カートを見る</a><a class="btn btn--outline" href="index.html">トップページへ</a></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-bottom" style="margin-top:0;border-top:0;padding-top:0">
+                <p><a href="guide.html">ご利用ガイド</a>　<a href="tokushoho.html">特定商取引法に基づく表記</a>　<a href="privacy.html">プライバシーポリシー</a></p>
+                <p>&copy; <span data-year>2026</span> KUNI OFFICE</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/checkout.js"></script>
+</body>
+</html>

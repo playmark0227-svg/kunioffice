@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カート｜なんと！おいしい 若葉のしずく 公式オンラインショップ</title>
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#0f3d2c">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/wakaba.css">
+    <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+    <a class="skip-link" href="#main">本文へスキップ</a>
+
+    <header class="site-header">
+        <div class="container site-header__inner">
+            <a class="site-logo" href="index.html"><img src="images/logo.png" alt="なんと！おいしい 若葉のしずく" width="442" height="225"></a>
+            <nav class="site-nav" id="siteNav" aria-label="メインメニュー">
+                <ul>
+                    <li><a href="index.html#kodawari">こだわり</a></li>
+                    <li><a href="index.html#howto">飲み方</a></li>
+                    <li><a href="index.html#item">商品情報</a></li>
+                    <li><a href="index.html#buy">ご購入</a></li>
+                    <li><a href="index.html#faq">よくある質問</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a class="cart-btn" href="cart.html" aria-current="page" data-cart-label aria-label="カート">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+                    <span class="cart-count" data-cart-count hidden>0</span>
+                </a>
+                <button class="nav-toggle" id="navToggle" type="button" aria-controls="siteNav" aria-expanded="false" aria-label="メニューを開く"><span></span></button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+        <section class="page-hero">
+            <div class="container">
+                <p class="breadcrumb"><a href="index.html">ホーム</a> ／ カート</p>
+                <p class="dots" aria-hidden="true"><span>カ</span><span class="p">ー</span><span>ト</span></p>
+                <h1>カート</h1>
+            </div>
+        </section>
+
+        <section class="page-body">
+            <div class="container">
+                <div class="cart-page" data-cart-page>
+                    <div class="panel">
+                        <h2>カートの中身</h2>
+                        <div data-page-lines></div>
+                        <a class="continue" href="index.html#buy">← お買い物を続ける</a>
+                    </div>
+                    <div class="panel">
+                        <h2>ご注文金額</h2>
+                        <div data-page-totals></div>
+                        <a class="btn btn--buy btn--block" href="checkout.html" data-needs-items>ご注文手続きへ</a>
+                        <p class="note">定期便のご契約条件（お届け周期・休止／解約方法など）は、次の確認画面で必ずご確認いただけます。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-bottom" style="margin-top:0;border-top:0;padding-top:0">
+                <p><a href="guide.html">ご利用ガイド</a>　<a href="tokushoho.html">特定商取引法に基づく表記</a>　<a href="privacy.html">プライバシーポリシー</a></p>
+                <p>&copy; <span data-year>2026</span> KUNI OFFICE</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/store.js"></script>
+</body>
+</html>

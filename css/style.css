@@ -795,6 +795,27 @@ ul {
     margin-top: 32px;
 }
 
+/* ---------- Online shop feature (home) ---------- */
+.shop-feature__media {
+    position: relative;
+    overflow: hidden;
+}
+
+.shop-feature__media img {
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.shop-feature__media:hover img {
+    transform: scale(1.04);
+}
+
+.bg-ink .about-body p {
+    color: rgba(255, 255, 255, 0.78);
+}
+
 /* ---------- Big CTA ---------- */
 .cta-section {
     text-align: center;
@@ -810,7 +831,7 @@ ul {
     font-size: 0.8rem;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.95);
     display: block;
     margin-bottom: 22px;
 }
@@ -889,7 +910,7 @@ ul {
 .footer-bottom {
     text-align: center;
     padding-top: 32px;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.62);
     font-size: 0.82rem;
     letter-spacing: 0.05em;
 }
@@ -1669,6 +1690,7 @@ ul {
     padding: 26px;
 }
 
+.sidebar-card h2,
 .sidebar-card h3 {
     font-size: 0.74rem;
     letter-spacing: 0.18em;
