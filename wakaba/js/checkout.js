@@ -138,7 +138,7 @@
             out.push('電話：' + customer.tel);
             out.push('お届け先：〒' + customer.zip + ' ' + customer.address);
             out.push('お届け希望時間帯：' + customer.time);
-            if (customer.note) out.push('備考：' + customer.note);
+            if (customer.note) out.push('備考：' + customer.note.replace(/\r?\n/g, '\r\n'));
         }
         out.push('');
         out.push('上記内容で注文します。（特定商取引法に基づく表記・ご利用ガイド・プライバシーポリシーに同意済み）');

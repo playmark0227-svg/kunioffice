@@ -20,7 +20,7 @@ GitHub Actions（`.github/workflows/pages.yml`）が自動で GitHub Pages に�
 | `works.html` | 実績（一覧はこのファイルに直接記載。絞り込みは `data-category`） |
 | `company.html` | 会社情報 |
 | `contact.html` | お問い合わせ（送信すると入力内容入りのメールが `info@kunioffice.jp` 宛てに開く） |
-| `images/` | KUNI OFFICE ページの写真。**同じファイル名で上書きすると差し替わる**（1つの写真枠に1ファイル） |
+| `images/` | KUNI OFFICE ページの写真。**同じファイル名で上書きすると差し替わる**（事業内容・実績の一部の写真はトップページにも表示される。一覧はマニュアル参照） |
 | `css/style.css` | デザイン |
 | `js/main.js` | メニュー・実績の絞り込み・お問い合わせフォームなど |
 | `wakaba/` | 若葉のしずく オンラインショップ一式（詳細は [`wakaba/README.md`](wakaba/README.md)） |

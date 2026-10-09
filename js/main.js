@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'お問い合わせ種類：' + serviceLabel,
                 '',
                 '■ お問い合わせ内容',
-                formData.message,
+                formData.message.replace(/\r?\n/g, '\r\n'),
                 '',
                 '（個人情報の取り扱いに同意済み）'
             ].join('\r\n');

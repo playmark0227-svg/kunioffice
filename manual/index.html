@@ -173,7 +173,9 @@
             white-space: pre;
         }
 
-        pre .hl { background: #6b5d00; color: #fff; border-radius: 3px; padding: 0 2px; }
+        pre .hl { background: #ffe066; color: #1a1a1a; border-radius: 3px; padding: 0 2px; }
+
+        pre, pre .hl, .flag, h2, .rules li::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
         pre .tag { color: #8fc1ff; }
 
@@ -276,10 +278,11 @@
     <tr><td><code>contact.html</code></td><td>お問い合わせページの文章</td></tr>
     <tr><td><code>wakaba</code> フォルダ</td><td>「若葉のしずく」オンラインショップ一式（<a href="#s8">8章</a>）</td></tr>
     <tr><td><code>manual</code> フォルダ</td><td>このマニュアル</td></tr>
+    <tr><td><code>js/main.js</code></td><td>お問い合わせの送り先メールアドレス（<a href="#s7">7章</a>）と、電話番号の書き換え（<a href="#bulk">3章</a>）のときだけ開きます</td></tr>
 </table>
 <div class="box">
     <h4>触らなくてよいもの</h4>
-    <p><code>css</code>（デザイン）・<code>js</code>（動き）・<code>.github</code>（公開の自動化）・<code>server.js</code>・<code>package.json</code>・<code>.env.example</code>・<code>.md</code> で終わる説明書・<code>shop.html</code>／<code>success.html</code>（旧ページからの転送用）は、変更しなくてOKです。</p>
+    <p><code>css</code>（デザイン）・<code>js</code>（動き。上の表の <code>js/main.js</code> の書き換え以外）・<code>.github</code>（公開の自動化）・<code>.gitignore</code>・<code>server.js</code>・<code>package.json</code>・<code>.env.example</code>・<code>.md</code> で終わる説明書・<code>shop.html</code>／<code>success.html</code>（旧ページからの転送用）は、変更しなくてOKです。</p>
 </div>
 
 <!-- ================================================== -->
@@ -311,13 +314,14 @@
 <div class="box box--warn">
     <h4>ファイル名の注意</h4>
     <ul class="list">
-        <li>大文字・小文字も区別されます。<code>Service-Photo.JPG</code> や <code>service-photo.jpeg</code> は<strong>別の名前</strong>として扱われ、表示されません。</li>
+        <li>大文字・小文字も区別されます。<code>Service-Photo.JPG</code> や <code>service-photo.jpeg</code> は<strong>別の名前</strong>として扱われ、公開したホームページでは表示されません。</li>
+        <li><strong>パソコンでの確認（5章）では、大文字の <code>.JPG</code> でも表示されてしまいます。</strong>カメラやスマホから取り込んだ写真は <code>.JPG</code>（大文字）になっていることが多いので、公開する前に、ファイル名がすべて小文字の <code>.jpg</code> になっているか必ず目で確認してください。</li>
         <li>パソコンの設定で拡張子（.jpg）が見えないと、名前を変えたときに <code>service-photo.jpg.jpg</code> になってしまうことがあります。<br>Windows は「表示」→「ファイル名拡張子」にチェック、Mac は Finder の「設定」→「詳細」→「すべてのファイル名拡張子を表示」をオンにすると確認できます。</li>
     </ul>
 </div>
 
 <h3 id="photolist">写真一覧</h3>
-<p class="note"><span class="flag flag--ai">AIの仮画像</span> はAIで作った仮の画像です。実際の写真への差し替えをおすすめします。<span class="flag flag--ph">準備中</span> は「写真準備中」の仮画像で、上書きすると写真が表示されます。</p>
+<p class="note"><span class="flag flag--ai">AIの仮画像</span> はAIで作った仮の画像です。実際の写真への差し替えをおすすめします。<span class="flag flag--ph">準備中</span> は、黒地にタイトルだけが入った仮の画像です。上書きすると写真が表示されます。</p>
 
 <h3>業務内容の写真（最優先：AIで作った仮の画像です）</h3>
 <p class="note">事業内容ページと、トップページの「Services」に表示されます。</p>
@@ -351,7 +355,7 @@
 <table class="photos"><thead><tr><th>今の写真</th><th>ファイル名</th><th>表示される場所</th></tr></thead><tbody>
 <tr><td class="thumb"><img src="../images/logo1.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">logo1.jpg</code><br></td><td>いちばん上の大きな写真（KUNI OFFICEの看板）<br><span class="prep">用意する写真の例：差し替える場合は横長の写真</span></td></tr>
 <tr><td class="thumb"><img src="../images/about.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">about.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>「About　KUNI OFFICE について」の写真<br><span class="prep">用意する写真の例：事務所・お店・作業の様子など</span></td></tr>
-<tr><td class="thumb"><img src="../images/ceo-photo.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">ceo-photo.jpg</code><br></td><td>「Message　代表挨拶」の写真<br><span class="prep">用意する写真の例：縦長の写真（縦5：横4）</span></td></tr>
+<tr><td class="thumb"><img src="../images/ceo-photo.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">ceo-photo.jpg</code><br></td><td>「Message　お客様の「想い」をカタチにする。」の写真（代表の写真）<br><span class="prep">用意する写真の例：縦長の写真（縦5：横4）</span></td></tr>
 </tbody></table>
 <h3>オンラインショップ（若葉のしずく）の写真</h3>
 <p class="note">ショップのページは wakaba フォルダの中にあります。</p>
@@ -363,7 +367,7 @@
 
 <div class="box">
     <h4>使っていない写真（予備）</h4>
-    <p><code>images</code> フォルダの <code>ceo-photo-1.jpg</code>・<code>ceo-photo-2.jpg</code>（代表写真の別カット）、<code>logo-black.png</code>・<code>logo2.png</code>（ロゴの別バージョン）は、今のホームページでは使っていません。残しておいても消しても表示に影響はありません。ヘッダーのロゴは <code>logo-white.png</code> です。</p>
+    <p><code>images</code> フォルダの <code>ceo-photo-1.jpg</code>（代表写真の別カット）、<code>ceo-photo-2.jpg</code>（今使っている <code>ceo-photo.jpg</code> と同じ写真のコピー）、<code>logo-black.png</code>・<code>logo2.png</code>（ロゴの別バージョン）は、今のホームページでは使っていません。残しておいても消しても表示に影響はありません。ヘッダーのロゴは <code>logo-white.png</code> です。</p>
 </div>
 
 <!-- ================================================== -->
@@ -433,12 +437,14 @@
     <tr><th style="width:34%">情報</th><th>書かれているファイル</th></tr>
     <tr><td>電話 0153-82-1538<br>メール info@kunioffice.jp</td><td><code>index.html</code> <code>services.html</code> <code>works.html</code> <code>company.html</code> <code>contact.html</code> <code>js/main.js</code>、ショップの <code>wakaba</code> フォルダ内の各ページと <code>wakaba/js/config.js</code></td></tr>
     <tr><td>FAX・携帯・住所</td><td><code>index.html</code> <code>services.html</code> <code>works.html</code> <code>company.html</code> <code>contact.html</code>（FAX・住所はショップの <code>wakaba</code> フォルダ内にもあります）</td></tr>
+    <tr><td>営業時間 8:30〜17:30</td><td><code>company.html</code> <code>contact.html</code>、ショップの <code>wakaba</code> フォルダ内の各ページと <code>wakaba/js/config.js</code>。探すときは <code>8:30</code> だけで検索すると漏れなく見つかります</td></tr>
 </table>
+<p class="note">住所が変わった場合、会社情報ページの地図は文字の置き換えでは移動しません。地図の差し替えは ViFight にご依頼ください。</p>
 <div class="box box--ok">
     <h4>Visual Studio Code なら一度に置き換えられます</h4>
     <ol class="steps">
         <li>Visual Studio Code の「ファイル」→「フォルダーを開く」で、受け取ったフォルダ全体を開きます。</li>
-        <li><span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">H</span>（Mac は <span class="kbd">⌘</span> + <span class="kbd">Shift</span> + <span class="kbd">H</span>）で「フォルダーで置換」を開きます。</li>
+        <li><span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">H</span>（Mac は <span class="kbd">⌘</span> + <span class="kbd">Shift</span> + <span class="kbd">H</span>）で「<strong>フォルダーを指定して置換</strong>」を開きます（「編集」メニューにもあります）。</li>
         <li>上の欄に古い番号、下の欄に新しい番号を入れ、見つかった場所を確認してから「すべて置換」を押します。</li>
     </ol>
 </div>
@@ -477,14 +483,24 @@
 <p>消したい実績のかたまりを、<code>&lt;div class="work-item"</code> の行から数えて<strong>10行目の <code>&lt;/div&gt;</code> まで、まるごと</strong>消します。途中だけ消したり、行数がずれたりすると表示が崩れます。</p>
 
 <h3>トップページの「Works」（6枠）</h3>
-<p>トップページの実績紹介は <code>index.html</code> に書かれていて、写真は実績ページと同じファイル（★印）を使っています。実績ページの写真を上書きすると、トップページも一緒に変わります。トップに出す実績そのものを入れ替えたいときは、<code>index.html</code> の <code>class="work-tile"</code> の部分の写真のファイル名とタイトルを書き換えてください。</p>
+<p>トップページの実績紹介は <code>index.html</code> に書かれていて、写真は実績ページと同じファイル（★印）を使っています。実績ページの写真を上書きすると、トップページも一緒に変わります。</p>
+<p>トップに出す実績そのものを入れ替えたいときは、<code>index.html</code> の <code>class="work-tile"</code> のかたまりの<strong>黄色の5か所</strong>を書き換えます。種類（絞り込みの値と表示名）は4章の表と同じ組み合わせにしてください。</p>
+<pre><span class="tag">&lt;a href="works.html?filter=</span><span class="hl">photo</span><span class="tag">" class="work-tile reveal"&gt;</span>
+    <span class="tag">&lt;img src="images/</span><span class="hl">work-store.jpg</span><span class="tag">" alt="</span><span class="hl">店舗撮影</span><span class="tag">"&gt;</span>
+    <span class="tag">&lt;div class="work-tile-meta"&gt;</span>
+        <span class="tag">&lt;span class="tag"&gt;</span><span class="hl">写真撮影</span><span class="tag">&lt;/span&gt;</span>
+        <span class="tag">&lt;h3&gt;</span><span class="hl">店舗・料理撮影</span><span class="tag">&lt;/h3&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/a&gt;</span></pre>
+<p class="note">実績ページ（<code>works.html</code>）から★印の実績を削除しても、トップページには残ります。トップからも外す場合は、<code>index.html</code> 側も入れ替えてください。</p>
 
 <!-- ================================================== -->
 <h2 id="s5"><span class="num">5</span>パソコンで確認する</h2>
 <ol class="steps">
     <li>フォルダの中の <code>index.html</code> を<strong>ダブルクリック</strong>すると、インターネットに公開する前の状態をブラウザで見られます。</li>
     <li>変更したページを開いて、写真や文章が正しく出ているか確認します。スマホでの見え方は、ブラウザの幅を狭くすると確認できます。</li>
-    <li>変わっていないときは、再読み込み（<span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">R</span>／Mac は <span class="kbd">⌘</span> + <span class="kbd">Shift</span> + <span class="kbd">R</span>）をしてください。</li>
+    <li>変わっていないときは、再読み込み（<span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">R</span>／Mac の Chrome は <span class="kbd">⌘</span> + <span class="kbd">Shift</span> + <span class="kbd">R</span>、Safari は <span class="kbd">⌥</span> + <span class="kbd">⌘</span> + <span class="kbd">R</span>）をしてください。</li>
+    <li>ショップは、メニューの「ショップ」から開くか、<code>wakaba</code> フォルダの中の <code>index.html</code> をダブルクリックして確認します。</li>
 </ol>
 <p class="note">パソコンで開いたときは、地図やお問い合わせなど、一部インターネットにつながっている部分の動きが本番と違うことがあります。</p>
 
@@ -525,14 +541,14 @@
 <!-- ================================================== -->
 <h2 id="s7"><span class="num">7</span>お問い合わせフォームについて</h2>
 <p>お問い合わせページのフォームで「メールで送信する」を押すと、お客様のパソコン・スマホのメールアプリが、入力内容が入った状態で開きます。お客様がそのまま送信すると、<strong>info@kunioffice.jp</strong> にメールが届きます。</p>
-<p class="note">送り先のメールアドレスを変えるときは、<code>js/main.js</code> を開いて <code>CONTACT_EMAIL</code> で検索し、<code>const CONTACT_EMAIL = 'info@kunioffice.jp';</code> の <code>'</code> と <code>'</code> の間を書き換えてください。</p>
+<p class="note">送り先のメールアドレスを変えるときは、<code>js/main.js</code> を開いて <code>CONTACT_EMAIL</code> で検索し、<code>const CONTACT_EMAIL = 'info@kunioffice.jp';</code> の <code>'</code> と <code>'</code> の間を書き換えてください。ページに表示しているメールアドレスやショップの注文の送り先（<code>wakaba/js/config.js</code>）も変える場合は、<a href="#bulk">3章の「フォルダーを指定して置換」</a>で古いアドレスをまとめて置き換えると、これらも一緒に変わります。</p>
 
 <!-- ================================================== -->
 <h2 id="s8"><span class="num">8</span>オンラインショップ（若葉のしずく）</h2>
 <p>ショップは <code>wakaba</code> フォルダの中にあり、ページの構成は KUNI OFFICE のページと同じです。写真は <code>wakaba/images</code> フォルダを同じ名前で上書きすれば差し替わります（<a href="#photolist">写真一覧</a>の最後を参照）。</p>
 <table>
     <tr><th style="width:34%">変えたいこと</th><th>直すファイル</th></tr>
-    <tr><td>価格・送料・定期便の条件</td><td><code>wakaba/js/config.js</code>（カートの計算に使う値）<strong>と</strong>、ページに書いてある価格（<code>wakaba/index.html</code>・<code>wakaba/guide.html</code>・<code>wakaba/tokushoho.html</code>、KUNI OFFICE トップの <code>index.html</code> の「Online Shop」）の<strong>両方</strong></td></tr>
+    <tr><td>価格・送料・定期便の条件</td><td><code>wakaba/js/config.js</code>（カートの計算に使う値）<strong>と</strong>、ページに書いてある価格（<code>wakaba/index.html</code>・<code>wakaba/guide.html</code>・<code>wakaba/tokushoho.html</code>、KUNI OFFICE トップの <code>index.html</code> の「Online Shop」）の<strong>両方</strong>。<br><span class="note"><code>wakaba/index.html</code> の上のほうには検索エンジン向けにカンマなしの価格（<code>"price": "2980"</code>）もあります。また「10%OFF」「1日あたり約99円」「2箱以上で送料無料」など、価格から計算した言葉もあわせて見直してください。</span></td></tr>
     <tr><td>商品説明・飲み方・よくある質問</td><td><code>wakaba/index.html</code></td></tr>
     <tr><td>送料・お届け・返品の説明</td><td><code>wakaba/guide.html</code></td></tr>
     <tr><td>販売者・連絡先などの法律上の表記</td><td><code>wakaba/tokushoho.html</code></td></tr>
@@ -551,7 +567,8 @@
 <table>
     <tr><th style="width:38%">こんなとき</th><th>確認すること</th></tr>
     <tr><td>写真を入れたのに表示されない</td><td>ファイル名が一覧と<strong>完全に同じ</strong>か（大文字・小文字、<code>.jpg</code> と <code>.jpeg</code> の違い、<code>.jpg.jpg</code> になっていないか）。iPhone の HEIC 形式ではないか。</td></tr>
-    <tr><td>古い写真・古い文章のまま</td><td>再読み込み（<span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">R</span>）。公開中のホームページの場合は、反映に1〜2分かかります。</td></tr>
+    <tr><td>パソコンでは表示されるのに、公開後に表示されない</td><td>ファイル名の大文字・小文字（<code>.JPG</code> になっていないか）。パソコンでは区別されないため、確認で気づけません。</td></tr>
+    <tr><td>古い写真・古い文章のまま</td><td>再読み込み（5章の方法）。公開中のホームページの場合は、反映に1〜2分かかります。</td></tr>
     <tr><td>ページの見た目が崩れた</td><td>タグ（<code>&lt;</code> <code>&gt;</code> の部分）を消していないか。直したファイルをバックアップのものに戻すと元に戻ります。</td></tr>
     <tr><td>文字化けした</td><td>保存するときの文字コードが <strong>UTF-8</strong> になっているか。</td></tr>
 </table>
