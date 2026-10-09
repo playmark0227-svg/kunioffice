@@ -94,6 +94,9 @@ function applyFilter(filterValue, workItems) {
 // ========================================
 // お問い合わせフォームの送信処理
 // ========================================
+// お問い合わせの送り先
+const CONTACT_EMAIL = 'info@kunioffice.jp';
+
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contactForm');
     const formMessage = document.getElementById('formMessage');
@@ -120,33 +123,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // 送信ボタンを無効化
-            const submitButton = contactForm.querySelector('button[type="submit"]');
-            const originalText = submitButton.textContent;
-            submitButton.disabled = true;
-            submitButton.textContent = '送信中...';
-            
-            // 実際の送信処理（ここでは疑似的な処理）
-            // 実装時には適切なバックエンドAPIへの送信処理に置き換えてください
-            setTimeout(() => {
-                // 成功メッセージを表示
-                showMessage('お問い合わせありがとうございます。担当者より折り返しご連絡いたします。', 'success');
-                
-                // フォームをリセット
-                contactForm.reset();
-                
-                // 送信ボタンを有効化
-                submitButton.disabled = false;
-                submitButton.textContent = originalText;
-                
-                // フォームを非表示にする
-                contactForm.style.display = 'none';
-                
-                // 3秒後にページトップへスクロール
-                setTimeout(() => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }, 3000);
-            }, 1000);
+            // 入力内容を本文に入れたメールを開く（サーバーを使わずに確実に届ける方式）
+            const serviceSelect = document.getElementById('service');
+            const serviceLabel = serviceSelect.options[serviceSelect.selectedIndex].text;
+            const body = [
+                '【ホームページからのお問い合わせ】',
+                '',
+                'お名前：' + formData.name,
+                '会社名・団体名：' + (formData.company || '（未入力）'),
+                'メールアドレス：' + formData.email,
+                '電話番号：' + (formData.phone || '（未入力）'),
+                'お問い合わせ種類：' + serviceLabel,
+                '',
+                '■ お問い合わせ内容',
+                formData.message,
+                '',
+                '（個人情報の取り扱いに同意済み）'
+            ].join('\r\n');
+            window.location.href = 'mailto:' + CONTACT_EMAIL +
+                '?subject=' + encodeURIComponent('【お問い合わせ】' + formData.subject) +
+                '&body=' + encodeURIComponent(body);
+
+            showMessage('メールアプリに入力内容を入れて開きました。内容を確認して、そのまま送信してください。' +
+                'メールアプリが開かない場合は、' + CONTACT_EMAIL + ' へ直接お送りいただくか、お電話（0153-82-1538）でお問い合わせください。', 'success');
         });
     }
     

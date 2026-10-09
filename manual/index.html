@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>KUNI OFFICE ホームページ 編集マニュアル</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #cc0000;
+            --ink: #1a1a1a;
+            --soft: #5a5a5a;
+            --line: #e2ddd5;
+            --paper: #f6f3ee;
+            --green: #1f7a3a;
+            --amber: #8a5a00;
+        }
+
+        * { box-sizing: border-box; }
+
+        html { -webkit-text-size-adjust: 100%; }
+
+        body {
+            margin: 0;
+            font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+            color: var(--ink);
+            background: #fff;
+            line-height: 1.9;
+            font-size: 16px;
+        }
+
+        .wrap {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 48px 24px 96px;
+        }
+
+        header.cover {
+            border-bottom: 4px solid var(--red);
+            padding-bottom: 28px;
+            margin-bottom: 36px;
+        }
+
+        .kicker {
+            color: var(--red);
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            font-size: 0.85rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            line-height: 1.35;
+            margin: 6px 0 10px;
+        }
+
+        .meta { color: var(--soft); font-size: 0.92rem; margin: 0; }
+
+        h2 {
+            font-size: 1.45rem;
+            font-weight: 900;
+            margin: 56px 0 16px;
+            padding: 10px 16px;
+            background: var(--ink);
+            color: #fff;
+            border-radius: 4px;
+            line-height: 1.4;
+        }
+
+        h2 .num { color: #ff6b6b; margin-right: 10px; }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 32px 0 10px;
+            padding-left: 12px;
+            border-left: 5px solid var(--red);
+            line-height: 1.5;
+        }
+
+        p { margin: 0 0 12px; }
+
+        a { color: var(--red); }
+
+        ol.steps, ul.list {
+            margin: 8px 0 16px;
+            padding-left: 1.6em;
+        }
+
+        ol.steps > li { margin-bottom: 8px; padding-left: 4px; }
+
+        ol.steps > li::marker { font-weight: 900; color: var(--red); }
+
+        .box {
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 16px 0 20px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+        }
+
+        .box > :last-child { margin-bottom: 0; }
+
+        .box h4 { margin: 0 0 6px; font-size: 1rem; }
+
+        .box--rule { background: #fff5f5; border-color: #f2c6c6; }
+
+        .box--warn { background: #fff8e6; border-color: #f0d9a0; }
+
+        .box--warn h4 { color: var(--amber); }
+
+        .box--ok { background: #eef7f0; border-color: #bfe0c8; }
+
+        .box--ok h4 { color: var(--green); }
+
+        .rules { counter-reset: r; list-style: none; padding: 0; margin: 0; }
+
+        .rules li {
+            counter-increment: r;
+            position: relative;
+            padding: 10px 0 10px 48px;
+            border-top: 1px dashed #f2c6c6;
+            font-weight: 500;
+        }
+
+        .rules li:first-child { border-top: 0; }
+
+        .rules li::before {
+            content: counter(r);
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--red);
+            color: #fff;
+            font-weight: 900;
+            text-align: center;
+            line-height: 32px;
+        }
+
+        .toc { columns: 2; column-gap: 32px; padding-left: 1.4em; margin: 8px 0 0; }
+
+        .toc li { break-inside: avoid; margin-bottom: 4px; }
+
+        code, .fname {
+            font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+            background: #f1efeb;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 0.9em;
+            word-break: break-all;
+        }
+
+        .fname { font-weight: 700; color: var(--ink); }
+
+        pre {
+            background: #1f1f1f;
+            color: #f3f3f3;
+            border-radius: 8px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+            font-size: 0.86rem;
+            line-height: 1.7;
+            margin: 10px 0 18px;
+            white-space: pre;
+        }
+
+        pre .hl { background: #6b5d00; color: #fff; border-radius: 3px; padding: 0 2px; }
+
+        pre .tag { color: #8fc1ff; }
+
+        .label { font-size: 0.82rem; font-weight: 700; color: var(--soft); margin: 14px 0 0; }
+
+        table { width: 100%; border-collapse: collapse; margin: 10px 0 20px; font-size: 0.93rem; }
+
+        th, td { border: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; }
+
+        th { background: var(--paper); font-weight: 700; }
+
+        table.photos td.thumb { width: 150px; padding: 6px; }
+
+        table.photos td.thumb img { display: block; width: 136px; height: 102px; object-fit: cover; border-radius: 4px; background: #eee; }
+
+        table.photos td:nth-child(2) { width: 230px; }
+
+        .folder { display: block; color: var(--soft); font-size: 0.78rem; }
+
+        .prep { color: var(--soft); font-size: 0.85rem; }
+
+        .flag { display: inline-block; margin-top: 6px; font-size: 0.75rem; font-weight: 700; border-radius: 999px; padding: 1px 10px; }
+
+        .flag--ai { background: #ffe1e1; color: #a40000; }
+
+        .flag--ph { background: #ececec; color: #444; }
+
+        .note { color: var(--soft); font-size: 0.9rem; }
+
+        .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        .kbd { display: inline-block; border: 1px solid #bbb; border-bottom-width: 2px; border-radius: 4px; padding: 0 6px; font-size: 0.85em; background: #fff; font-family: inherit; }
+
+        footer.end { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--soft); font-size: 0.9rem; }
+
+        @media (max-width: 640px) {
+            .toc { columns: 1; }
+            .two { grid-template-columns: 1fr; }
+            table.photos td.thumb { width: 96px; }
+            table.photos td.thumb img { width: 84px; height: 63px; }
+            table.photos td:nth-child(2) { width: auto; }
+            h1 { font-size: 1.6rem; }
+        }
+
+        @media print {
+            @page { size: A4; margin: 14mm 13mm 16mm; }
+            body { font-size: 10.5pt; line-height: 1.75; }
+            .wrap { max-width: none; padding: 0; }
+            h2 { margin-top: 30px; break-after: avoid; }
+            h2#s2, h2#s4, h2#s6 { break-before: page; margin-top: 0; }
+            h3, h4, .label { break-after: avoid; }
+            thead { display: table-header-group; }
+            tr, pre, .box, img { break-inside: avoid; }
+            a { color: var(--ink); text-decoration: none; }
+            pre { white-space: pre-wrap; word-break: break-all; }
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="cover">
+    <p class="kicker">KUNI OFFICE ホームページ</p>
+    <h1>編集マニュアル<br><span style="font-size:0.6em;font-weight:700">写真の差し替え・文章の修正・実績の追加</span></h1>
+    <p class="meta">2026年10月版　／　対象：KUNI OFFICE 高桑様　／　作成：ViFight</p>
+</header>
+
+<div class="box box--rule">
+    <h4>作業の前に、この3つだけ守ってください</h4>
+    <ol class="rules">
+        <li><strong>作業前に、フォルダを丸ごとコピーしてバックアップ</strong>を取っておく（失敗しても元に戻せます）</li>
+        <li><strong>写真は「同じファイル名」で上書きする</strong>だけで差し替わります（HTMLを触る必要はありません）</li>
+        <li><strong>文章は「文字だけ」書き換える</strong>。<code>&lt;</code> と <code>&gt;</code> で囲まれた部分（タグ）は消したり変えたりしない</li>
+    </ol>
+</div>
+
+<p><strong>もくじ</strong></p>
+<ol class="toc">
+    <li><a href="#s1">フォルダの中身</a></li>
+    <li><a href="#s2">写真を差し替える（写真一覧つき）</a></li>
+    <li><a href="#s3">文章を直す</a></li>
+    <li><a href="#s4">実績を追加・削除する</a></li>
+    <li><a href="#s5">パソコンで確認する</a></li>
+    <li><a href="#s6">ホームページに反映（公開）する</a></li>
+    <li><a href="#s7">お問い合わせフォームについて</a></li>
+    <li><a href="#s8">オンラインショップ（若葉のしずく）</a></li>
+    <li><a href="#s9">うまくいかないとき</a></li>
+</ol>
+
+<!-- ================================================== -->
+<h2 id="s1" class="keep"><span class="num">1</span>フォルダの中身</h2>
+<p>受け取ったフォルダ（ZIPを解凍したもの）の中で、<strong>触るのは次の場所だけ</strong>です。</p>
+<table>
+    <tr><th style="width:34%">場所</th><th>中身</th></tr>
+    <tr><td><code>images</code> フォルダ</td><td>KUNI OFFICE のページで使っている写真。<strong>写真の差し替えはここ</strong></td></tr>
+    <tr><td><code>index.html</code></td><td>ホーム（トップページ）の文章</td></tr>
+    <tr><td><code>services.html</code></td><td>事業内容ページの文章</td></tr>
+    <tr><td><code>works.html</code></td><td>実績ページの文章・実績の追加／削除</td></tr>
+    <tr><td><code>company.html</code></td><td>会社情報ページの文章</td></tr>
+    <tr><td><code>contact.html</code></td><td>お問い合わせページの文章</td></tr>
+    <tr><td><code>wakaba</code> フォルダ</td><td>「若葉のしずく」オンラインショップ一式（<a href="#s8">8章</a>）</td></tr>
+    <tr><td><code>manual</code> フォルダ</td><td>このマニュアル</td></tr>
+</table>
+<div class="box">
+    <h4>触らなくてよいもの</h4>
+    <p><code>css</code>（デザイン）・<code>js</code>（動き）・<code>.github</code>（公開の自動化）・<code>server.js</code>・<code>package.json</code>・<code>.env.example</code>・<code>.md</code> で終わる説明書・<code>shop.html</code>／<code>success.html</code>（旧ページからの転送用）は、変更しなくてOKです。</p>
+</div>
+
+<!-- ================================================== -->
+<h2 id="s2"><span class="num">2</span>写真を差し替える</h2>
+
+<h3>手順（同じ名前で上書きするだけ）</h3>
+<ol class="steps">
+    <li>差し替えたい写真を、下の<a href="#photolist">「写真一覧」</a>で探し、<strong>ファイル名</strong>を確認します（例：<code class="fname">service-photo.jpg</code>）。</li>
+    <li>新しい写真のファイル名を、<strong>そのファイル名と1文字も違わない名前</strong>に変えます。</li>
+    <li>その写真を <code>images</code> フォルダに入れ、「置き換えますか？」と聞かれたら<strong>「置き換える」</strong>を選びます。</li>
+    <li><a href="#s5">5章</a>の方法でパソコンで確認し、<a href="#s6">6章</a>の方法で公開します。</li>
+</ol>
+
+<div class="box box--ok">
+    <h4>ポイント：1枚の写真が2か所に出ることがあります</h4>
+    <p>たとえば <code class="fname">service-photo.jpg</code> を差し替えると、「事業内容ページ」と「トップページのServices」の<strong>両方</strong>が新しい写真に変わります。どこに出るかは写真一覧の「表示される場所」で確認できます。</p>
+</div>
+
+<h3>写真の大きさ・向き</h3>
+<table>
+    <tr><th style="width:34%">項目</th><th>おすすめ</th></tr>
+    <tr><td>向き</td><td><strong>横長</strong>（横4：縦3くらい）。代表挨拶の写真だけ<strong>縦長</strong>（縦5：横4）</td></tr>
+    <tr><td>大きさ</td><td>横 1600 ピクセル前後（スマホで撮った写真をそのまま使っても表示されます）</td></tr>
+    <tr><td>ファイルの種類</td><td><strong>JPEG（.jpg）</strong>。iPhone の HEIC 形式は表示されないので、JPEG で書き出してください</td></tr>
+    <tr><td>ファイルの重さ</td><td>1枚 500KB 前後まで（重いと表示が遅くなります）</td></tr>
+</table>
+<p class="note">写真は枠に合わせて<strong>自動で中央を切り抜いて</strong>表示されます。端に写っているものは切れることがあるので、見せたいものは写真の中央に置いてください。</p>
+
+<div class="box box--warn">
+    <h4>ファイル名の注意</h4>
+    <ul class="list">
+        <li>大文字・小文字も区別されます。<code>Service-Photo.JPG</code> や <code>service-photo.jpeg</code> は<strong>別の名前</strong>として扱われ、表示されません。</li>
+        <li>パソコンの設定で拡張子（.jpg）が見えないと、名前を変えたときに <code>service-photo.jpg.jpg</code> になってしまうことがあります。<br>Windows は「表示」→「ファイル名拡張子」にチェック、Mac は Finder の「設定」→「詳細」→「すべてのファイル名拡張子を表示」をオンにすると確認できます。</li>
+    </ul>
+</div>
+
+<h3 id="photolist">写真一覧</h3>
+<p class="note"><span class="flag flag--ai">AIの仮画像</span> はAIで作った仮の画像です。実際の写真への差し替えをおすすめします。<span class="flag flag--ph">準備中</span> は「写真準備中」の仮画像で、上書きすると写真が表示されます。</p>
+
+<h3>業務内容の写真（最優先：AIで作った仮の画像です）</h3>
+<p class="note">事業内容ページと、トップページの「Services」に表示されます。</p>
+<table class="photos"><thead><tr><th>今の写真</th><th>ファイル名</th><th>表示される場所</th></tr></thead><tbody>
+<tr><td class="thumb"><img src="../images/service-photo.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">service-photo.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>事業内容「01 写真撮影」／トップ「写真撮影」<br><span class="prep">用意する写真の例：撮影中の様子、撮影した写真など</span></td></tr>
+<tr><td class="thumb"><img src="../images/service-print.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">service-print.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>事業内容「02 印刷サービス」／トップ「印刷サービス」<br><span class="prep">用意する写真の例：名刺・チラシなどの印刷物</span></td></tr>
+<tr><td class="thumb"><img src="../images/service-video.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">service-video.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>事業内容「03 映像制作」／トップ「映像制作」<br><span class="prep">用意する写真の例：撮影・編集の様子</span></td></tr>
+<tr><td class="thumb"><img src="../images/service-signboard.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">service-signboard.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>事業内容「04 看板制作」／トップ「看板制作」<br><span class="prep">用意する写真の例：手がけた看板</span></td></tr>
+<tr><td class="thumb"><img src="../images/service-goods.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">service-goods.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>事業内容「05 オリジナルTシャツ・グッズ制作」／トップ「オリジナルグッズ」<br><span class="prep">用意する写真の例：Tシャツ・グッズ</span></td></tr>
+<tr><td class="thumb"><img src="../images/service-website.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">service-website.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>事業内容「06 ホームページ制作」／トップ「ホームページ制作」<br><span class="prep">用意する写真の例：パソコン・スマホに映したホームページなど</span></td></tr>
+<tr><td class="thumb"><img src="../images/service-other.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">service-other.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>事業内容「07 その他サービス」（事業内容ページのみ）<br><span class="prep">用意する写真の例：ロゴ・デザインなどの制作物</span></td></tr>
+</tbody></table>
+<h3>実績の写真</h3>
+<p class="note">実績ページに表示されます。★印の6枚はトップページの「Works」にも表示されます。</p>
+<table class="photos"><thead><tr><th>今の写真</th><th>ファイル名</th><th>表示される場所</th></tr></thead><tbody>
+<tr><td class="thumb"><img src="../images/work-event.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-event.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>実績「地域イベント撮影」★</td></tr>
+<tr><td class="thumb"><img src="../images/work-product.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-product.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>実績「商品撮影」★</td></tr>
+<tr><td class="thumb"><img src="../images/work-store.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-store.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>実績「店舗撮影」★（トップでは「店舗・料理撮影」）</td></tr>
+<tr><td class="thumb"><img src="../images/work-brochure.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-brochure.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>実績「企業パンフレット」★</td></tr>
+<tr><td class="thumb"><img src="../images/work-flyer.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-flyer.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>実績「イベントチラシ」★</td></tr>
+<tr><td class="thumb"><img src="../images/work-meishi.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-meishi.jpg</code><br><span class="flag flag--ph">準備中</span></td><td>実績「名刺・ショップカード」</td></tr>
+<tr><td class="thumb"><img src="../images/work-video.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-video.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>実績「企業PR映像」★</td></tr>
+<tr><td class="thumb"><img src="../images/work-event-movie.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-event-movie.jpg</code><br><span class="flag flag--ph">準備中</span></td><td>実績「イベント記録映像」</td></tr>
+<tr><td class="thumb"><img src="../images/work-product-movie.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-product-movie.jpg</code><br><span class="flag flag--ph">準備中</span></td><td>実績「商品紹介映像」</td></tr>
+<tr><td class="thumb"><img src="../images/work-signboard.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-signboard.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>実績「店舗看板」</td></tr>
+<tr><td class="thumb"><img src="../images/work-outdoor-sign.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-outdoor-sign.jpg</code><br><span class="flag flag--ph">準備中</span></td><td>実績「屋外広告看板」</td></tr>
+<tr><td class="thumb"><img src="../images/work-tshirt.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-tshirt.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>実績「イベントTシャツ」</td></tr>
+<tr><td class="thumb"><img src="../images/work-novelty.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">work-novelty.jpg</code><br><span class="flag flag--ph">準備中</span></td><td>実績「企業ノベルティ」</td></tr>
+</tbody></table>
+<h3>トップページの写真</h3>
+<table class="photos"><thead><tr><th>今の写真</th><th>ファイル名</th><th>表示される場所</th></tr></thead><tbody>
+<tr><td class="thumb"><img src="../images/logo1.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">logo1.jpg</code><br></td><td>いちばん上の大きな写真（KUNI OFFICEの看板）<br><span class="prep">用意する写真の例：差し替える場合は横長の写真</span></td></tr>
+<tr><td class="thumb"><img src="../images/about.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">about.jpg</code><br><span class="flag flag--ai">AIの仮画像</span></td><td>「About　KUNI OFFICE について」の写真<br><span class="prep">用意する写真の例：事務所・お店・作業の様子など</span></td></tr>
+<tr><td class="thumb"><img src="../images/ceo-photo.jpg" alt=""></td><td><span class="folder">images/</span><code class="fname">ceo-photo.jpg</code><br></td><td>「Message　代表挨拶」の写真<br><span class="prep">用意する写真の例：縦長の写真（縦5：横4）</span></td></tr>
+</tbody></table>
+<h3>オンラインショップ（若葉のしずく）の写真</h3>
+<p class="note">ショップのページは wakaba フォルダの中にあります。</p>
+<table class="photos"><thead><tr><th>今の写真</th><th>ファイル名</th><th>表示される場所</th></tr></thead><tbody>
+<tr><td class="thumb"><img src="../wakaba/images/package-kraft.jpg" alt=""></td><td><span class="folder">wakaba/images/</span><code class="fname">package-kraft.jpg</code><br></td><td>ショップのトップ・商品情報・購入欄／KUNI OFFICEトップの「Online Shop」</td></tr>
+<tr><td class="thumb"><img src="../wakaba/images/package-cream.jpg" alt=""></td><td><span class="folder">wakaba/images/</span><code class="fname">package-cream.jpg</code><br></td><td>ショップの「おいしさ」・商品情報・定期便</td></tr>
+<tr><td class="thumb"><img src="../wakaba/images/og.jpg" alt=""></td><td><span class="folder">wakaba/images/</span><code class="fname">og.jpg</code><br></td><td>LINEやSNSでショップのURLを送ったときに出る画像<br><span class="prep">用意する写真の例：横1200×縦630</span></td></tr>
+</tbody></table>
+
+<div class="box">
+    <h4>使っていない写真（予備）</h4>
+    <p><code>images</code> フォルダの <code>ceo-photo-1.jpg</code>・<code>ceo-photo-2.jpg</code>（代表写真の別カット）、<code>logo-black.png</code>・<code>logo2.png</code>（ロゴの別バージョン）は、今のホームページでは使っていません。残しておいても消しても表示に影響はありません。ヘッダーのロゴは <code>logo-white.png</code> です。</p>
+</div>
+
+<!-- ================================================== -->
+<h2 id="s3"><span class="num">3</span>文章を直す</h2>
+
+<h3>使うソフト</h3>
+<div class="two">
+    <div class="box">
+        <h4>Windows</h4>
+        <p>「メモ帳」で開けます。ファイルを右クリック →「プログラムから開く」→「メモ帳」。</p>
+    </div>
+    <div class="box">
+        <h4>Mac</h4>
+        <p>「テキストエディット」で開くと見た目が崩れて表示されるため、次の Visual Studio Code をおすすめします。</p>
+    </div>
+</div>
+<p>おすすめは無料の <strong>Visual Studio Code</strong>（Windows・Mac 両方あり）です。文字の色分けで「タグ」と「文章」の区別がつきやすく、<a href="#bulk">全ページまとめての置き換え</a>もできます。</p>
+
+<h3>手順</h3>
+<ol class="steps">
+    <li>直したいページのファイルを開きます（下の表を参照）。</li>
+    <li><span class="kbd">Ctrl</span> + <span class="kbd">F</span>（Mac は <span class="kbd">⌘</span> + <span class="kbd">F</span>）を押し、<strong>今ホームページに出ている文章</strong>の一部を入力して探します。</li>
+    <li>見つかった文章の<strong>文字だけ</strong>を書き換えます。</li>
+    <li>上書き保存します（<span class="kbd">Ctrl</span> + <span class="kbd">S</span>／Mac は <span class="kbd">⌘</span> + <span class="kbd">S</span>）。文字コードを聞かれたら <strong>UTF-8</strong> のまま保存してください。</li>
+    <li><a href="#s5">5章</a>の方法でパソコンで確認します。</li>
+</ol>
+
+<table>
+    <tr><th style="width:34%">ホームページのページ</th><th>ファイル</th></tr>
+    <tr><td>ホーム（トップページ）</td><td><code>index.html</code></td></tr>
+    <tr><td>事業内容</td><td><code>services.html</code></td></tr>
+    <tr><td>実績</td><td><code>works.html</code></td></tr>
+    <tr><td>会社情報</td><td><code>company.html</code></td></tr>
+    <tr><td>お問い合わせ</td><td><code>contact.html</code></td></tr>
+</table>
+
+<h3>書き換えてよい所・いけない所</h3>
+<p>例：事業内容ページ「写真撮影」の説明文を直す場合</p>
+<p class="label">変更前</p>
+<pre><span class="tag">&lt;p class="service-description"&gt;</span>
+    <span class="hl">プロフェッショナルな技術と経験で、あらゆるシーンの撮影に対応いたします。</span>
+    <span class="hl">商品撮影、イベント撮影、店舗撮影など、お客様のニーズに合わせた最適な撮影プランをご提案します。</span>
+<span class="tag">&lt;/p&gt;</span></pre>
+<p class="label">変更後（黄色の文字の部分だけ変える）</p>
+<pre><span class="tag">&lt;p class="service-description"&gt;</span>
+    <span class="hl">標津町を中心に、商品・店舗・イベントの撮影をお受けしています。</span>
+    <span class="hl">出張撮影もご相談ください。</span>
+<span class="tag">&lt;/p&gt;</span></pre>
+<div class="box box--warn">
+    <h4>青い文字（タグ）は変えない</h4>
+    <ul class="list">
+        <li><code>&lt;p class="..."&gt;</code> や <code>&lt;/p&gt;</code> のような、<code>&lt;</code> と <code>&gt;</code> で囲まれた部分は消したり変えたりしないでください。表示が崩れます。</li>
+        <li>文中で改行したいときは、改行したい場所に <code>&lt;br&gt;</code> と入れます。</li>
+        <li><code>&amp;amp;</code> は「&amp;」記号の書き方です。そのまま残してください。</li>
+    </ul>
+</div>
+
+<h3>箇条書きの項目を増やす・減らす</h3>
+<p>事業内容ページの「サービス内容」などの箇条書きは、<code>&lt;li&gt;</code>〜<code>&lt;/li&gt;</code> の1行が1項目です。<strong>1行まるごとコピーして下に貼り付け</strong>、文字を書き換えれば項目が増えます。減らすときは1行まるごと消します。</p>
+<pre><span class="tag">&lt;li&gt;</span><span class="hl">商品撮影（物撮り）</span><span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;li&gt;</span><span class="hl">イベント撮影</span><span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;li&gt;</span><span class="hl">ドローン空撮</span><span class="tag">&lt;/li&gt;</span>   ← コピーして追加した行</pre>
+
+<h3 id="bulk">住所・電話番号・メール・営業時間を変えるとき</h3>
+<p>これらは<strong>各ページの下の部分（フッター）など、複数のファイルにそれぞれ書かれています</strong>。1つのファイルだけ直すと、ページによって違う番号が出てしまいます。</p>
+<table>
+    <tr><th style="width:34%">情報</th><th>書かれているファイル</th></tr>
+    <tr><td>電話 0153-82-1538<br>メール info@kunioffice.jp</td><td><code>index.html</code> <code>services.html</code> <code>works.html</code> <code>company.html</code> <code>contact.html</code> <code>js/main.js</code>、ショップの <code>wakaba</code> フォルダ内の各ページと <code>wakaba/js/config.js</code></td></tr>
+    <tr><td>FAX・携帯・住所</td><td><code>index.html</code> <code>services.html</code> <code>works.html</code> <code>company.html</code> <code>contact.html</code>（FAX・住所はショップの <code>wakaba</code> フォルダ内にもあります）</td></tr>
+</table>
+<div class="box box--ok">
+    <h4>Visual Studio Code なら一度に置き換えられます</h4>
+    <ol class="steps">
+        <li>Visual Studio Code の「ファイル」→「フォルダーを開く」で、受け取ったフォルダ全体を開きます。</li>
+        <li><span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">H</span>（Mac は <span class="kbd">⌘</span> + <span class="kbd">Shift</span> + <span class="kbd">H</span>）で「フォルダーで置換」を開きます。</li>
+        <li>上の欄に古い番号、下の欄に新しい番号を入れ、見つかった場所を確認してから「すべて置換」を押します。</li>
+    </ol>
+</div>
+
+<!-- ================================================== -->
+<h2 id="s4"><span class="num">4</span>実績を追加・削除する</h2>
+<p>実績ページ（<code>works.html</code>）の実績は、1件ごとに次のような<strong>10行のかたまり</strong>で書かれています。</p>
+<pre><span class="tag">&lt;div class="work-item" data-category="</span><span class="hl">photo</span><span class="tag">"&gt;</span>
+    <span class="tag">&lt;div class="work-image"&gt;</span>
+        <span class="tag">&lt;img src="images/</span><span class="hl">work-event.jpg</span><span class="tag">" alt="</span><span class="hl">地域イベント撮影</span><span class="tag">"&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;div class="work-details"&gt;</span>
+        <span class="tag">&lt;span class="work-category"&gt;</span><span class="hl">写真撮影</span><span class="tag">&lt;/span&gt;</span>
+        <span class="tag">&lt;h3&gt;</span><span class="hl">地域イベント撮影</span><span class="tag">&lt;/h3&gt;</span>
+        <span class="tag">&lt;p&gt;</span><span class="hl">標津町の祭りイベントの記録撮影。躍動感のある瞬間を捉えました。</span><span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre>
+
+<h3>追加する</h3>
+<ol class="steps">
+    <li>写真に新しいファイル名を付けて <code>images</code> フォルダに入れます。名前は<strong>半角の英数字とハイフンだけ</strong>（例：<code>work-shibetsu-festival.jpg</code>）。日本語や空白は使わないでください。</li>
+    <li><code>works.html</code> を開き、同じ種類の実績のかたまり（<code>&lt;div class="work-item"</code> の行から数えて<strong>10行目の <code>&lt;/div&gt;</code> まで</strong>）を<strong>まるごとコピー</strong>し、そのすぐ下に貼り付けます。</li>
+    <li>貼り付けたかたまりの<strong>黄色の部分</strong>（写真のファイル名・タイトル・説明文・種類）を書き換えます。</li>
+    <li>種類（<code>data-category="..."</code> と表示名）は、下の表の組み合わせのどれかにします。実績ページ上部の絞り込みボタンはこの値で動きます。</li>
+</ol>
+<table>
+    <tr><th><code>data-category="..."</code> に入れる値</th><th>表示名（<code>work-category</code> に入れる文字）</th></tr>
+    <tr><td><code>photo</code></td><td>写真撮影</td></tr>
+    <tr><td><code>print</code></td><td>印刷物</td></tr>
+    <tr><td><code>video</code></td><td>映像制作</td></tr>
+    <tr><td><code>signboard</code></td><td>看板</td></tr>
+    <tr><td><code>goods</code></td><td>オリジナルグッズ</td></tr>
+</table>
+
+<h3>削除する</h3>
+<p>消したい実績のかたまりを、<code>&lt;div class="work-item"</code> の行から数えて<strong>10行目の <code>&lt;/div&gt;</code> まで、まるごと</strong>消します。途中だけ消したり、行数がずれたりすると表示が崩れます。</p>
+
+<h3>トップページの「Works」（6枠）</h3>
+<p>トップページの実績紹介は <code>index.html</code> に書かれていて、写真は実績ページと同じファイル（★印）を使っています。実績ページの写真を上書きすると、トップページも一緒に変わります。トップに出す実績そのものを入れ替えたいときは、<code>index.html</code> の <code>class="work-tile"</code> の部分の写真のファイル名とタイトルを書き換えてください。</p>
+
+<!-- ================================================== -->
+<h2 id="s5"><span class="num">5</span>パソコンで確認する</h2>
+<ol class="steps">
+    <li>フォルダの中の <code>index.html</code> を<strong>ダブルクリック</strong>すると、インターネットに公開する前の状態をブラウザで見られます。</li>
+    <li>変更したページを開いて、写真や文章が正しく出ているか確認します。スマホでの見え方は、ブラウザの幅を狭くすると確認できます。</li>
+    <li>変わっていないときは、再読み込み（<span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">R</span>／Mac は <span class="kbd">⌘</span> + <span class="kbd">Shift</span> + <span class="kbd">R</span>）をしてください。</li>
+</ol>
+<p class="note">パソコンで開いたときは、地図やお問い合わせなど、一部インターネットにつながっている部分の動きが本番と違うことがあります。</p>
+
+<!-- ================================================== -->
+<h2 id="s6"><span class="num">6</span>ホームページに反映（公開）する</h2>
+<p>パソコンの中のファイルを直しただけでは、インターネット上のホームページは変わりません。次のどちらかの方法で反映します。</p>
+<p>公開中のホームページ：<a href="https://playmark0227-svg.github.io/kunioffice/">https://playmark0227-svg.github.io/kunioffice/</a></p>
+
+<h3>方法A：変更したファイルを ViFight に送る（かんたん）</h3>
+<ol class="steps">
+    <li>変更した写真・ファイルをまとめて ViFight（久保）に送ります（メール添付や大容量ファイル送信サービスなど）。</li>
+    <li>ViFight 側でホームページに反映し、ご連絡します。</li>
+</ol>
+
+<h3>方法B：GitHub（ギットハブ）で直接反映する</h3>
+<p>ホームページのデータは GitHub というサービスに保管されていて、ここに変更を保存すると<strong>1〜2分で自動的にホームページに反映</strong>されます。ViFight から GitHub の編集権限を受け取ったあとに使える方法です。</p>
+<p><strong>写真を差し替える</strong></p>
+<ol class="steps">
+    <li>GitHub にログインし、<a href="https://github.com/playmark0227-svg/kunioffice">https://github.com/playmark0227-svg/kunioffice</a> を開きます。</li>
+    <li><code>images</code> フォルダをクリックします。</li>
+    <li>右上の「<strong>Add file</strong>」→「<strong>Upload files</strong>」を押します。</li>
+    <li>差し替える写真（一覧と同じファイル名にしたもの）をドラッグ＆ドロップします。</li>
+    <li>下の緑のボタン「<strong>Commit changes</strong>」を押します。</li>
+</ol>
+<p><strong>文章を直す</strong></p>
+<ol class="steps">
+    <li>直したいファイル（例：<code>services.html</code>）をクリックします。</li>
+    <li>右上の鉛筆マーク（Edit this file）を押します。</li>
+    <li>3章と同じ要領で文字だけ書き換えます。</li>
+    <li>右上の「<strong>Commit changes...</strong>」→ 出てきた画面の「<strong>Commit changes</strong>」を押します。</li>
+</ol>
+<div class="box">
+    <h4>反映されたか確認するには</h4>
+    <p>1〜2分たってからホームページを開き、再読み込みしてください。GitHub の「Actions」タブで、いちばん上に緑のチェックが付いていれば反映完了です。赤いバツが付いたときは、ViFight にご連絡ください。</p>
+    <p>GitHub には変更の履歴がすべて残るので、失敗してもあとから元に戻せます。</p>
+</div>
+
+<!-- ================================================== -->
+<h2 id="s7"><span class="num">7</span>お問い合わせフォームについて</h2>
+<p>お問い合わせページのフォームで「メールで送信する」を押すと、お客様のパソコン・スマホのメールアプリが、入力内容が入った状態で開きます。お客様がそのまま送信すると、<strong>info@kunioffice.jp</strong> にメールが届きます。</p>
+<p class="note">送り先のメールアドレスを変えるときは、<code>js/main.js</code> を開いて <code>CONTACT_EMAIL</code> で検索し、<code>const CONTACT_EMAIL = 'info@kunioffice.jp';</code> の <code>'</code> と <code>'</code> の間を書き換えてください。</p>
+
+<!-- ================================================== -->
+<h2 id="s8"><span class="num">8</span>オンラインショップ（若葉のしずく）</h2>
+<p>ショップは <code>wakaba</code> フォルダの中にあり、ページの構成は KUNI OFFICE のページと同じです。写真は <code>wakaba/images</code> フォルダを同じ名前で上書きすれば差し替わります（<a href="#photolist">写真一覧</a>の最後を参照）。</p>
+<table>
+    <tr><th style="width:34%">変えたいこと</th><th>直すファイル</th></tr>
+    <tr><td>価格・送料・定期便の条件</td><td><code>wakaba/js/config.js</code>（カートの計算に使う値）<strong>と</strong>、ページに書いてある価格（<code>wakaba/index.html</code>・<code>wakaba/guide.html</code>・<code>wakaba/tokushoho.html</code>、KUNI OFFICE トップの <code>index.html</code> の「Online Shop」）の<strong>両方</strong></td></tr>
+    <tr><td>商品説明・飲み方・よくある質問</td><td><code>wakaba/index.html</code></td></tr>
+    <tr><td>送料・お届け・返品の説明</td><td><code>wakaba/guide.html</code></td></tr>
+    <tr><td>販売者・連絡先などの法律上の表記</td><td><code>wakaba/tokushoho.html</code></td></tr>
+</table>
+<div class="box box--warn">
+    <h4>ご注文の受け取り方</h4>
+    <p>今は「お客様のメールアプリが、注文内容が入った状態で開き、info@kunioffice.jp に送られる」方式です。注文メールが届いたら、お支払い方法とお届け予定日をお客様にメールでご案内してください。クレジットカード決済を使いたい場合は ViFight にご相談ください。</p>
+</div>
+<div class="box">
+    <h4>販売前にご確認ください</h4>
+    <p>「特定商取引法に基づく表記」（<code>wakaba/tokushoho.html</code>）の運営統括責任者は、いま「代表 高桑」とだけ書かれています。<strong>フルネームでの記載</strong>が必要なため、お名前を書き足してください。商品の表示（内容量・賞味期限など）、送料、発送日数、返品の条件も、実際の内容と合っているかご確認ください。</p>
+</div>
+
+<!-- ================================================== -->
+<h2 id="s9"><span class="num">9</span>うまくいかないとき</h2>
+<table>
+    <tr><th style="width:38%">こんなとき</th><th>確認すること</th></tr>
+    <tr><td>写真を入れたのに表示されない</td><td>ファイル名が一覧と<strong>完全に同じ</strong>か（大文字・小文字、<code>.jpg</code> と <code>.jpeg</code> の違い、<code>.jpg.jpg</code> になっていないか）。iPhone の HEIC 形式ではないか。</td></tr>
+    <tr><td>古い写真・古い文章のまま</td><td>再読み込み（<span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">R</span>）。公開中のホームページの場合は、反映に1〜2分かかります。</td></tr>
+    <tr><td>ページの見た目が崩れた</td><td>タグ（<code>&lt;</code> <code>&gt;</code> の部分）を消していないか。直したファイルをバックアップのものに戻すと元に戻ります。</td></tr>
+    <tr><td>文字化けした</td><td>保存するときの文字コードが <strong>UTF-8</strong> になっているか。</td></tr>
+</table>
+<p>わからないことや、大きな変更（ページの追加・デザインの変更など）は、ViFight（久保）までご連絡ください。</p>
+
+<footer class="end">
+    <p>KUNI OFFICE ホームページ 編集マニュアル　2026年10月版　作成：ViFight</p>
+</footer>
+
+</div>
+</body>
+</html>
