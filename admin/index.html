@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="referrer" content="same-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' blob: data:; media-src 'self' blob:; connect-src https://api.github.com; frame-src 'self' about: blob: https://www.google.com/maps/; base-uri 'self'; form-action 'none'; object-src 'none'">
+    <title>管理画面 | KUNI OFFICE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- 起動・読み込み中 -->
+    <section class="boot" id="bootView" aria-live="polite">
+        <img class="boot__logo" src="../images/logo-white.png" alt="KUNI OFFICE">
+        <p class="boot__status" id="bootStatus"><span class="spin" aria-hidden="true"></span><span id="bootText">管理画面を準備しています…</span></p>
+        <div class="boot__error" id="bootError" hidden>
+            <p id="bootErrorText"></p>
+            <div class="boot__actions">
+                <button class="btn btn--primary" type="button" id="bootRetry">もう一度読み込む</button>
+                <button class="btn btn--ghost-dark" type="button" id="bootLogout">ログアウト</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ログイン -->
+    <section class="login" id="loginView" hidden>
+        <div class="login__intro">
+            <img class="login__brand" src="../images/logo-white.png" alt="KUNI OFFICE">
+            <div>
+                <p class="kicker login__kicker">Website editor</p>
+                <h1 class="login__headline">見たままの画面で、<br><em>そのまま</em>書き換える。</h1>
+                <ol class="login__points">
+                    <li><b>01</b><span>文字をタップして、その場で書き換え</span></li>
+                    <li><b>02</b><span>写真をタップして、スマホの写真に差し替え</span></li>
+                    <li><b>03</b><span>「公開する」で、約1分後にサイトへ反映</span></li>
+                </ol>
+            </div>
+        </div>
+        <div class="login__main">
+            <div class="login__card">
+                <p class="kicker">Admin</p>
+                <h2 class="login__title">管理画面</h2>
+                <p class="login__lead">KUNI OFFICE・若葉のしずくのホームページを編集します。</p>
+                <form class="login__form" id="loginForm" novalidate>
+                    <div class="field">
+                        <label class="field__label" for="tokenInput">アクセスキー</label>
+                        <div class="input-group">
+                            <input class="input" id="tokenInput" name="accessKey" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" required>
+                            <button class="input-group__btn" type="button" id="tokenToggle" aria-pressed="false" aria-controls="tokenInput">表示</button>
+                        </div>
+                        <p class="field__hint">サイト管理者（ViFight）から受け取った文字列を貼り付けてください。</p>
+                    </div>
+                    <label class="check"><input type="checkbox" id="rememberInput" checked> このブラウザに記憶する</label>
+                    <p class="form-error" id="loginError" role="alert" hidden></p>
+                    <button class="btn btn--primary btn--block btn--lg" type="submit" id="loginBtn">ログイン</button>
+                </form>
+                <details class="howto">
+                    <summary>アクセスキーの作り方（サイト管理者向け）</summary>
+                    <ol>
+                        <li>GitHub にログインし、右上のアイコン → <b>Settings</b> を開く</li>
+                        <li>左メニューの一番下 <b>Developer settings</b> → <b>Personal access tokens</b> → <b>Fine-grained tokens</b></li>
+                        <li><b>Generate new token</b> を押す</li>
+                        <li><b>Repository access</b>: <b>Only select repositories</b> → <code>kunioffice</code> を選ぶ</li>
+                        <li><b>Permissions</b>: <b>Contents</b> = <b>Read and write</b>、<b>Actions</b> = <b>Read-only</b></li>
+                        <li><b>Expiration</b>: 1年（期限が来たら作り直す）</li>
+                        <li><b>Generate token</b> を押す → 表示された文字列を担当者に安全に渡す</li>
+                    </ol>
+                    <p class="howto__note">この文字列があればサイトを書き換えられます。メールやチャットに残さず、直接お渡しください。</p>
+                </details>
+                <p class="login__foot">管理画面は検索エンジンには表示されません。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 編集画面 -->
+    <section class="editor" id="editorView" hidden>
+        <header class="topbar">
+            <div class="topbar__brand">
+                <img class="topbar__logo" src="../images/logo-white.png" alt="KUNI OFFICE">
+                <span class="topbar__name">管理画面</span>
+            </div>
+            <div class="topbar__picker">
+                <label class="visually-hidden" for="pagePicker">編集するページ</label>
+                <div class="picker">
+                    <select class="picker__select" id="pagePicker"></select>
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+            </div>
+            <div class="topbar__actions">
+                <span class="deploy-chip" id="deployChip" hidden><span class="spin" aria-hidden="true"></span><span>サイトに反映中</span></span>
+                <span class="change-count" id="changeCount" aria-live="polite">未公開の変更はありません</span>
+                <button class="btn btn--ghost-dark revert-btn" type="button" id="revertBtn" disabled>元に戻す</button>
+                <button class="btn btn--primary publish-btn" type="button" id="publishBtn" disabled><span class="lg">公開する</span><span class="sm">公開</span><span class="badge" id="publishBadge" hidden>0</span></button>
+                <button class="icon-btn menu-btn" type="button" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="menu" aria-label="メニュー">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="offline" id="offlineBar" role="status" hidden>インターネットに接続されていません。編集は続けられますが、公開はつながってからになります。</div>
+
+        <div class="subbar">
+            <p class="subbar__hint" id="hint"></p>
+            <div class="subbar__tools">
+                <a class="subbar__link" id="viewSiteLink" href="../" target="_blank" rel="noopener"></a>
+                <div class="segmented" role="group" aria-label="表示の幅">
+                    <button type="button" data-device="pc" aria-pressed="true">PC</button>
+                    <button type="button" data-device="sp" aria-pressed="false">スマホ</button>
+                </div>
+            </div>
+        </div>
+
+        <main class="stage" id="stage">
+            <div class="frames" id="frames"></div>
+            <div class="stage-state" id="stageState" hidden></div>
+            <button class="add-pill" type="button" id="addWorkBtn" hidden>実績を追加</button>
+        </main>
+    </section>
+
+    <div class="menu" id="menu" role="menu" aria-label="メニュー" hidden></div>
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/cms-core.js"></script>
+    <script src="js/github.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/image.js"></script>
+    <script src="js/editor.js"></script>
+    <script src="js/panels.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
