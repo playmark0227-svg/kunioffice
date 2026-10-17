@@ -2422,12 +2422,18 @@ ul {
         height: calc(100vh - 78px);
         background: rgba(8, 8, 8, 0.98);
         backdrop-filter: blur(10px);
-        transform: translateX(100%);
-        transition: transform 0.35s ease;
+        /* 画面の外に置くとスマホで横にはみ出して縮小表示になるため、重ねて非表示にする */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-12px);
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
     }
 
     .nav.active {
-        transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
     .nav ul {
