@@ -2420,6 +2420,11 @@ ul {
         position: fixed;
         inset: 78px 0 auto 0;
         height: calc(100vh - 78px);
+        height: calc(100dvh - 78px);
+        /* 横向きなど背の低い画面でも、下のリンク（ショップ・お問い合わせ）までスクロールで届くように */
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
         background: rgba(8, 8, 8, 0.98);
         backdrop-filter: blur(10px);
         /* 画面の外に置くとスマホで横にはみ出して縮小表示になるため、重ねて非表示にする */

@@ -5,7 +5,8 @@
 
 - 公開URL: https://playmark0227-svg.github.io/kunioffice/
 - オンラインショップ: https://playmark0227-svg.github.io/kunioffice/wakaba/
-- **編集マニュアル（写真の差し替え・文章の修正・実績の追加）: [`manual/index.html`](manual/index.html)**
+- **管理画面（見たまま編集）: https://playmark0227-svg.github.io/kunioffice/admin/** （→ [管理画面（/admin/）](#管理画面admin)）
+- **編集マニュアル（管理画面の使い方・ファイルで直す方法）: [`manual/index.html`](manual/index.html)**
   （公開URL: https://playmark0227-svg.github.io/kunioffice/manual/ ）
 
 ビルド不要の静的サイト（HTML / CSS / JavaScript）です。`main` ブランチに変更が入ると、
@@ -24,9 +25,39 @@ GitHub Actions（`.github/workflows/pages.yml`）が自動で GitHub Pages に�
 | `css/style.css` | デザイン |
 | `js/main.js` | メニュー・実績の絞り込み・お問い合わせフォームなど |
 | `wakaba/` | 若葉のしずく オンラインショップ一式（詳細は [`wakaba/README.md`](wakaba/README.md)） |
-| `manual/` | 編集マニュアル（サイト担当者向け） |
+| `admin/` | 管理画面（見たまま編集）。ブラウザから GitHub API で `main` に直接コミットする（[下記](#管理画面admin)） |
+| `images/works/` | 管理画面の「実績を追加」で追加した実績の写真（`work-YYYYMMDD-HHmmss.jpg`） |
+| `manual/` | 編集マニュアル（サイト担当者向け。`manual/img/` は管理画面の画面写真） |
 | `shop.html` / `success.html` | 旧ショップURLから `wakaba/` への転送用 |
 | `server.js` / `package.json` / `.env.example` / `STRIPE_SETUP.md` | ショップでカード決済を使う場合の決済サーバー（任意） |
+
+## 管理画面（/admin/）
+
+https://playmark0227-svg.github.io/kunioffice/admin/
+
+サイト担当者（高桑様）が、iPhone やパソコンのブラウザで**実際のページを見たまま**文章・写真・実績を直し、
+「公開する」で反映するための管理画面です。ビルド不要の静的ファイル（`admin/index.html` ほか）で、データベースはありません。
+ページの HTML がそのまま保存先で、変更は元の HTML への最小限の書き換えとして保存されます（触っていない部分は1バイトも変わりません）。
+
+- **ログイン**: GitHub の Fine-grained personal access token（画面上の呼び名は「アクセスキー」）を入力する。
+  - Repository access: **Only select repositories → `kunioffice`**
+  - Permissions: **Contents = Read and write**、**Actions = Read-only**（Metadata = Read-only は自動）
+  - Expiration: 1年（期限が来たら作り直す。端末をなくしたら Delete で取り消す）
+  - 作り方・渡し方の手順はマニュアル2章、管理画面のログイン画面の「アクセスキーの作り方（サイト管理者向け）」にもある。
+  - アクセスキーはその端末のブラウザ（既定では sessionStorage）にだけ保存され、`https://api.github.com` にだけ送られる。
+- **公開 = `main` への直接コミット**: 「公開する」で GitHub API（git data API）から `main` にコミットし、
+  `pages.yml` が約1分で公開する。コミットメッセージは `管理画面から更新: …`、公開の履歴からの取り消しは `管理画面から取り消し: …`。
+  - **ローカルで作業する前に必ず `git pull` で `main` を取り込むこと。** 古いファイルのまま push すると、管理画面で公開された変更を上書きしてしまう。
+    （管理画面側は、同じファイルが先に更新されていれば上書きせずに「ほかの場所で同じページが更新されました」で止まる。）
+  - `main` にブランチ保護（PR 必須など）をかけると、管理画面から公開できなくなる。
+- **編集できる範囲**: `admin/js/config.js` の `pages` に書いた9ページの `<main>` の中の文字・写真・箇条書き、
+  実績一覧（`works.html` の `data-cms-list="works"`）、ページのタイトル・説明文、共通情報（電話・住所など。サイト内の `.html` / `.js` を一括置換）。
+  - `data-cms-lock` を付けた要素（価格・送料・割引表記など `wakaba/js/config.js` と連動する部分、JS が書き換える部分、実績の分類ラベル）は編集できない。
+    `header` / `footer` / `nav` / フォームなども対象外。**HTML を直すときは `data-cms-` で始まる属性を消さないこと。**
+  - 管理画面は `admin/`・`.github/`・`manual/`・CSS など、ページ・写真・共通情報以外のファイルは書き換えも取り消しもしない。
+  - 写真の差し替えはファイル名を変えずに上書きし、その写真を使う `<img src>` に `?v=日時` を付けてキャッシュを避ける。
+- 設定（編集できるページ・共通情報の項目・実績のひな形）は `admin/js/config.js`。
+- サイト担当者向けの使い方は [`manual/index.html`](manual/index.html) の第1部。
 
 ## ローカルで確認する
 
@@ -37,8 +68,14 @@ python3 -m http.server 8000
 # → http://localhost:8000/
 ```
 
+管理画面もローカルサーバーで開けます（http://localhost:8000/admin/ ）が、読み書きするのは GitHub 上の `main` です
+（ローカルのファイルではありません。「公開する」を押すと本番に反映されます）。
+
 ## 変更履歴（主なもの）
 
+- 2026-10: 見たまま編集できる管理画面（`admin/`）を追加。GitHub のアクセスキー（Fine-grained token）でログインし、
+  「公開する」で `main` に直接コミットする。各ページに `data-cms-lock` / `data-cms-list="works"` の印を追加。
+  スマホでメニューが画面外にはみ出し、ページが縮小表示になる問題を修正。編集マニュアルを管理画面中心に改訂（画面写真つき）。
 - 2026-10: 実績ページをファイル管理に統一（以前は Supabase のデータで一覧を上書きしていた）。
   ログインなしで編集できた管理画面（`admin.html` / `firebase-admin.html`）と関連ファイルを削除。
   お問い合わせフォームを、実際に送信される方式（メールアプリ）に変更。編集マニュアルを追加。

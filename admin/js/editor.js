@@ -13,7 +13,14 @@
     // プレビューの中だけに入れる編集用の見た目（レイアウトは変えない: outline / box-shadow のみ）
     const PREVIEW_CSS = `
 html { scroll-behavior: auto !important; }
+/* プレビューの端までスクロールしても、管理画面ごと引っぱって「再読み込み」にならないように */
+html, body { overscroll-behavior-y: contain !important; }
 [data-cms-text] { cursor: text; }
+/* 空のままでよい文章（実績の説明など）: タップできる高さと「説明を追加」の目印 */
+[data-cms-text][data-cms-empty] { min-height: 1.7em; }
+[data-cms-text][data-cms-empty]:not([contenteditable])::before {
+  content: attr(data-cms-empty); color: #cc0000; font-size: 13px; font-weight: 700; opacity: 0.8;
+}
 @media (hover: hover) {
   [data-cms-text]:hover { outline: 2px dashed rgba(204, 0, 0, 0.7) !important; outline-offset: 3px; }
   [data-cms-img]:hover { outline: 3px solid #cc0000 !important; outline-offset: -3px; }
@@ -60,6 +67,9 @@ html .cms-layer .cms-chip:focus-visible { box-shadow: 0 0 0 3px #fff, 0 0 0 6px 
 html .cms-layer .cms-bar {
   align-items: center; gap: 2px; padding: 4px; border-radius: 10px; background: #0b0b0b; color: #fff;
   box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.6);
+  /* 狭い画面では2段にして、右端の「削除」が画面の外に出ないように */
+  /* （浮かぶ層は幅0なので、幅は中身に合わせて明示する） */
+  flex-wrap: wrap; width: max-content; max-width: calc(100vw - 16px);
 }
 html .cms-layer .cms-b {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 40px; height: 40px;
@@ -113,9 +123,12 @@ html .cms-layer .cms-tip__btn:hover { background: #cc0000; }
         return /[^\s ]/.test(el.textContent || '');
     }
 
+    // HTML の空白（半角スペース・改行・タブ）だけをまとめる。全角スペース・&nbsp; はそのまま残す
     function collapse(text) {
-        return String(text || '').replace(/[\s ]+/g, ' ').trim();
+        return String(text || '').replace(/[ \t\n\f\r]+/g, ' ').replace(/^ | $/g, '');
     }
+
+    const EMPTY_LABEL = '＋ 説明を追加（タップして入力）';
 
     // 元のソースの開始タグから data-cms-* と id を除いたもの（新しい項目のひな形に使う）
     function cleanOpenTag(src, node) {
@@ -264,6 +277,7 @@ html .cms-layer .cms-tip__btn:hover { background: #cc0000; }
             d.querySelectorAll('[data-cms-text]').forEach((el) => {
                 const id = idOf(el);
                 if (id !== null) this.baseline.set(id, C.serializeInline(el, this.lookup));
+                this.markEmpty(el);
             });
             for (const id of this.cls.lists) {
                 const kids = this.doc.nodes[id].children;
@@ -510,6 +524,8 @@ html .cms-layer .cms-tip__btn:hover { background: #cc0000; }
             });
             // 並べ替えたあとは、マウスを動かすまでバーをその項目に付けたままにする
             on('pointermove', (e) => {
+                // 指で操作したあとは、マウスを実際に動かすまでマウスの位置（画面の動きで出る見かけの移動）を使わない
+                if (e.pointerType === 'mouse' && (e.movementX || e.movementY)) this.lastPointer = 'mouse';
                 if (this.barLock && Math.hypot(e.clientX - this.barLock.x, e.clientY - this.barLock.y) > 6) {
                     this.barLock = null;
                     this.onPointerOver(e); // いまマウスの下にある項目にバーを移す
@@ -548,6 +564,11 @@ html .cms-layer .cms-tip__btn:hover { background: #cc0000; }
             const text = t.closest('[data-cms-text]');
             const hit = text ? null : this.imageAt(t, e.clientX, e.clientY);
             const img = hit && hit.img;
+            // 指でタップした項目を優先する（マウスが別の項目の上に残っていても、そちらにバーを出さない）
+            if (this.lastPointer !== 'mouse' && this.hoverItem) {
+                this.hoverItem = null;
+                this.updateItemBar();
+            }
             this.setActiveItem(t.closest('[data-cms-item]') || (img && img.closest('[data-cms-item]')));
 
             if (text) {
@@ -587,11 +608,17 @@ html .cms-layer .cms-tip__btn:hover { background: #cc0000; }
                     return;
                 }
             }
+            // サイトのメニューのボタン（スマホの ≡）は、編集画面では開かない
+            const siteButton = !t.closest('main') && t.closest('header button, nav button, header [role="button"]');
+            if (siteButton) {
+                this.showTip(siteButton, 'これはサイトのメニューです（編集画面では開きません）。ほかのページを編集するときは、いちばん上の欄でページを選んでください。');
+                return;
+            }
             this.hideTip();
         }
 
         onPointerOver(e) {
-            if (e.pointerType === 'touch' || this.barLock) return;
+            if (e.pointerType === 'touch' || this.barLock || this.lastPointer === 'touch') return;
             const t = elOf(e.target);
             if (!t || (this.layer && this.layer.contains(t))) return;
             const hit = t.closest('[data-cms-text]') ? null : this.imageAt(t, e.clientX, e.clientY);
@@ -715,6 +742,37 @@ html .cms-layer .cms-tip__btn:hover { background: #cc0000; }
             this.select(range);
             this.updateListBar();
             this.app.onEditing(this, el);
+            if (this.lastPointer === 'touch') this.revealOnKeyboard(el);
+        }
+
+        // iPhone では focus({ preventScroll }) のため、キーボードが出ても書き換え中の文字が下に隠れたままになる
+        // （iOS が自分でスクロールしない）。キーボードで狭くなった表示（visualViewport）に合わせて、プレビューを動かす。
+        revealOnKeyboard(el) {
+            const vv = window.visualViewport;
+            if (!vv) return;
+            const run = () => {
+                if (this.editing === el) this.revealEditing();
+            };
+            vv.addEventListener('resize', run, { once: true });
+            setTimeout(run, 650); // キーボードが出終わったころ（resize が来ないブラウザ向け）
+        }
+
+        revealEditing() {
+            const el = this.editing;
+            const vv = window.visualViewport;
+            if (!el || !vv || !this.fwin || !this.frame) return;
+            const frameRect = this.frame.getBoundingClientRect();
+            // プレビューの中の座標で、キーボードに隠れずに見えている下端
+            const limit = Math.min(vv.offsetTop + vv.height, frameRect.bottom) - frameRect.top - 12;
+            const range = this.currentRange();
+            let r = range ? range.getBoundingClientRect() : null;
+            if (!r || (!r.top && !r.bottom)) r = el.getBoundingClientRect();
+            if (r.bottom <= limit) return;
+            const top = this.stickyTop() + 8;
+            const elTop = el.getBoundingClientRect().top;
+            // 下端が見えるところまで。ただし書き換え中の文章の上端がサイトのヘッダーに隠れない範囲で
+            const by = Math.min(r.bottom - limit, Math.max(0, Math.max(r.top, elTop) - top));
+            if (by > 0) this.fwin.scrollBy(0, by);
         }
 
         stopEditing() {
@@ -726,13 +784,18 @@ html .cms-layer .cms-tip__btn:hover { background: #cc0000; }
             clearTimeout(this.updateTimer);
             const newKey = el.getAttribute('data-cms-new');
             if (!hasVisibleText(el)) {
-                if (newKey && this.newItems.has(newKey) && this.newItems.get(newKey).kind === 'li') {
+                const root = newKey && this.newItems.has(newKey) && this.newItems.get(newKey).kind === 'li' ? this.rootOf(el) : null;
+                if (root && root.order.entries.length > 1) {
                     this.dropEntry(el); // 追加しただけで空のままの項目は消す
+                } else if (!root && this.isOptionalText(el)) {
+                    el.textContent = ''; // 実績の説明などは空でもよい（あとからまた書き込める）
                 } else {
+                    // 一覧の最後の1つ（ほかの項目はすべて削除した）も、空にして消すことはできない
                     el.innerHTML = this.editStartHtml;
-                    toast('文字をすべて消すことはできません。元の文章に戻しました。', { type: 'error' });
+                    toast(root ? '最後の1つは消せません。元の文字に戻しました。' : '文字をすべて消すことはできません。元の文章に戻しました。', { type: 'error' });
                 }
             }
+            if (el.isConnected) this.markEmpty(el);
             this.updateText(el);
             if (this.listBar) this.listBar.classList.remove('is-on');
             if (this.tipAnchor && el.contains(this.tipAnchor)) this.hideTip();
@@ -857,6 +920,20 @@ html .cms-layer .cms-tip__btn:hover { background: #cc0000; }
                 el.removeAttribute('data-cms-changed');
             }
             this.app.changed(this);
+        }
+
+        // 空のままでよい文章か（実績の説明。追加したばかりの実績の説明も）
+        isOptionalText(el) {
+            const id = idOf(el);
+            if (id !== null && this.cls.optional && this.cls.optional.has(id)) return true;
+            const item = this.newItemOf(el);
+            return !!(item && item.kind === 'collection' && item.descEl === el);
+        }
+
+        // 空の「説明」に目印（「＋ 説明を追加」）を出す
+        markEmpty(el) {
+            if (!hasVisibleText(el) && this.isOptionalText(el)) el.setAttribute('data-cms-empty', EMPTY_LABEL);
+            else el.removeAttribute('data-cms-empty');
         }
 
         /* ---------- 写真 ---------- */
@@ -1021,11 +1098,16 @@ html .cms-layer .cms-tip__btn:hover { background: #cc0000; }
                 return;
             }
             const title = isItem ? collapse((this.itemTitle(el) || {}).textContent) : collapse(el.textContent);
+            const short = title.length > 40 ? title.slice(0, 40) + '…' : title;
             const editingEl = this.editing;
             if (editingEl) this.stopEditing();
+            const others = isItem ? await this.otherPagesWithPhoto(el) : [];
             const ok = await confirmDialog({
                 title: isItem ? 'この実績を削除しますか？' : 'この項目を削除しますか？',
-                message: '「' + (title.length > 40 ? title.slice(0, 40) + '…' : title) + '」を削除します。「公開する」を押すまでサイトには反映されません。',
+                message: h('div', null,
+                    h('p', { class: 'modal__text', text: '「' + short + '」を削除します。「公開する」を押すまでサイトには反映されません。' }),
+                    others.length ? h('p', { class: 'modal__text', style: { marginTop: '10px' },
+                        text: 'この実績の写真は「' + others.join('」「') + '」のページにも出ています。そちらは自動では消えないので、必要ならそのページを開いて、写真や文字をタップして変えてください。' }) : null),
                 ok: '削除する',
                 danger: true
             });
@@ -1033,7 +1115,47 @@ html .cms-layer .cms-tip__btn:hover { background: #cc0000; }
                 if (editingEl && editingEl.isConnected) this.startEditing(editingEl);
                 return;
             }
+            const root2 = this.rootOf(el);
+            const index = root2 ? this.entryIndex(root2.order, el) : -1;
+            const entry = index >= 0 ? root2.order.entries[index] : null;
             this.dropEntry(el);
+            // 元からあった項目は、すぐに「元に戻す」で戻せる
+            if (entry && !entry.key) {
+                toast('「' + short + '」を削除しました。', { action: { label: '元に戻す', onClick: () => this.restoreEntry(root2, entry, index, el) } });
+            }
+        }
+
+        // 削除した項目を、元の位置に戻す（同じプレビューが開いたままのときだけ）
+        restoreEntry(root, entry, index, el) {
+            if (!this.ready || !root.el.isConnected || el.isConnected || root.order !== this.orders.get(root.id)) return;
+            const entries = root.order.entries;
+            if (entries.some((e) => !e.key && e.id === entry.id)) return;
+            const at = Math.min(index, entries.length);
+            const next = at < entries.length ? this.elementOf(entries[at]) : null;
+            root.el.insertBefore(el, next && next.parentNode === root.el ? next : null);
+            entries.splice(at, 0, entry);
+            el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            this.app.changed(this);
+            setTimeout(() => {
+                this.updateItemBar();
+                this.reposition();
+            }, 30);
+        }
+
+        // 実績の写真が、ほかのページ（ホームの「これまでの仕事」など）でも使われているか → ページ名の一覧
+        async otherPagesWithPhoto(item) {
+            const img = this.itemImage(item);
+            const repoPath = img && !this.newItemOf(item) ? this.repoPathOf(img) : null;
+            if (!repoPath || !this.app.findImageUsages) return [];
+            try {
+                const list = await Promise.race([
+                    this.app.findImageUsages(repoPath),
+                    new Promise((resolve) => setTimeout(() => resolve(null), 5000))
+                ]);
+                return (list || []).filter((u) => u.pagePath !== this.path).map((u) => this.app.describePath(u.pagePath));
+            } catch (err) {
+                return [];
+            }
         }
 
         dropEntry(el) {
@@ -1167,6 +1289,7 @@ html .cms-layer .cms-tip__btn:hover { background: #cc0000; }
             const descEl = el.querySelector(cfg.descSelector);
             const img = el.querySelector(cfg.imageSelector);
             [titleEl, descEl].forEach((t) => t && t.setAttribute('data-cms-text', ''));
+            if (descEl && !hasVisibleText(descEl)) descEl.setAttribute('data-cms-empty', EMPTY_LABEL);
             if (img) {
                 img.setAttribute('data-cms-img', '');
                 img.setAttribute('tabindex', '0');
@@ -1319,8 +1442,14 @@ html .cms-layer .cms-tip__btn:hover { background: #cc0000; }
             return edits;
         }
 
-        buildSource() {
-            return C.applyEdits(this.src, this.doc, this.buildEdits());
+        // extraAttrs: { id: { name: value } }（差し替えた写真の src に付ける「?v=…」など）
+        buildSource(extraAttrs) {
+            const edits = this.buildEdits();
+            if (extraAttrs && Object.keys(extraAttrs).length) {
+                edits.attrs = edits.attrs || {};
+                for (const id of Object.keys(extraAttrs)) edits.attrs[id] = Object.assign({}, edits.attrs[id], extraAttrs[id]);
+            }
+            return C.applyEdits(this.src, this.doc, edits);
         }
     }
 

@@ -14,6 +14,8 @@
         decode: 'この写真の形式は読み込めませんでした。iPhoneの場合は「設定 → カメラ → フォーマット → 互換性優先」にするか、スクリーンショットを使ってください。',
         too_large: '写真のデータが大きすぎます（8MBまで）。別の写真を選んでください。',
         encode: 'この写真を保存用の形式に変換できませんでした。別の写真を選んでください。',
+        // iPhone の Safari などは WebP 形式で保存できない（どの写真を選んでも同じ）
+        webp: 'ここの写真（WebP形式）は、このブラウザでは差し替えられません（iPhone の Safari など）。パソコンの Chrome で差し替えるか、ViFightにご連絡ください。',
         not_image: '写真（画像ファイル）を選んでください。'
     };
 
@@ -101,7 +103,7 @@
 
         const blob = await toBlob(canvas, mime, quality);
         canvas.width = canvas.height = 0; // iPhone のメモリをすぐ返す
-        if (!blob || blob.type !== mime) throw new ImageError('encode');
+        if (!blob || blob.type !== mime) throw new ImageError(mime === 'image/webp' ? 'webp' : 'encode');
         if (blob.size > MAX_BYTES) throw new ImageError('too_large');
         return {
             blob,

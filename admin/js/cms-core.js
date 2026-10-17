@@ -591,9 +591,11 @@
     }
 
     /**
-     * classify(doc, {pagePath, collections}) → {texts, images, lists, collections, locked, excluded}
+     * classify(doc, {pagePath, collections}) → {texts, images, lists, collections, locked, excluded, optional}
      *   texts: [id]; images: [{id, src, repoPath}]; lists: [id]; collections: [{id, type, items:[id]}]
      *   locked: Set of in-scope ids under data-cms-lock; excluded: Set of in-scope ids never editable.
+     *   optional: Set of text-target ids that may be empty (a collection item's descSelector, e.g. a work's
+     *   description: an empty <p></p> is still a target so a description can be added later).
      */
     function classify(doc, opts) {
         opts = opts || {};
@@ -677,7 +679,26 @@
             collections.push({ id, type, items });
         }
 
-        return { texts, images, lists, collections, locked, excluded };
+        // A collection item's description may be empty (実績の説明は任意): keep an empty <p></p> editable too.
+        const optional = new Set();
+        for (const c of collections) {
+            const cfg = collectionCfg[c.type];
+            if (!cfg.descSelector) continue;
+            for (const item of c.items) {
+                for (const id of select(doc, item, cfg.descSelector)) {
+                    const nd = nodes[id];
+                    if (isText[id]) { optional.add(id); continue; }
+                    if (textful[id] || blocked[id] || insideTarget[id] || !inScope[id] || !TEXT_TAGS.has(nd.tag) ||
+                        !nd.explicitClose || nd.ns !== 'html' || !inlineClean[id]) continue;
+                    isText[id] = 1;
+                    texts.push(id);
+                    optional.add(id);
+                }
+            }
+        }
+        if (optional.size) texts.sort((a, b) => a - b);
+
+        return { texts, images, lists, collections, locked, excluded, optional };
     }
 
     /* ---------------- Patching ---------------- */

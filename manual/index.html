@@ -17,6 +17,7 @@
             --paper: #f6f3ee;
             --green: #1f7a3a;
             --amber: #8a5a00;
+            --mark: #ffd200;
         }
 
         * { box-sizing: border-box; }
@@ -82,9 +83,17 @@
             line-height: 1.5;
         }
 
+        h3 .sub { color: var(--red); margin-right: 8px; }
+
+        h4.minor { font-size: 1rem; margin: 20px 0 6px; }
+
         p { margin: 0 0 12px; }
 
         a { color: var(--red); }
+
+        a[href^="#c"] { white-space: nowrap; }
+
+        .toc a, .toc-sub a { white-space: normal; }
 
         ol.steps, ul.list {
             margin: 8px 0 16px;
@@ -94,6 +103,8 @@
         ol.steps > li { margin-bottom: 8px; padding-left: 4px; }
 
         ol.steps > li::marker { font-weight: 900; color: var(--red); }
+
+        ul.list > li { margin-bottom: 4px; }
 
         .box {
             border-radius: 8px;
@@ -144,9 +155,41 @@
             line-height: 32px;
         }
 
-        .toc { columns: 2; column-gap: 32px; padding-left: 1.4em; margin: 8px 0 0; }
+        .url { font-weight: 700; word-break: break-all; }
 
-        .toc li { break-inside: avoid; margin-bottom: 4px; }
+        /* もくじ */
+        .toc-part { font-weight: 900; margin: 18px 0 4px; padding-bottom: 4px; border-bottom: 2px solid var(--ink); }
+
+        .toc-part small { color: var(--red); font-weight: 700; margin-right: 8px; letter-spacing: 0.08em; }
+
+        .toc { padding-left: 1.6em; margin: 8px 0 0; }
+
+        .toc li { margin-bottom: 4px; }
+
+        .toc--cols { columns: 2; column-gap: 32px; }
+
+        .toc--cols li { break-inside: avoid; }
+
+        .toc-sub { list-style: none; padding: 0; margin: 2px 0 8px; columns: 2; column-gap: 24px; font-size: 0.92rem; }
+
+        .toc-sub li { break-inside: avoid; margin-bottom: 2px; }
+
+        .toc-sub a { color: var(--ink); text-decoration: none; border-bottom: 1px dotted #bbb; }
+
+        /* 部の見出し */
+        .part {
+            margin: 72px 0 8px;
+            padding: 20px 22px;
+            border: 3px solid var(--ink);
+            border-radius: 6px;
+            font-size: 1.4rem;
+            font-weight: 900;
+            line-height: 1.45;
+        }
+
+        .part small { display: block; color: var(--red); font-size: 0.8rem; letter-spacing: 0.14em; margin-bottom: 2px; }
+
+        .part + p { margin-top: 14px; }
 
         code, .fname {
             font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
@@ -175,7 +218,7 @@
 
         pre .hl { background: #ffe066; color: #1a1a1a; border-radius: 3px; padding: 0 2px; }
 
-        pre, pre .hl, .flag, h2, .rules li::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        pre, pre .hl, .flag, h2, .rules li::before, .legend .n, .btnlike, .part { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
         pre .tag { color: #8fc1ff; }
 
@@ -207,13 +250,81 @@
 
         .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
-        .kbd { display: inline-block; border: 1px solid #bbb; border-bottom-width: 2px; border-radius: 4px; padding: 0 6px; font-size: 0.85em; background: #fff; font-family: inherit; }
+        .two > .box { margin: 0; }
+
+        .kbd { display: inline-block; border: 1px solid #bbb; border-bottom-width: 2px; border-radius: 4px; padding: 0 6px; font-size: 0.85em; background: #fff; font-family: inherit; line-height: 1.5; }
+
+        /* 画面の名前（ボタンの文字など） */
+        .btnlike { display: inline-block; background: var(--red); color: #fff; font-weight: 700; font-size: 0.86em; border-radius: 4px; padding: 0 8px; line-height: 1.7; white-space: nowrap; }
+
+        /* 画面写真 */
+        figure.shot { margin: 14px 0 22px; }
+
+        figure.shot img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: 1px solid #d6d1c8;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            background: #f1efeb;
+        }
+
+        figure.shot figcaption { font-size: 0.84rem; color: var(--soft); margin-top: 6px; line-height: 1.6; }
+
+        .shot--phone img { border-radius: 16px; border-color: #c9c4ba; }
+
+        .shot--dialog { max-width: 470px; }
+
+        .shots { display: flex; flex-wrap: wrap; gap: 18px; margin: 14px 0 22px; align-items: flex-start; }
+
+        .shots > figure.shot { margin: 0; flex: 0 1 240px; }
+
+        .shots--dialogs > figure.shot { flex: 1 1 220px; }
+
+        .side { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 26px; align-items: start; margin: 12px 0 20px; }
+
+        .side--wide { grid-template-columns: 320px minmax(0, 1fr); }
+
+        .side > figure.shot { margin: 0; }
+
+        .side > div > :first-child { margin-top: 0; }
+
+        /* 画面写真の番号の説明 */
+        .legend { list-style: none; padding: 0; margin: 8px 0 18px; }
+
+        .legend li { position: relative; padding: 3px 0 5px 40px; }
+
+        .legend .n {
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--mark);
+            color: #111;
+            font-weight: 900;
+            font-size: 0.85rem;
+            text-align: center;
+            line-height: 26px;
+            box-shadow: 0 0 0 2px #111;
+        }
+
+        .legend--cols { columns: 2; column-gap: 28px; }
+
+        .legend--cols li { break-inside: avoid; }
 
         footer.end { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--soft); font-size: 0.9rem; }
 
         @media (max-width: 640px) {
-            .toc { columns: 1; }
+            .toc--cols, .toc-sub, .legend--cols { columns: 1; }
             .two { grid-template-columns: 1fr; }
+            .side, .side--wide { grid-template-columns: 1fr; }
+            .side > figure.shot { max-width: 280px; }
+            .side--wide > figure.shot { max-width: 360px; }
+            .shots > figure.shot { flex-basis: calc(50% - 9px); }
+            .shots--dialogs > figure.shot { flex-basis: 100%; }
             table.photos td.thumb { width: 96px; }
             table.photos td.thumb img { width: 84px; height: 63px; }
             table.photos td:nth-child(2) { width: auto; }
@@ -225,11 +336,28 @@
             body { font-size: 10.5pt; line-height: 1.75; }
             .wrap { max-width: none; padding: 0; }
             h2 { margin-top: 30px; break-after: avoid; }
-            h2#s2, h2#s4, h2#s6 { break-before: page; margin-top: 0; }
+            h2 + p.note, h3 + p.note { break-after: avoid; }
+            .newpage { break-before: page; margin-top: 0; }
+            header.cover { padding-bottom: 16px; margin-bottom: 18px; }
+            .box { padding: 12px 16px; margin: 12px 0 14px; }
+            .toc-sub { font-size: 0.88rem; }
+            .toc-part { margin-top: 12px; }
+            .part.newpage + h2 { margin-top: 18px; }
             h3, h4, .label { break-after: avoid; }
             thead { display: table-header-group; }
-            tr, pre, .box, img { break-inside: avoid; }
+            tr, pre, .box, img, figure, .legend li { break-inside: avoid; }
+            .side, .shots { break-inside: avoid; }
+            .two { display: block; }
+            .two > .box { margin: 12px 0; }
+            .side { grid-template-columns: 180px minmax(0, 1fr); gap: 20px; }
+            .side--wide { grid-template-columns: 270px minmax(0, 1fr); }
+            .shots > figure.shot { flex-basis: 180px; }
+            .shots { justify-content: center; gap: 24px; }
+            .shots--dialogs > figure.shot { flex: 1 1 190px; }
+            figure.shot img { box-shadow: none; }
+            .shot--wide { max-width: 88%; }
             a { color: var(--ink); text-decoration: none; }
+            a.url { color: var(--red); }
             pre { white-space: pre-wrap; word-break: break-all; }
         }
     </style>
@@ -239,61 +367,412 @@
 
 <header class="cover">
     <p class="kicker">KUNI OFFICE ホームページ</p>
-    <h1>編集マニュアル<br><span style="font-size:0.6em;font-weight:700">写真の差し替え・文章の修正・実績の追加</span></h1>
-    <p class="meta">2026年10月版　／　対象：KUNI OFFICE 高桑様　／　作成：ViFight</p>
+    <h1>編集マニュアル<br><span style="font-size:0.6em;font-weight:700">管理画面で、文章・写真・実績をその場で直す</span></h1>
+    <p class="meta">2026年10月版（管理画面対応）　／　対象：KUNI OFFICE 高桑様　／　作成：ViFight</p>
 </header>
 
 <div class="box box--rule">
-    <h4>作業の前に、この3つだけ守ってください</h4>
+    <h4>ホームページの直し方は、この3ステップだけです</h4>
     <ol class="rules">
+        <li>iPhone やパソコンで<strong>管理画面</strong>を開き、アクセスキーでログインする<br><a class="url" href="https://playmark0227-svg.github.io/kunioffice/admin/">https://playmark0227-svg.github.io/kunioffice/admin/</a></li>
+        <li>直したい<strong>文字や写真をタップ</strong>して、その場で書き換える</li>
+        <li><strong>「公開する」</strong>を押す　→　約1分でホームページに反映されます</li>
+    </ol>
+</div>
+
+
+<p><strong>もくじ</strong></p>
+<p class="toc-part"><small>第1部</small>管理画面で編集する（ふだんはこちら）</p>
+<ol class="toc">
+    <li><a href="#c1">管理画面で編集する（いちばん簡単）</a>
+        <ul class="toc-sub">
+            <li><a href="#c1-1">1-1 管理画面を開く</a></li>
+            <li><a href="#c1-2">1-2 ログインする</a></li>
+            <li><a href="#c1-3">1-3 画面の見方</a></li>
+            <li><a href="#c1-4">1-4 文章を直す</a></li>
+            <li><a href="#c1-5">1-5 写真を差し替える</a></li>
+            <li><a href="#c1-6">1-6 実績を追加・変更・削除する</a></li>
+            <li><a href="#c1-7">1-7 電話番号・住所など（共通情報）</a></li>
+            <li><a href="#c1-8">1-8 ページ設定（タイトル・説明文）</a></li>
+            <li><a href="#c1-9">1-9 公開する</a></li>
+            <li><a href="#c1-10">1-10 公開した変更を取り消す</a></li>
+            <li><a href="#c1-11">1-11 変更できない部分（価格など）</a></li>
+            <li><a href="#c1-12">1-12 困ったとき</a></li>
+        </ul>
+    </li>
+    <li><a href="#c2">サイト管理者（ViFight）向け：アクセスキーの用意</a></li>
+</ol>
+<p class="toc-part"><small>第2部</small>管理画面が使えないとき（ファイルで直す方法）</p>
+<ol class="toc toc--cols" start="3">
+    <li><a href="#c3">フォルダの中身</a></li>
+    <li><a href="#c4">写真を差し替える（写真一覧つき）</a></li>
+    <li><a href="#c5">文章を直す</a></li>
+    <li><a href="#c6">実績を追加・削除する</a></li>
+    <li><a href="#c7">パソコンで確認する</a></li>
+    <li><a href="#c8">ホームページに反映（公開）する</a></li>
+    <li><a href="#c9">お問い合わせフォームについて</a></li>
+    <li><a href="#c10">オンラインショップ（若葉のしずく）</a></li>
+    <li><a href="#c11">うまくいかないとき（ファイルで直したとき）</a></li>
+</ol>
+
+<!-- ================================================== -->
+<p class="part newpage" id="part1"><small>第1部</small>管理画面で編集する（ふだんはこちら）</p>
+<h2 id="c1"><span class="num">1</span>管理画面で編集する（いちばん簡単）</h2>
+<p>管理画面を使うと、iPhone やパソコンのブラウザで<strong>ホームページを見たまま</strong>、文字や写真を直せます。ファイルの名前やタグを気にする必要はありません。直したら「公開する」を押すだけで、約1分後にホームページに反映されます。</p>
+<div class="box box--ok">
+    <h4>用意するもの</h4>
+    <ul class="list">
+        <li>iPhone（Safari）、またはパソコン（Chrome・Edge・Safari など）</li>
+        <li>ViFight から受け取った<strong>アクセスキー</strong>（<code>github_pat_</code> で始まる長い文字列）</li>
+    </ul>
+</div>
+<div class="box box--warn">
+    <h4>はじめに済ませておきたいこと</h4>
+    <ul class="list">
+        <li>AIで作った仮の画像（<a href="#photolist">4章の写真一覧</a>で <span class="flag flag--ai">AIの仮画像</span>・<span class="flag flag--ph">準備中</span> の印があるもの）を、実際の写真に差し替える（<a href="#c1-5">1-5</a>）</li>
+        <li>ショップの「特定商取引法の表記」の運営統括責任者を、フルネームにする（<a href="#c10">10章</a>）</li>
+    </ul>
+</div>
+
+<h3 id="c1-1"><span class="sub">1-1</span>管理画面を開く</h3>
+<p>管理画面のアドレス（URL）：<br><a class="url" href="https://playmark0227-svg.github.io/kunioffice/admin/">https://playmark0227-svg.github.io/kunioffice/admin/</a></p>
+<p>すぐ開けるように、最初に1回だけ登録しておくと便利です。</p>
+<div class="two">
+    <div class="box">
+        <h4>iPhone：ホーム画面に追加</h4>
+        <ol class="steps">
+            <li>Safari で上のアドレスを開きます。</li>
+            <li>共有ボタン（四角から上向きの矢印が出ているマーク。見当たらないときは「…」を押すと出てきます）を押します。</li>
+            <li>「ホーム画面に追加」→「追加」を押します。</li>
+        </ol>
+        <p>ホーム画面にアイコンができ、次からはそれを押すだけで開けます。</p>
+    </div>
+    <div class="box">
+        <h4>パソコン：ブックマーク</h4>
+        <p>管理画面を開いた状態で <span class="kbd">Ctrl</span> + <span class="kbd">D</span>（Mac は <span class="kbd">⌘</span> + <span class="kbd">D</span>）を押すと、ブックマーク（お気に入り）に登録できます。</p>
+    </div>
+</div>
+<p class="note">管理画面は検索しても出てきません（検索エンジンに載らないようにしてあります）。ホームページのメニューにもリンクはありません。このマニュアルも iPhone で見られます：<a href="https://playmark0227-svg.github.io/kunioffice/manual/">https://playmark0227-svg.github.io/kunioffice/manual/</a></p>
+
+<h3 id="c1-2"><span class="sub">1-2</span>ログインする</h3>
+<div class="side">
+    <figure class="shot shot--phone"><img src="img/admin-login-iphone.jpg" width="585" height="1266" alt="iPhone で開いた管理画面のログイン画面。アクセスキーの欄と「ログイン」ボタン"><figcaption>ログイン画面（iPhone）</figcaption></figure>
+    <div>
+        <ol class="steps">
+            <li>「アクセスキー」の欄を押し、ViFight から受け取ったアクセスキーを入力（貼り付け）します。「表示」を押すと、入力した文字を確かめられます。</li>
+            <li>「ログイン」を押します。</li>
+            <li>はじめてのときは「使い方」が出ます。読んだら「はじめる」を押します（あとから「≡」→「使い方」でいつでも見られます）。</li>
+        </ol>
+        <div class="box box--ok">
+            <h4>アクセスキーは iPhone に覚えさせるのがおすすめ</h4>
+            <p>ログインしたときに「パスワードを保存しますか？」と聞かれたら<strong>「保存」</strong>を押してください。次からは、アクセスキーの欄を押すとキーボードの上に候補が出て、選ぶだけで入力できます。</p>
+            <p>「このブラウザに記憶する」は、安全のため<strong>オフのまま</strong>がおすすめです。</p>
+        </div>
+        <div class="box box--warn">
+            <h4>アクセスキーは「お店の鍵」と同じです</h4>
+            <p>この文字列があれば、だれでもホームページを書き換えられます。人に見せたり、メールや LINE で送ったりしないでください。iPhone をなくしたときは、すぐに ViFight へご連絡ください（そのアクセスキーを使えなくします）。</p>
+        </div>
+    </div>
+</div>
+
+<h3 id="c1-3"><span class="sub">1-3</span>画面の見方</h3>
+<p>ログインすると、ホームページがそのままの見た目で表示されます。いちばん上の黒い帯で、ページの切り替えや公開をします。</p>
+<figure class="shot shot--wide"><img src="img/admin-overview-pc.jpg" width="1600" height="690" alt="パソコンで開いた管理画面。上の黒い帯に、ページ選択・未公開の変更・元に戻す・公開する・メニューが並ぶ"><figcaption>パソコンの画面（「事業内容」ページを編集中。まだ公開していない変更が2件あります）</figcaption></figure>
+<ol class="legend legend--cols">
+    <li><span class="n">1</span><strong>ページ選択</strong>：編集するページを選びます。KUNI OFFICE の5ページと、ショップ（若葉のしずく）の4ページを選べます。まだ公開していない変更があるページには「●」が付きます。</li>
+    <li><span class="n">2</span><strong>未公開の変更</strong>：まだホームページに出していない変更の数です。</li>
+    <li><span class="n">3</span><strong>元に戻す</strong>：いま表示しているページの、まだ公開していない変更をすべて取り消します。</li>
+    <li><span class="n">4</span><strong>公開する</strong>：変更をホームページに反映します（<a href="#c1-9">1-9</a>）。</li>
+    <li><span class="n">5</span><strong>メニュー（≡）</strong>：共通情報・ページ設定・公開の履歴・使い方・ログアウトなど。</li>
+    <li><span class="n">6</span><strong>PC／スマホ</strong>：パソコンで、スマホで見たときの表示を確かめられます。</li>
+</ol>
+
+<div class="side">
+    <figure class="shot shot--phone"><img src="img/admin-overview-iphone.jpg" width="585" height="1266" alt="iPhone で開いた管理画面。上にページ選択・公開・メニュー"><figcaption>iPhone の画面</figcaption></figure>
+    <div>
+        <p>iPhone では、上の帯が小さくまとまっています。</p>
+        <ol class="legend">
+            <li><span class="n">1</span><strong>ページ選択</strong>：押すと、ページの一覧が出ます。</li>
+            <li><span class="n">2</span><strong>公開</strong>：まだ公開していない変更があると、赤い「公開」ボタンに数字が出ます。</li>
+            <li><span class="n">3</span><strong>メニュー（≡）</strong>：「元に戻す」は、iPhone ではメニューの中の「このページの変更を元に戻す」です。</li>
+        </ol>
+        <figure class="shot shot--phone" style="max-width:300px"><img src="img/admin-menu-iphone.jpg" width="585" height="705" alt="メニューを開いたところ。共通情報、ページ設定、公開の履歴、このページの変更を元に戻す、編集できる場所を表示、使い方、サイトを見る、ログアウト"><figcaption>メニュー（≡）を開いたところ</figcaption></figure>
+        <ul class="list">
+            <li><strong>編集できる場所を表示</strong>：オンにすると、書き換えられる文字が赤い点線で囲まれます（iPhone でははじめからオン）。</li>
+            <li><strong>サイトを見る</strong>：公開中のホームページを開きます。</li>
+        </ul>
+    </div>
+</div>
+<div class="box">
+    <h4>画面の中のメニューやボタンでは、ページは移動しません</h4>
+    <p>管理画面の中では、ホームページのメニューやボタンを押してもページは切り替わりません（間違って移動しないようにしてあります）。ほかのページを直すときは、いちばん上の<strong>ページ選択</strong>で選んでください。ページの中のリンクを押したときに「このページを編集する」と出たら、それを押しても切り替えられます。</p>
+</div>
+
+<h3 id="c1-4"><span class="sub">1-4</span>文章を直す</h3>
+<div class="side">
+    <figure class="shot shot--phone"><img src="img/admin-text-iphone.jpg" width="585" height="1266" alt="説明文をタップして書き換えているところ。文章が赤い枠と薄い黄色の背景で囲まれている"><figcaption>文章を書き換えているところ（2行目は改行して入れた文）</figcaption></figure>
+    <div>
+        <ol class="steps">
+            <li>直したい文字を<strong>タップ</strong>（パソコンはクリック）します。赤い枠で囲まれ、その場で入力できるようになります。</li>
+            <li>文字を消したり入力したりして書き換えます。<strong>改行したいときは「改行」キー（パソコンは <span class="kbd">Enter</span> キー）</strong>を押します。</li>
+            <li>終わったら、<strong>文字の外のどこか</strong>をタップします。書き換えた文章には黄色の下線が付き、「公開」の数字が増えます。</li>
+        </ol>
+        <ul class="list">
+            <li>文字の太さ・色・大きさはホームページのデザインのまま決まっていて、変えられません。ほかのアプリからコピーして貼り付けても、文字だけが入ります。</li>
+            <li>文章をすべて消して空にすることはできません（元の文章に戻ります）。</li>
+            <li>電話番号・メールアドレスは、ここで直してもタップしたときのかけ先・送り先が変わりません。<a href="#c1-7">1-7 共通情報</a>で変えてください。</li>
+        </ul>
+        <div class="box">
+            <h4>箇条書きの項目を増やす・減らす</h4>
+            <p>「サービス内容」などの箇条書きは、項目をタップすると上に小さなバーが出ます。<strong>「下に追加」</strong>で新しい項目、<strong>↑ ↓</strong>で並び順の変更、<strong>削除</strong>で項目を消せます（最後の1つは消せません）。</p>
+        </div>
+    </div>
+</div>
+
+<h3 id="c1-5"><span class="sub">1-5</span>写真を差し替える</h3>
+<div class="side">
+    <figure class="shot shot--phone"><img src="img/admin-photo-iphone.jpg" width="585" height="1266" alt="写真をタップすると、赤い「写真を変更」ボタンが出る"><figcaption>写真をタップすると「写真を変更」が出ます</figcaption></figure>
+    <div>
+        <ol class="steps">
+            <li>差し替えたい写真をタップすると、赤い<span class="btnlike">写真を変更</span>ボタンが出るので押します（パソコンでは、写真をクリックするとすぐ次の画面になります）。</li>
+            <li>「写真を選ぶ」を押し、「写真ライブラリ」（その場で撮るときは「写真を撮る」）から写真を選びます。</li>
+            <li>「いまの写真」と「新しい写真」が並んで表示されます。よければ<strong>「この写真にする」</strong>を押します。</li>
+        </ol>
+        <ul class="list">
+            <li>スマホで撮った写真をそのまま選んでOKです。大きな写真は、自動でちょうどよい大きさ（長い辺 2000 ピクセルまで）に縮めて使います。</li>
+            <li>写真は枠に合わせて<strong>中央を切り抜いて</strong>表示されます。見せたいものは写真の中央に置いてください。</li>
+            <li>公開する前なら、何度でも選び直せます。もう一度写真を押すと「元の写真に戻す」もできます。</li>
+        </ul>
+    </div>
+</div>
+<div class="side side--wide">
+    <figure class="shot shot--dialog"><img src="img/admin-photo-dialog.jpg" width="906" height="1090" alt="「写真を変更」の画面。いまの写真と新しい写真が並び、ほかのページでも使われているという注意が出ている"><figcaption>「写真を変更」の画面</figcaption></figure>
+    <div>
+        <div class="box box--warn">
+            <h4>「この写真は ○○ のページでも使われています」と出たとき</h4>
+            <p>1枚の写真が、いくつかのページで使われています（たとえば事業内容の「写真撮影」の写真は、ホームの「Services」にも出ています）。差し替えると、<strong>出ているページすべての写真が変わります</strong>。片方だけ変えたいときは ViFight にご相談ください。</p>
+        </div>
+        <p><strong>写真の説明（alt）</strong>は、目の不自由な方の読み上げや、検索エンジンが使う短い説明です。新しい写真の内容に合わせて直しておくと親切です。</p>
+        <div class="box">
+            <h4>「この写真の形式は読み込めませんでした」と出たとき</h4>
+            <p>iPhone の写真の形式（HEIC）が読み込めないときに出ます。iPhone の<strong>「設定」→「カメラ」→「フォーマット」→「互換性優先」</strong>にしてから撮り直すか、その写真のスクリーンショットを使ってください。iPhone で撮った写真をパソコンに送り、パソコンの管理画面で使うときに出やすいメッセージです。</p>
+        </div>
+    </div>
+</div>
+
+<h3 id="c1-6"><span class="sub">1-6</span>実績を追加・変更・削除する</h3>
+<p>ページ選択で<strong>「実績」</strong>を選びます。</p>
+<div class="shots">
+    <figure class="shot shot--phone"><img src="img/admin-works-bar-iphone.jpg" width="585" height="1266" alt="実績をタップすると、写真・分類・前へ・後ろへ・削除のバーが出る"><figcaption>① 実績をタップすると、上にバーが出ます</figcaption></figure>
+    <figure class="shot shot--phone"><img src="img/admin-works-add-iphone.jpg" width="585" height="1266" alt="「実績を追加」の画面。写真・タイトル・分類・説明を入れる"><figcaption>② 「実績を追加」の画面</figcaption></figure>
+    <figure class="shot shot--phone"><img src="img/admin-works-added-iphone.jpg" width="585" height="1266" alt="追加した実績が、同じ分類の先頭に表示されている"><figcaption>③ 追加した実績（公開するまではホームページには出ません）</figcaption></figure>
+</div>
+<h4 class="minor">追加する</h4>
+<ol class="steps">
+    <li>右下の赤い<span class="btnlike">＋ 実績を追加</span>を押します。</li>
+    <li><strong>写真</strong>（必須）・<strong>タイトル</strong>（必須・40文字まで）・<strong>分類</strong>・<strong>説明</strong>（200文字まで。改行もそのまま反映されます）を入れて、「追加する」を押します。</li>
+    <li>新しい実績は、<strong>同じ分類の実績のいちばん前</strong>に入ります。写真のファイル名は自動で付きます。</li>
+</ol>
+<h4 class="minor">写真・分類・順番を変える、削除する</h4>
+<p>実績の分類の文字（「写真撮影」など）のあたりをタップすると、その実績の上にバーが出ます（パソコンでは、マウスを乗せると出ます）。</p>
+<table>
+    <tr><th style="width:30%">バーのボタン</th><th>できること</th></tr>
+    <tr><td>写真</td><td>その実績の写真を差し替えます（<a href="#c1-5">1-5</a>と同じ）。</td></tr>
+    <tr><td>分類（いまの分類名と ▼）</td><td>写真撮影・印刷物・映像制作・看板・オリジナルグッズ から選びます。実績ページ上の絞り込みボタンも、この分類で動きます。</td></tr>
+    <tr><td>↑　↓</td><td>前へ・後ろへ（並び順を変えます）。</td></tr>
+    <tr><td>ゴミ箱のマーク</td><td>削除します。確認が出ます。消した直後なら、下に出るお知らせの「元に戻す」で戻せます。</td></tr>
+</table>
+<p>タイトルと説明文は、<a href="#c1-4">1-4</a>と同じようにタップして書き換えます。説明文がない実績は「＋ 説明を追加」をタップすると書けます。</p>
+<div class="box">
+    <h4>ホームの「Works」（6枠）は別に直します</h4>
+    <p>ホーム（トップページ）の実績紹介は、実績ページとは別に書かれています。実績ページで削除しても、ホームには残ります。ホームの写真やタイトルを変えるときは、ページ選択で「ホーム」を開き、写真や文字をタップして直してください。</p>
+</div>
+
+<h3 id="c1-7"><span class="sub">1-7</span>電話番号・住所などをまとめて変える（共通情報）</h3>
+<div class="side side--wide">
+    <figure class="shot shot--dialog"><img src="img/admin-global.png" width="1208" height="1552" alt="共通情報の画面。電話番号・FAX・携帯・メールアドレス・郵便番号などの欄と、サイト内で使われている場所の数"><figcaption>共通情報の画面</figcaption></figure>
+    <div>
+        <p>電話番号・FAX・携帯・メールアドレス・郵便番号・住所・営業時間は、各ページのいちばん下（フッター）やショップのページなど、サイトのあちこちに書かれています。「共通情報」なら、<strong>全部の場所を一度に</strong>書き換えられます。</p>
+        <ol class="steps">
+            <li>先に、ほかの変更を「公開する」で公開しておきます（まだ公開していない変更があるあいだは、共通情報は変えられません）。</li>
+            <li>「≡」→「共通情報（電話・住所など）」を押します。</li>
+            <li>変えたい欄だけを書き換えて、「変更を確認する」を押します。</li>
+            <li>「電話番号：24か所（13ファイル）」のように、書き換わる場所の数が出ます。よければ「公開する」を押します。<strong>共通情報は、ここですぐに公開されます。</strong></li>
+        </ol>
+        <ul class="list">
+            <li>メールアドレスを変えると、ページに出ているアドレスと一緒に、<strong>お問い合わせフォームの送り先</strong>と<strong>ショップの注文メールの送り先</strong>も変わります。</li>
+            <li>住所を変えても、会社情報ページの地図は動きません。地図の変更は ViFight にご依頼ください。</li>
+            <li>「いまの値がサイト内に見つからないため、ここでは変更できません」と出た項目は、ViFight にご連絡ください。</li>
+        </ul>
+    </div>
+</div>
+
+<h3 id="c1-8"><span class="sub">1-8</span>ページのタイトル・説明文（ページ設定）</h3>
+<div class="side side--wide">
+    <figure class="shot shot--dialog"><img src="img/admin-page-settings.png" width="1208" height="1386" alt="ページ設定の画面。ページのタイトルと説明文の欄、検索結果での見え方"><figcaption>ページ設定の画面</figcaption></figure>
+    <div>
+        <p>Google などの<strong>検索結果に出る</strong>ページの題名と説明文です（ページの中には表示されません）。</p>
+        <ol class="steps">
+            <li>ページ選択で直したいページを開き、「≡」→「ページ設定（タイトル・説明文）」を押します。</li>
+            <li>書き換えると、下の「検索結果での見え方（目安）」も変わります。タイトルは30文字前後、説明文は120文字前後がおすすめです。</li>
+            <li>「変更する」を押し、ほかの変更と同じように「公開する」で反映します。</li>
+        </ol>
+        <p class="note">検索結果が新しくなるのは、Google が次にページを読みに来たときです（数日〜数週間かかることがあります）。</p>
+    </div>
+</div>
+
+<h3 id="c1-9"><span class="sub">1-9</span>公開する（ホームページに反映）</h3>
+<p>ここまでの変更は、<strong>まだ管理画面の中だけ</strong>です。管理画面ではすぐに新しい見た目になりますが、ホームページはまだ変わっていません。「公開する」を押して、はじめてホームページに反映されます。いくつかのページの変更も、まとめて1回で公開できます。</p>
+<ol class="steps">
+    <li>右上の<span class="btnlike">公開する</span>（iPhone は<span class="btnlike">公開</span>）を押します。</li>
+    <li>「この内容で公開しますか？」に、ページごとの変更が出ます。確かめて「公開する」を押します。</li>
+    <li>「保存しました」→「サイトに反映しています…（約1分）」と進み、<strong>約1分</strong>で「公開しました」と出たら完了です。「サイトで見る」で、公開中のページを確かめられます。</li>
+</ol>
+<div class="shots shots--dialogs">
+    <figure class="shot"><img src="img/admin-publish-confirm.png" width="928" height="622" alt="「この内容で公開しますか？」の確認画面"><figcaption>① 確認</figcaption></figure>
+    <figure class="shot"><img src="img/admin-publish-progress.png" width="928" height="640" alt="「サイトに反映しています…（約1分）」の画面"><figcaption>② 反映中（約1分）</figcaption></figure>
+    <figure class="shot"><img src="img/admin-publish-done.png" width="928" height="782" alt="「公開しました」の画面"><figcaption>③ 公開しました</figcaption></figure>
+</div>
+<ul class="list">
+    <li>反映を待つあいだに画面を閉じても大丈夫です（「閉じる（反映は裏で続きます）」）。上の帯に「反映中」と出ているあいだは、反映の途中です。続けて編集してもかまいません。</li>
+    <li>公開したのに古いままに見えるときは、ホームページを再読み込みしてください（iPhone は画面を下に引っぱる、パソコンは <span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">R</span>／Mac は <span class="kbd">⌘</span> + <span class="kbd">Shift</span> + <span class="kbd">R</span>）。</li>
+</ul>
+<div class="box box--warn">
+    <h4>まだ公開していない変更は、ページを閉じると消えます</h4>
+    <p>管理画面のページを閉じたり、再読み込みしたりすると、まだ公開していない変更は消えてしまいます。パソコンでは確認が出ますが、<strong>iPhone では確認が出ません</strong>。iPhone でほかのアプリに長く切り替えていると、Safari がページを読み込み直して消えることもあります。区切りのよいところで「公開する」を押してください。</p>
+</div>
+
+<h3 id="c1-10"><span class="sub">1-10</span>公開した変更を取り消す（公開の履歴）</h3>
+<p>公開したあとで「やっぱり元に戻したい」ときに使います。まだ公開していない変更は、上の帯の「元に戻す」で取り消せます。</p>
+<ol class="steps">
+    <li>「≡」→「公開の履歴」を押します。最近の20件が、新しい順に並びます。</li>
+    <li>取り消したい公開の「この変更を取り消す」を押します。</li>
+    <li>確認の画面で「取り消して公開する」を押すと、その公開の前の状態に戻して公開されます（約1分で反映）。</li>
+</ol>
+<figure class="shot shot--wide"><img src="img/admin-history.png" width="1568" height="990" alt="公開の履歴の画面。管理画面から公開したものには「この変更を取り消す」ボタンがある"><figcaption>公開の履歴</figcaption></figure>
+<div class="side side--wide">
+    <figure class="shot shot--dialog"><img src="img/admin-history-revert.png" width="920" height="634" alt="「この変更を取り消しますか？」の確認画面"><figcaption>取り消す前の確認</figcaption></figure>
+    <div>
+        <ul class="list">
+            <li>取り消せるのは、管理画面から公開したもの（「管理画面から更新」で始まるもの）です。「サイト管理者の更新」と書かれたものは ViFight が行った更新なので、ここでは取り消せません。</li>
+            <li>まだ公開していない変更があるあいだは、取り消しはできません。先に公開するか、「元に戻す」で取り消してください。</li>
+            <li>「この後にも ○○ が更新されています」と出たときは、そのあとに同じページを直した内容も一緒に元に戻ります。</li>
+            <li>取り消しも1回の公開として履歴に残るので、「取り消し」をさらに取り消すこともできます。</li>
+        </ul>
+    </div>
+</div>
+
+<h3 id="c1-11"><span class="sub">1-11</span>変更できない部分（価格など）</h3>
+<figure class="shot shot--wide"><img src="img/admin-locked.jpg" width="1350" height="840" alt="ショップの価格をタップすると「ここ（価格など）は、この画面では変更できません」と表示される"><figcaption>価格をタップしたところ（ショップ トップ）</figcaption></figure>
+<p>管理画面で書き換えられるのは、各ページの本文の文字と写真です。次の部分は、ホームページの動きが壊れないように<strong>鍵がかかっていて</strong>、タップしても書き換えられません。</p>
+<ul class="list">
+    <li><strong>価格・送料・割引</strong>（ショップの価格、「1日あたり約99円」「送料500円」「10%OFF」など）… カートの計算と連動しているため、ViFight が変更します。</li>
+    <li><strong>ページのいちばん上（メニュー）と、いちばん下（フッター）</strong> … 電話番号・住所などは<a href="#c1-7">共通情報</a>で変えられます。</li>
+    <li>お問い合わせの入力欄・ボタン・地図・動画</li>
+    <li>実績の分類名（「写真撮影」など）… 実績のバーの「分類」で変えます（<a href="#c1-6">1-6</a>）。</li>
+</ul>
+<p>「編集できる場所を表示」がオンのとき、<strong>赤い点線で囲まれない部分</strong>は管理画面では変えられない部分です。変更が必要なときは ViFight（久保）にご連絡ください。ページの追加やデザインの変更も ViFight が行います。</p>
+
+<h3 id="c1-12"><span class="sub">1-12</span>困ったとき</h3>
+<table>
+    <tr><th style="width:38%">こんなとき</th><th>どうするか</th></tr>
+    <tr><td>「アクセスキーが正しくないか、有効期限が切れています」と出てログインできない</td><td>アクセスキーを最後まで正しく貼り付けたか（前後に空白が入っていないか）確かめます。それでもだめなときは、アクセスキーの有効期限（1年）が切れています。ViFight に新しいアクセスキーをもらってください。</td></tr>
+    <tr><td>編集の途中でログイン画面に戻った（「ログインの有効期限が切れたか、アクセスキーが無効になりました」）</td><td>管理画面のページは<strong>閉じずに</strong>、新しいアクセスキーを入れてください。編集中の内容はそのまま続けられます。新しいアクセスキーは ViFight からもらいます。</td></tr>
+    <tr><td>「このアクセスキーでは編集できません」「公開できませんでした（権限がありません）」</td><td>アクセスキーの設定の問題です。ViFight にご連絡ください。新しいアクセスキーをもらったら「別のアクセスキーを入力する」から入れれば、変更は消えません。</td></tr>
+    <tr><td>「インターネットに接続できません」「通信に失敗しました」</td><td>電波のよい場所（Wi-Fi など）で、もう一度「公開する」を押してください。<strong>変更はそのまま残っています</strong>。上に「インターネットに接続されていません」と出ているあいだも、編集は続けられます。</td></tr>
+    <tr><td>「ほかの場所で同じページが更新されました」</td><td>同じページを、ViFight やほかの端末（パソコンと iPhone など）が先に更新したときに出ます。「読み込み直す」を押すと最新の内容が表示されますが、<strong>まだ公開していなかった変更は消えます</strong>。直した内容をメモしてから読み込み直し、もう一度直して公開してください。</td></tr>
+    <tr><td>「アクセスが集中しています」</td><td>しばらく（数分〜1時間ほど）待ってから、もう一度試してください。</td></tr>
+    <tr><td>「反映でエラーが発生しました。ViFightに連絡してください。」</td><td>変更は保存されていますが、ホームページへの反映がうまくいきませんでした。ViFight にご連絡ください。</td></tr>
+    <tr><td>公開したのにホームページが変わらない</td><td>1〜2分待ってから、ホームページを再読み込みしてください（<a href="#c1-9">1-9</a>）。</td></tr>
+    <tr><td>「この写真の形式は読み込めませんでした」</td><td><a href="#c1-5">1-5</a>の「この写真の形式は読み込めませんでした と出たとき」を見てください。</td></tr>
+    <tr><td>タップしても書き換えられない</td><td>鍵がかかった部分です（<a href="#c1-11">1-11</a>）。</td></tr>
+    <tr><td>間違えて公開してしまった</td><td>「≡」→「公開の履歴」から取り消せます（<a href="#c1-10">1-10</a>）。</td></tr>
+</table>
+<p>わからないことは、ViFight（久保）までご連絡ください。</p>
+
+<!-- ================================================== -->
+<h2 id="c2"><span class="num">2</span>サイト管理者（ViFight）向け：アクセスキーの用意</h2>
+<p class="note">この章はサイト管理者（ViFight）向けです。高桑様は読み飛ばしてかまいません。</p>
+
+<h3>アクセスキーの作り方（GitHub の Fine-grained token）</h3>
+<ol class="steps">
+    <li><code>playmark0227-svg/kunioffice</code> を持っている GitHub アカウントでログインし、右上のアイコン →「<strong>Settings</strong>」を開きます。</li>
+    <li>左メニューのいちばん下「<strong>Developer settings</strong>」→「<strong>Personal access tokens</strong>」→「<strong>Fine-grained tokens</strong>」→「<strong>Generate new token</strong>」。</li>
+    <li><strong>Token name</strong>：だれのどの端末用かわかる名前（例：<code>kunioffice 管理画面 高桑 iPhone</code>）。<strong>Resource owner</strong>：<code>playmark0227-svg</code>。</li>
+    <li><strong>Expiration</strong>：<strong>1年</strong>（Custom で1年後の日付）。更新日をカレンダーに入れておきます。</li>
+    <li><strong>Repository access</strong>：<strong>Only select repositories</strong> → <code>kunioffice</code> だけを選びます。</li>
+    <li><strong>Permissions</strong>（Repository permissions）：<strong>Contents = Read and write</strong>、<strong>Actions = Read-only</strong>。Metadata（Read-only）は自動で付きます。ほかは No access のままにします。</li>
+    <li>「<strong>Generate token</strong>」を押し、表示された <code>github_pat_…</code> の文字列をコピーします（この画面を閉じると二度と表示されません）。</li>
+</ol>
+<div class="box">
+    <h4>権限が足りないとき</h4>
+    <p>Contents が Read-only だと、ログイン時に「このアクセスキーでは編集できません（読み取り専用です）」と出ます。Actions を付けないと公開はできますが、「サイトに反映しています」の進み具合が出ず、「1〜2分後にサイトに反映されます」とだけ表示されます。</p>
+</div>
+
+<h3>安全な渡し方</h3>
+<ul class="list">
+    <li>いちばん安全なのは、<strong>直接会って</strong>高桑様の iPhone で管理画面にログインし、Safari の「パスワードを保存」で iPhone に保存してもらう方法です。</li>
+    <li>メール・LINE・チャット・紙には残さないでください。離れて渡すときは、AirDrop や iPhone の「パスワード」アプリの共有など、相手の端末に直接届く方法を使います。</li>
+    <li>1人（1台）につき1つのアクセスキーを作ると、なくしたときにその1つだけを止められます。</li>
+</ul>
+
+<h3>期限が切れたとき・端末をなくしたとき</h3>
+<ul class="list">
+    <li>期限が近づくと GitHub からメールが届きます。期限が切れると管理画面にログインできなくなる（「アクセスキーが正しくないか、有効期限が切れています」）ので、同じ手順で作り直して渡します。トークンの画面の「<strong>Regenerate token</strong>」でも作り直せます（古い文字列は使えなくなります）。</li>
+    <li>iPhone やパソコンをなくした、アクセスキーが漏れたかもしれないときは、すぐに「Fine-grained tokens」でそのトークンを開き、<strong>「Delete」</strong>で取り消します。そのあと新しいアクセスキーを作って渡します。</li>
+</ul>
+
+<h3>管理画面の仕組み（知っておくこと）</h3>
+<ul class="list">
+    <li>管理画面で「公開する」を押すと、GitHub の <code>main</code> ブランチに<strong>直接コミット</strong>されます（メッセージは「管理画面から更新: …」、取り消しは「管理画面から取り消し: …」）。GitHub Actions（Deploy to GitHub Pages）が約1分で公開します。</li>
+    <li><strong>ローカルで作業する前は、必ず <code>git pull</code> で最新の <code>main</code> を取り込んでください。</strong>古いファイルのまま push すると、管理画面で公開された変更を上書きしてしまいます。（同じページが先に更新されていた場合、管理画面のほうは上書きせずに「ほかの場所で同じページが更新されました」で止まります。）</li>
+    <li><code>main</code> にブランチ保護（プルリクエスト必須など）をかけると、管理画面から公開できなくなります。</li>
+    <li>管理画面が書き換えるのは、ページの HTML・写真と、共通情報の置き換えで使う <code>.js</code>（<code>js/main.js</code>・<code>wakaba/js/config.js</code> など）だけです。<code>admin/</code>・<code>.github/</code>・CSS などは書き換えも取り消しもできません。</li>
+    <li>価格など <code>data-cms-lock</code> を付けた部分は編集できません。HTML を直すときは、<code>data-cms-lock</code>・<code>data-cms-list="works"</code> などの <code>data-cms-</code> で始まる印を消さないでください。詳しくはリポジトリの <code>README.md</code>「管理画面（/admin/）」を参照してください。</li>
+</ul>
+
+<!-- ================================================== -->
+<p class="part newpage" id="part2"><small>第2部</small>管理画面が使えないとき（ファイルで直す方法）</p>
+<p>ふだんは<a href="#c1">1章の管理画面</a>を使ってください。この部は、管理画面が使えないときや、管理画面では変えられない部分をファイルで直すときの方法です。</p>
+<div class="box box--rule">
+    <h4>ファイルで直す前に、この4つを守ってください</h4>
+    <ol class="rules">
+        <li><strong>いちばん新しいファイルで作業する</strong>。管理画面で公開した変更は、以前に受け取ったフォルダ（ZIP）には入っていません。古いファイルで上書きすると、<strong>管理画面で公開した変更が消えてしまいます</strong>。作業の前に、ViFight から最新のフォルダを受け取るか、<a href="https://github.com/playmark0227-svg/kunioffice">https://github.com/playmark0227-svg/kunioffice</a> の緑の「Code」→「Download ZIP」で最新版をダウンロードしてください。</li>
         <li><strong>作業前に、フォルダを丸ごとコピーしてバックアップ</strong>を取っておく（失敗しても元に戻せます）</li>
         <li><strong>写真は「同じファイル名」で上書きする</strong>だけで差し替わります（HTMLを触る必要はありません）</li>
         <li><strong>文章は「文字だけ」書き換える</strong>。<code>&lt;</code> と <code>&gt;</code> で囲まれた部分（タグ）は消したり変えたりしない</li>
     </ol>
 </div>
 
-<p><strong>もくじ</strong></p>
-<ol class="toc">
-    <li><a href="#s1">フォルダの中身</a></li>
-    <li><a href="#s2">写真を差し替える（写真一覧つき）</a></li>
-    <li><a href="#s3">文章を直す</a></li>
-    <li><a href="#s4">実績を追加・削除する</a></li>
-    <li><a href="#s5">パソコンで確認する</a></li>
-    <li><a href="#s6">ホームページに反映（公開）する</a></li>
-    <li><a href="#s7">お問い合わせフォームについて</a></li>
-    <li><a href="#s8">オンラインショップ（若葉のしずく）</a></li>
-    <li><a href="#s9">うまくいかないとき</a></li>
-</ol>
-
-<!-- ================================================== -->
-<h2 id="s1" class="keep"><span class="num">1</span>フォルダの中身</h2>
-<p>受け取ったフォルダ（ZIPを解凍したもの）の中で、<strong>触るのは次の場所だけ</strong>です。</p>
+<h2 id="c3"><span class="num">3</span>フォルダの中身</h2>
+<p>最新のフォルダ（ZIPを解凍したもの）の中で、<strong>触るのは次の場所だけ</strong>です。</p>
 <table>
     <tr><th style="width:34%">場所</th><th>中身</th></tr>
-    <tr><td><code>images</code> フォルダ</td><td>KUNI OFFICE のページで使っている写真。<strong>写真の差し替えはここ</strong></td></tr>
+    <tr><td><code>images</code> フォルダ</td><td>KUNI OFFICE のページで使っている写真。<strong>写真の差し替えはここ</strong>（管理画面で追加した実績の写真は、この中の <code>works</code> フォルダに入っています）</td></tr>
     <tr><td><code>index.html</code></td><td>ホーム（トップページ）の文章</td></tr>
     <tr><td><code>services.html</code></td><td>事業内容ページの文章</td></tr>
     <tr><td><code>works.html</code></td><td>実績ページの文章・実績の追加／削除</td></tr>
     <tr><td><code>company.html</code></td><td>会社情報ページの文章</td></tr>
     <tr><td><code>contact.html</code></td><td>お問い合わせページの文章</td></tr>
-    <tr><td><code>wakaba</code> フォルダ</td><td>「若葉のしずく」オンラインショップ一式（<a href="#s8">8章</a>）</td></tr>
+    <tr><td><code>wakaba</code> フォルダ</td><td>「若葉のしずく」オンラインショップ一式（<a href="#c10">10章</a>）</td></tr>
     <tr><td><code>manual</code> フォルダ</td><td>このマニュアル</td></tr>
-    <tr><td><code>js/main.js</code></td><td>お問い合わせの送り先メールアドレス（<a href="#s7">7章</a>）と、電話番号の書き換え（<a href="#bulk">3章</a>）のときだけ開きます</td></tr>
+    <tr><td><code>js/main.js</code></td><td>お問い合わせの送り先メールアドレス（<a href="#c9">9章</a>）と、電話番号の書き換え（<a href="#bulk">5章</a>）のときだけ開きます</td></tr>
 </table>
 <div class="box">
     <h4>触らなくてよいもの</h4>
-    <p><code>css</code>（デザイン）・<code>js</code>（動き。上の表の <code>js/main.js</code> の書き換え以外）・<code>.github</code>（公開の自動化）・<code>.gitignore</code>・<code>server.js</code>・<code>package.json</code>・<code>.env.example</code>・<code>.md</code> で終わる説明書・<code>shop.html</code>／<code>success.html</code>（旧ページからの転送用）は、変更しなくてOKです。</p>
+    <p><code>admin</code>（管理画面）・<code>css</code>（デザイン）・<code>js</code>（動き。上の表の <code>js/main.js</code> の書き換え以外）・<code>.github</code>（公開の自動化）・<code>.gitignore</code>・<code>server.js</code>・<code>package.json</code>・<code>.env.example</code>・<code>.md</code> で終わる説明書・<code>shop.html</code>／<code>success.html</code>（旧ページからの転送用）は、変更しなくてOKです。</p>
 </div>
 
 <!-- ================================================== -->
-<h2 id="s2"><span class="num">2</span>写真を差し替える</h2>
+<h2 id="c4"><span class="num">4</span>写真を差し替える</h2>
+<p class="note">管理画面なら、写真をタップして選ぶだけで差し替えられます（<a href="#c1-5">1-5</a>）。ファイル名を気にする必要もありません。</p>
 
 <h3>手順（同じ名前で上書きするだけ）</h3>
 <ol class="steps">
     <li>差し替えたい写真を、下の<a href="#photolist">「写真一覧」</a>で探し、<strong>ファイル名</strong>を確認します（例：<code class="fname">service-photo.jpg</code>）。</li>
     <li>新しい写真のファイル名を、<strong>そのファイル名と1文字も違わない名前</strong>に変えます。</li>
     <li>その写真を <code>images</code> フォルダに入れ、「置き換えますか？」と聞かれたら<strong>「置き換える」</strong>を選びます。</li>
-    <li><a href="#s5">5章</a>の方法でパソコンで確認し、<a href="#s6">6章</a>の方法で公開します。</li>
+    <li><a href="#c7">7章</a>の方法でパソコンで確認し、<a href="#c8">8章</a>の方法で公開します。</li>
 </ol>
 
 <div class="box box--ok">
@@ -315,7 +794,7 @@
     <h4>ファイル名の注意</h4>
     <ul class="list">
         <li>大文字・小文字も区別されます。<code>Service-Photo.JPG</code> や <code>service-photo.jpeg</code> は<strong>別の名前</strong>として扱われ、公開したホームページでは表示されません。</li>
-        <li><strong>パソコンでの確認（5章）では、大文字の <code>.JPG</code> でも表示されてしまいます。</strong>カメラやスマホから取り込んだ写真は <code>.JPG</code>（大文字）になっていることが多いので、公開する前に、ファイル名がすべて小文字の <code>.jpg</code> になっているか必ず目で確認してください。</li>
+        <li><strong>パソコンでの確認（7章）では、大文字の <code>.JPG</code> でも表示されてしまいます。</strong>カメラやスマホから取り込んだ写真は <code>.JPG</code>（大文字）になっていることが多いので、公開する前に、ファイル名がすべて小文字の <code>.jpg</code> になっているか必ず目で確認してください。</li>
         <li>パソコンの設定で拡張子（.jpg）が見えないと、名前を変えたときに <code>service-photo.jpg.jpg</code> になってしまうことがあります。<br>Windows は「表示」→「ファイル名拡張子」にチェック、Mac は Finder の「設定」→「詳細」→「すべてのファイル名拡張子を表示」をオンにすると確認できます。</li>
     </ul>
 </div>
@@ -371,7 +850,8 @@
 </div>
 
 <!-- ================================================== -->
-<h2 id="s3"><span class="num">3</span>文章を直す</h2>
+<h2 id="c5"><span class="num">5</span>文章を直す</h2>
+<p class="note">管理画面なら、ホームページの文字をタップしてその場で直せます（<a href="#c1-4">1-4</a>）。</p>
 
 <h3>使うソフト</h3>
 <div class="two">
@@ -392,7 +872,7 @@
     <li><span class="kbd">Ctrl</span> + <span class="kbd">F</span>（Mac は <span class="kbd">⌘</span> + <span class="kbd">F</span>）を押し、<strong>今ホームページに出ている文章</strong>の一部を入力して探します。</li>
     <li>見つかった文章の<strong>文字だけ</strong>を書き換えます。</li>
     <li>上書き保存します（<span class="kbd">Ctrl</span> + <span class="kbd">S</span>／Mac は <span class="kbd">⌘</span> + <span class="kbd">S</span>）。文字コードを聞かれたら <strong>UTF-8</strong> のまま保存してください。</li>
-    <li><a href="#s5">5章</a>の方法でパソコンで確認します。</li>
+    <li><a href="#c7">7章</a>の方法でパソコンで確認します。</li>
 </ol>
 
 <table>
@@ -420,6 +900,7 @@
     <h4>青い文字（タグ）は変えない</h4>
     <ul class="list">
         <li><code>&lt;p class="..."&gt;</code> や <code>&lt;/p&gt;</code> のような、<code>&lt;</code> と <code>&gt;</code> で囲まれた部分は消したり変えたりしないでください。表示が崩れます。</li>
+        <li><code>data-cms-lock</code> や <code>data-cms-list="works"</code> のように <code>data-cms</code> で始まる部分は、管理画面が使う印です。消さないでください。</li>
         <li>文中で改行したいときは、改行したい場所に <code>&lt;br&gt;</code> と入れます。</li>
         <li><code>&amp;amp;</code> は「&amp;」記号の書き方です。そのまま残してください。</li>
     </ul>
@@ -432,6 +913,10 @@
 <span class="tag">&lt;li&gt;</span><span class="hl">ドローン空撮</span><span class="tag">&lt;/li&gt;</span>   ← コピーして追加した行</pre>
 
 <h3 id="bulk">住所・電話番号・メール・営業時間を変えるとき</h3>
+<div class="box box--ok">
+    <h4>管理画面の「共通情報」なら一度に変えられます</h4>
+    <p>管理画面の「≡」→「共通情報（電話・住所など）」を使うと、下の表の場所がすべて、漏れなく一度に書き換わります（<a href="#c1-7">1-7</a>）。ファイルで直すのは、管理画面が使えないときだけにしてください。</p>
+</div>
 <p>これらは<strong>各ページの下の部分（フッター）など、複数のファイルにそれぞれ書かれています</strong>。1つのファイルだけ直すと、ページによって違う番号が出てしまいます。</p>
 <table>
     <tr><th style="width:34%">情報</th><th>書かれているファイル</th></tr>
@@ -440,7 +925,7 @@
     <tr><td>営業時間 8:30〜17:30</td><td><code>company.html</code> <code>contact.html</code>、ショップの <code>wakaba</code> フォルダ内の各ページと <code>wakaba/js/config.js</code>。探すときは <code>8:30</code> だけで検索すると漏れなく見つかります</td></tr>
 </table>
 <p class="note">住所が変わった場合、会社情報ページの地図は文字の置き換えでは移動しません。地図の差し替えは ViFight にご依頼ください。</p>
-<div class="box box--ok">
+<div class="box">
     <h4>Visual Studio Code なら一度に置き換えられます</h4>
     <ol class="steps">
         <li>Visual Studio Code の「ファイル」→「フォルダーを開く」で、受け取ったフォルダ全体を開きます。</li>
@@ -450,14 +935,15 @@
 </div>
 
 <!-- ================================================== -->
-<h2 id="s4"><span class="num">4</span>実績を追加・削除する</h2>
-<p>実績ページ（<code>works.html</code>）の実績は、1件ごとに次のような<strong>10行のかたまり</strong>で書かれています。</p>
+<h2 id="c6"><span class="num">6</span>実績を追加・削除する</h2>
+<p class="note">管理画面なら、「＋ 実績を追加」で写真とタイトルを入れるだけで追加できます（<a href="#c1-6">1-6</a>）。</p>
+<p>実績ページ（<code>works.html</code>）の実績は、<code>&lt;div class="works-grid-large" data-cms-list="works"&gt;</code> の中に、1件ごとに次のような<strong>10行のかたまり</strong>で書かれています。</p>
 <pre><span class="tag">&lt;div class="work-item" data-category="</span><span class="hl">photo</span><span class="tag">"&gt;</span>
     <span class="tag">&lt;div class="work-image"&gt;</span>
         <span class="tag">&lt;img src="images/</span><span class="hl">work-event.jpg</span><span class="tag">" alt="</span><span class="hl">地域イベント撮影</span><span class="tag">"&gt;</span>
     <span class="tag">&lt;/div&gt;</span>
     <span class="tag">&lt;div class="work-details"&gt;</span>
-        <span class="tag">&lt;span class="work-category"&gt;</span><span class="hl">写真撮影</span><span class="tag">&lt;/span&gt;</span>
+        <span class="tag">&lt;span class="work-category" data-cms-lock&gt;</span><span class="hl">写真撮影</span><span class="tag">&lt;/span&gt;</span>
         <span class="tag">&lt;h3&gt;</span><span class="hl">地域イベント撮影</span><span class="tag">&lt;/h3&gt;</span>
         <span class="tag">&lt;p&gt;</span><span class="hl">標津町の祭りイベントの記録撮影。躍動感のある瞬間を捉えました。</span><span class="tag">&lt;/p&gt;</span>
     <span class="tag">&lt;/div&gt;</span>
@@ -484,7 +970,7 @@
 
 <h3>トップページの「Works」（6枠）</h3>
 <p>トップページの実績紹介は <code>index.html</code> に書かれていて、写真は実績ページと同じファイル（★印）を使っています。実績ページの写真を上書きすると、トップページも一緒に変わります。</p>
-<p>トップに出す実績そのものを入れ替えたいときは、<code>index.html</code> の <code>class="work-tile"</code> のかたまりの<strong>黄色の5か所</strong>を書き換えます。種類（絞り込みの値と表示名）は4章の表と同じ組み合わせにしてください。</p>
+<p>トップに出す実績そのものを入れ替えたいときは、<code>index.html</code> の <code>class="work-tile"</code> のかたまりの<strong>黄色の5か所</strong>を書き換えます。種類（絞り込みの値と表示名）は、この章の上の表と同じ組み合わせにしてください。</p>
 <pre><span class="tag">&lt;a href="works.html?filter=</span><span class="hl">photo</span><span class="tag">" class="work-tile reveal"&gt;</span>
     <span class="tag">&lt;img src="images/</span><span class="hl">work-store.jpg</span><span class="tag">" alt="</span><span class="hl">店舗撮影</span><span class="tag">"&gt;</span>
     <span class="tag">&lt;div class="work-tile-meta"&gt;</span>
@@ -495,7 +981,7 @@
 <p class="note">実績ページ（<code>works.html</code>）から★印の実績を削除しても、トップページには残ります。トップからも外す場合は、<code>index.html</code> 側も入れ替えてください。</p>
 
 <!-- ================================================== -->
-<h2 id="s5"><span class="num">5</span>パソコンで確認する</h2>
+<h2 id="c7"><span class="num">7</span>パソコンで確認する</h2>
 <ol class="steps">
     <li>フォルダの中の <code>index.html</code> を<strong>ダブルクリック</strong>すると、インターネットに公開する前の状態をブラウザで見られます。</li>
     <li>変更したページを開いて、写真や文章が正しく出ているか確認します。スマホでの見え方は、ブラウザの幅を狭くすると確認できます。</li>
@@ -505,13 +991,13 @@
 <p class="note">パソコンで開いたときは、地図やお問い合わせなど、一部インターネットにつながっている部分の動きが本番と違うことがあります。</p>
 
 <!-- ================================================== -->
-<h2 id="s6"><span class="num">6</span>ホームページに反映（公開）する</h2>
+<h2 id="c8"><span class="num">8</span>ホームページに反映（公開）する</h2>
 <p>パソコンの中のファイルを直しただけでは、インターネット上のホームページは変わりません。次のどちらかの方法で反映します。</p>
 <p>公開中のホームページ：<a href="https://playmark0227-svg.github.io/kunioffice/">https://playmark0227-svg.github.io/kunioffice/</a></p>
 
 <h3>方法A：変更したファイルを ViFight に送る（かんたん）</h3>
 <ol class="steps">
-    <li>変更した写真・ファイルをまとめて ViFight（久保）に送ります（メール添付や大容量ファイル送信サービスなど）。</li>
+    <li>変更した写真・ファイルをまとめて ViFight（久保）に送ります（メール添付や大容量ファイル送信サービスなど）。<strong>どのファイルを変えたか</strong>も書き添えてください。</li>
     <li>ViFight 側でホームページに反映し、ご連絡します。</li>
 </ol>
 
@@ -529,53 +1015,64 @@
 <ol class="steps">
     <li>直したいファイル（例：<code>services.html</code>）をクリックします。</li>
     <li>右上の鉛筆マーク（Edit this file）を押します。</li>
-    <li>3章と同じ要領で文字だけ書き換えます。</li>
+    <li>5章と同じ要領で文字だけ書き換えます。</li>
     <li>右上の「<strong>Commit changes...</strong>」→ 出てきた画面の「<strong>Commit changes</strong>」を押します。</li>
 </ol>
+<div class="box box--warn">
+    <h4>管理画面で公開した変更を消さないために</h4>
+    <p>GitHub の画面で文章を直すときは、いつも最新のファイルが開くので心配ありません。ただし、<strong>パソコンの中の古い HTML ファイルを「Upload files」でアップロードすると、管理画面で公開した変更が消えてしまいます</strong>。アップロードするのは写真だけにしてください。</p>
+</div>
 <div class="box">
     <h4>反映されたか確認するには</h4>
     <p>1〜2分たってからホームページを開き、再読み込みしてください。GitHub の「Actions」タブで、いちばん上に緑のチェックが付いていれば反映完了です。赤いバツが付いたときは、ViFight にご連絡ください。</p>
-    <p>GitHub には変更の履歴がすべて残るので、失敗してもあとから元に戻せます。</p>
+    <p>GitHub には変更の履歴がすべて残るので、失敗してもあとから元に戻せます（GitHub で直接保存した変更は、管理画面の「公開の履歴」では「サイト管理者の更新」と表示され、管理画面からは取り消せません。ViFight にご連絡ください）。</p>
 </div>
 
 <!-- ================================================== -->
-<h2 id="s7"><span class="num">7</span>お問い合わせフォームについて</h2>
+<h2 id="c9"><span class="num">9</span>お問い合わせフォームについて</h2>
 <p>お問い合わせページのフォームで「メールで送信する」を押すと、お客様のパソコン・スマホのメールアプリが、入力内容が入った状態で開きます。お客様がそのまま送信すると、<strong>info@kunioffice.jp</strong> にメールが届きます。</p>
-<p class="note">送り先のメールアドレスを変えるときは、<code>js/main.js</code> を開いて <code>CONTACT_EMAIL</code> で検索し、<code>const CONTACT_EMAIL = 'info@kunioffice.jp';</code> の <code>'</code> と <code>'</code> の間を書き換えてください。ページに表示しているメールアドレスやショップの注文の送り先（<code>wakaba/js/config.js</code>）も変える場合は、<a href="#bulk">3章の「フォルダーを指定して置換」</a>で古いアドレスをまとめて置き換えると、これらも一緒に変わります。</p>
+<p>送り先のメールアドレスを変えるときは、管理画面の「共通情報」でメールアドレスを変えてください（<a href="#c1-7">1-7</a>）。ページに表示しているメールアドレス・お問い合わせの送り先・ショップの注文の送り先が、まとめて変わります。</p>
+<p class="note">ファイルで直す場合は、<code>js/main.js</code> を開いて <code>CONTACT_EMAIL</code> で検索し、<code>const CONTACT_EMAIL = 'info@kunioffice.jp';</code> の <code>'</code> と <code>'</code> の間を書き換えてください。ページに表示しているメールアドレスやショップの注文の送り先（<code>wakaba/js/config.js</code>）も変える場合は、<a href="#bulk">5章の「フォルダーを指定して置換」</a>で古いアドレスをまとめて置き換えると、これらも一緒に変わります。</p>
 
 <!-- ================================================== -->
-<h2 id="s8"><span class="num">8</span>オンラインショップ（若葉のしずく）</h2>
-<p>ショップは <code>wakaba</code> フォルダの中にあり、ページの構成は KUNI OFFICE のページと同じです。写真は <code>wakaba/images</code> フォルダを同じ名前で上書きすれば差し替わります（<a href="#photolist">写真一覧</a>の最後を参照）。</p>
+<h2 id="c10"><span class="num">10</span>オンラインショップ（若葉のしずく）</h2>
+<p>ショップは <code>wakaba</code> フォルダの中にあり、ページの構成は KUNI OFFICE のページと同じです。写真は <code>wakaba/images</code> フォルダを同じ名前で上書きすれば差し替わります（<a href="#photolist">写真一覧</a>の最後を参照）。管理画面では、ページ選択の「若葉のしずく」の4ページ（ショップ トップ・ご利用ガイド・特定商取引法の表記・プライバシーポリシー）の文章と写真を直せます（価格・送料は除く）。</p>
 <table>
     <tr><th style="width:34%">変えたいこと</th><th>直すファイル</th></tr>
-    <tr><td>価格・送料・定期便の条件</td><td><code>wakaba/js/config.js</code>（カートの計算に使う値）<strong>と</strong>、ページに書いてある価格（<code>wakaba/index.html</code>・<code>wakaba/guide.html</code>・<code>wakaba/tokushoho.html</code>、KUNI OFFICE トップの <code>index.html</code> の「Online Shop」）の<strong>両方</strong>。<br><span class="note"><code>wakaba/index.html</code> の上のほうには検索エンジン向けにカンマなしの価格（<code>"price": "2980"</code>）もあります。また「10%OFF」「1日あたり約99円」「2箱以上で送料無料」など、価格から計算した言葉もあわせて見直してください。</span></td></tr>
-    <tr><td>商品説明・飲み方・よくある質問</td><td><code>wakaba/index.html</code></td></tr>
-    <tr><td>送料・お届け・返品の説明</td><td><code>wakaba/guide.html</code></td></tr>
-    <tr><td>販売者・連絡先などの法律上の表記</td><td><code>wakaba/tokushoho.html</code></td></tr>
+    <tr><td>価格・送料・定期便の条件</td><td><strong>管理画面では変えられません。ViFight にご依頼ください。</strong>（下の「ViFight 向けメモ」）</td></tr>
+    <tr><td>商品説明・飲み方・よくある質問</td><td><code>wakaba/index.html</code>（管理画面の「ショップ トップ」）</td></tr>
+    <tr><td>送料・お届け・返品の説明</td><td><code>wakaba/guide.html</code>（管理画面の「ご利用ガイド」。送料の金額の部分は ViFight）</td></tr>
+    <tr><td>販売者・連絡先などの法律上の表記</td><td><code>wakaba/tokushoho.html</code>（管理画面の「特定商取引法の表記」）</td></tr>
 </table>
+<div class="box">
+    <h4>ViFight 向けメモ：価格・送料を変えるとき</h4>
+    <p><code>wakaba/js/config.js</code>（カートの計算に使う値）<strong>と</strong>、ページに書いてある価格（<code>wakaba/index.html</code>・<code>wakaba/guide.html</code>・<code>wakaba/tokushoho.html</code>、KUNI OFFICE トップの <code>index.html</code> の「Online Shop」）の<strong>両方</strong>を直します。<code>wakaba/index.html</code> の上のほうには検索エンジン向けにカンマなしの価格（<code>"price": "2980"</code>）もあります。また「10%OFF」「1日あたり約99円」「2箱以上で送料無料」など、価格から計算した言葉もあわせて見直してください。価格の部分の <code>data-cms-lock</code> は残します。</p>
+</div>
 <div class="box box--warn">
     <h4>ご注文の受け取り方</h4>
     <p>今は「お客様のメールアプリが、注文内容が入った状態で開き、info@kunioffice.jp に送られる」方式です。注文メールが届いたら、お支払い方法とお届け予定日をお客様にメールでご案内してください。クレジットカード決済を使いたい場合は ViFight にご相談ください。</p>
 </div>
 <div class="box">
     <h4>販売前にご確認ください</h4>
-    <p>「特定商取引法に基づく表記」（<code>wakaba/tokushoho.html</code>）の運営統括責任者は、いま「代表 高桑」とだけ書かれています。<strong>フルネームでの記載</strong>が必要なため、お名前を書き足してください。商品の表示（内容量・賞味期限など）、送料、発送日数、返品の条件も、実際の内容と合っているかご確認ください。</p>
+    <p>「特定商取引法に基づく表記」の運営統括責任者は、いま「代表 高桑」とだけ書かれています。<strong>フルネームでの記載</strong>が必要なため、お名前を書き足してください。管理画面でページ選択から「特定商取引法の表記」を開き、「代表 高桑」をタップすれば書き足せます。商品の表示（内容量・賞味期限など）、送料、発送日数、返品の条件も、実際の内容と合っているかご確認ください。</p>
 </div>
 
 <!-- ================================================== -->
-<h2 id="s9"><span class="num">9</span>うまくいかないとき</h2>
+<h2 id="c11"><span class="num">11</span>うまくいかないとき（ファイルで直したとき）</h2>
+<p class="note">管理画面で困ったときは<a href="#c1-12">1-12</a>を見てください。</p>
 <table>
     <tr><th style="width:38%">こんなとき</th><th>確認すること</th></tr>
     <tr><td>写真を入れたのに表示されない</td><td>ファイル名が一覧と<strong>完全に同じ</strong>か（大文字・小文字、<code>.jpg</code> と <code>.jpeg</code> の違い、<code>.jpg.jpg</code> になっていないか）。iPhone の HEIC 形式ではないか。</td></tr>
     <tr><td>パソコンでは表示されるのに、公開後に表示されない</td><td>ファイル名の大文字・小文字（<code>.JPG</code> になっていないか）。パソコンでは区別されないため、確認で気づけません。</td></tr>
-    <tr><td>古い写真・古い文章のまま</td><td>再読み込み（5章の方法）。公開中のホームページの場合は、反映に1〜2分かかります。</td></tr>
+    <tr><td>古い写真・古い文章のまま</td><td>再読み込み（7章の方法）。公開中のホームページの場合は、反映に1〜2分かかります。同じ名前で上書きした写真は、ブラウザに古い写真が残っていて、さらに10分ほど古いまま見えることがあります。</td></tr>
+    <tr><td>管理画面で公開した変更が消えた</td><td>古いフォルダのファイルで上書きしていないか。GitHub に履歴が残っているので元に戻せます。ViFight にご連絡ください。</td></tr>
     <tr><td>ページの見た目が崩れた</td><td>タグ（<code>&lt;</code> <code>&gt;</code> の部分）を消していないか。直したファイルをバックアップのものに戻すと元に戻ります。</td></tr>
     <tr><td>文字化けした</td><td>保存するときの文字コードが <strong>UTF-8</strong> になっているか。</td></tr>
 </table>
 <p>わからないことや、大きな変更（ページの追加・デザインの変更など）は、ViFight（久保）までご連絡ください。</p>
 
 <footer class="end">
-    <p>KUNI OFFICE ホームページ 編集マニュアル　2026年10月版　作成：ViFight</p>
+    <p>KUNI OFFICE ホームページ 編集マニュアル　2026年10月版（管理画面対応）　作成：ViFight<br>管理画面：https://playmark0227-svg.github.io/kunioffice/admin/　／　このマニュアル：https://playmark0227-svg.github.io/kunioffice/manual/</p>
 </footer>
 
 </div>

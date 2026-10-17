@@ -21,6 +21,10 @@
     const MAX_COMMIT_FILE_PAGES = 10;        // 1ページ300ファイル × 10 = GitHub の上限 3000
     const REQUEST_TIMEOUT_MS = 60 * 1000;
     const UPLOAD_TIMEOUT_MS = 5 * 60 * 1000; // 写真の送受信は回線が遅いと時間がかかる
+    // ログイン時の書き込み確認で作る小さなファイル（どこからも使われず、GitHub が後で片付ける）
+    const WRITE_CHECK_CONTENT = 'kunioffice admin: write access check\n';
+    // 管理画面からは保存も取り消しもしないファイル（公開の仕組み・管理画面そのもの）
+    const DEFAULT_PROTECTED = /^(\.github|admin)\//;
 
     // エラーコードごとの既定メッセージ（そのまま画面に出せる文言）
     const MESSAGES = {
@@ -31,6 +35,7 @@
         conflict: 'ほかの場所で同じページが更新されました',
         network: 'インターネットに接続できません',
         server: 'サーバーで一時的なエラーが発生しました。しばらく待ってからもう一度お試しください',
+        protected: 'この変更には、サイトの仕組みのファイル（サイト管理者が管理する部分）が含まれているため、ここでは取り消せません。ViFightにご連絡ください。',
         bad_response: '予期しない応答がありました'
     };
 
@@ -66,8 +71,15 @@
         else if (status >= 500) code = 'server';
 
         const extra = {};
-        const reset = Number(header('x-ratelimit-reset'));
-        if (code === 'rate_limited' && reset > 0) extra.resetAt = new Date(reset * 1000);
+        if (code === 'rate_limited') {
+            // 短時間の使いすぎ（二次制限）は retry-after 秒後から使える。x-ratelimit-reset は1時間ごとの上限の
+            // リセット時刻なので、その上限を使い切った（remaining が 0）ときだけ使う
+            const retryAfter = header('retry-after').trim();
+            const reset = Number(header('x-ratelimit-reset'));
+            if (/^\d+$/.test(retryAfter)) extra.resetAt = new Date(Date.now() + Number(retryAfter) * 1000);
+            else if (retryAfter && !isNaN(Date.parse(retryAfter))) extra.resetAt = new Date(Date.parse(retryAfter));
+            else if (header('x-ratelimit-remaining') === '0' && reset > 0) extra.resetAt = new Date(reset * 1000);
+        }
         return new GitHubError(code, status, detail, extra);
     }
 
@@ -174,6 +186,10 @@
             this.repo = opts.repo;
             this.branch = opts.branch || 'main';
             this.workflowName = opts.workflowName || '';
+            // 保存・取り消しをしないファイル（path → true なら守る）
+            this._isProtected = typeof opts.isProtectedPath === 'function'
+                ? (path) => DEFAULT_PROTECTED.test(path) || !!opts.isProtectedPath(path)
+                : (path) => DEFAULT_PROTECTED.test(path);
             this._fetch = opts.fetch || ((url, init) => fetch(url, init));
             // console などに出にくいよう、列挙されないプロパティに入れる
             Object.defineProperty(this, '_token', { value: String(opts.token || '').trim(), writable: true });
@@ -181,6 +197,9 @@
             this._commits = new Map();
             this._trees = new Map();
             this._blobs = new Map();
+            // path → この画面から送った中身（blob の sha）。公開の返事が届かなかったとき（保存はできていた）に、
+            // 最新の状態にある「自分が送った中身」を、ほかの人の更新と取り違えないため
+            this._sent = new Map();
         }
 
         // ---------- 通信 ----------
@@ -257,13 +276,21 @@
 
         // ---------- 読み込み ----------
 
+        // permissions は「アカウントの役割」で、アクセスキーに付けた権限ではない（細かい権限のアクセスキーは
+        // 読み取り専用でも push: true になる）。書き込めるかどうかは、どこからも使われない小さなファイルを
+        // 実際に作ってみて確かめる（作れなければ 403、対象のサイトでなければ 404）。
         async verify() {
             const data = await this._get('');
             if (!data || typeof data !== 'object') throw badResponse('repository');
-            return {
-                canPush: !!(data.permissions && data.permissions.push === true),
-                fullName: data.full_name || this.owner + '/' + this.repo
-            };
+            const fullName = data.full_name || this.owner + '/' + this.repo;
+            if (data.permissions && data.permissions.push === false) return { canPush: false, fullName };
+            try {
+                await this._post('/git/blobs', { content: WRITE_CHECK_CONTENT, encoding: 'utf-8' });
+            } catch (err) {
+                if (err.code === 'forbidden') return { canPush: false, fullName };
+                throw err;
+            }
+            return { canPush: true, fullName };
         }
 
         async getHead() {
@@ -330,6 +357,8 @@
             const opts = options || {};
             const list = normalizeChanges(opts.changes);
             if (!list.length) return { noop: true, changedPaths: [] };
+            const guarded = list.filter((change) => this._isProtected(change.path)).map((change) => change.path);
+            if (guarded.length) throw new GitHubError('protected', 0, 'protected paths: ' + guarded.join(', '), { paths: guarded });
             const base = await this.getCommit(opts.baseCommitSha);
             const baseFiles = await this.getTree(base.treeSha);
             const message = opts.message || '管理画面から更新';
@@ -338,17 +367,23 @@
             return this._commitOnHead(message, async (headSha, headFiles) => {
                 for (const change of list) {
                     if (!change.delete && !newShas.has(change.path)) {
-                        newShas.set(change.path, await this._createBlob(change));
+                        const sha = await this._createBlob(change);
+                        newShas.set(change.path, sha);
+                        if (!this._sent.has(change.path)) this._sent.set(change.path, new Set());
+                        this._sent.get(change.path).add(sha);
                     }
                 }
                 const target = (change) => (change.delete ? null : newShas.get(change.path));
+                // 前にこの画面から送った中身（返事が届かなかった公開が、実は保存されていた場合）
+                const sentBefore = (path, sha) => !!sha && this._sent.has(path) && this._sent.get(path).has(sha);
 
                 if (headSha !== base.sha) {
-                    // ほかの人の更新を上書きしない。ただし、すでに同じ内容になっているなら問題ない
-                    // （通信が切れて「公開する」を押し直した場合など）
+                    // ほかの人の更新を上書きしない。ただし、すでに同じ内容になっているとき、
+                    // 自分が前に送った内容になっているときは問題ない
+                    // （通信が切れて「公開する」を押し直した場合や、その後さらに編集した場合など）
                     const conflicts = list.filter((change) => {
                         const now = entrySha(headFiles, change.path);
-                        return now !== entrySha(baseFiles, change.path) && now !== target(change);
+                        return now !== entrySha(baseFiles, change.path) && now !== target(change) && !sentBefore(change.path, now);
                     }).map((change) => change.path);
                     if (conflicts.length) {
                         throw new GitHubError('conflict', 409, 'changed since ' + base.sha, { paths: conflicts });
@@ -407,8 +442,11 @@
                         force: false
                     });
                 } catch (err) {
+                    // 直前に誰かが保存した（早送りできない）・まだ GitHub の中で行き渡っていない、などは最新を読み直してやり直す
                     if (err.status !== 422 && err.status !== 409) throw err;
                     if (attempt >= MAX_COMMIT_ATTEMPTS) {
+                        // 何度やっても断られるのが「競合」以外（ブランチの保護など）なら、その理由のまま返す
+                        if (err.code !== 'conflict') throw err;
                         throw new GitHubError('conflict', err.status, err.detail, { paths: changedPaths });
                     }
                     continue;
@@ -481,6 +519,7 @@
                 headSha,
                 files: plan.files,
                 laterEdited: plan.laterEdited,
+                protectedPaths: plan.protectedPaths,
                 noop: plan.entries.length === 0
             };
         }
@@ -494,6 +533,9 @@
                 '\n\n取り消した変更: ' + target.sha;
             return this._commitOnHead(message, async (headSha, headFiles) => {
                 const plan = await this._revertPlan(sha, headFiles);
+                if (plan.protectedPaths.length) {
+                    throw new GitHubError('protected', 0, 'protected paths: ' + plan.protectedPaths.join(', '), { paths: plan.protectedPaths });
+                }
                 return { entries: plan.entries, extra: { laterEdited: plan.laterEdited } };
             });
         }
@@ -525,13 +567,16 @@
                 parentSha,
                 files,
                 entries,
-                laterEdited: files.filter((file) => file.laterEdited).map((file) => file.path)
+                laterEdited: files.filter((file) => file.laterEdited).map((file) => file.path),
+                // 管理画面・公開の仕組みなど、ここでは戻さないファイル（あれば取り消しは断る）
+                protectedPaths: files.filter((file) => this._isProtected(file.path)).map((file) => file.path)
             };
         }
 
         // ---------- 反映状況 ----------
 
-        // 権限がない・通信できないなどでも例外にせず { state: 'unknown' } を返す
+        // 例外にはしない。権限がない（403・404）などは { state: 'unknown' }、
+        // 通信の一時的な失敗（電波が切れた・GitHub の一時的なエラー・使いすぎ）は { state: 'retry' }（もう一度確かめればよい）
         async deployStatus(commitSha) {
             try {
                 const data = await this._get('/actions/runs?head_sha=' + encodeURIComponent(commitSha) + '&per_page=10');
@@ -541,7 +586,9 @@
                 if (!run) return { state: 'pending', url: null }; // 実行が作られるまで数秒かかる
                 return { state: runState(run), url: run.html_url || null };
             } catch (err) {
-                return { state: 'unknown', url: null, error: err.code || 'bad_response' };
+                const code = err.code || 'bad_response';
+                const transient = code === 'network' || code === 'server' || code === 'rate_limited';
+                return { state: transient ? 'retry' : 'unknown', url: null, error: code };
             }
         }
     }
@@ -562,6 +609,7 @@
     CMSGitHub.Error = GitHubError;
     CMSGitHub.MESSAGES = MESSAGES;
     CMSGitHub.API_BASE = API_BASE;
+    CMSGitHub.WRITE_CHECK_CONTENT = WRITE_CHECK_CONTENT;
     CMSGitHub.base64ToBytes = base64ToBytes;
     CMSGitHub.bytesToBase64 = bytesToBase64;
     return CMSGitHub;

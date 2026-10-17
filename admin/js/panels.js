@@ -148,6 +148,15 @@
                 { hint: '目の不自由な方の読み上げや、検索エンジンで使われます。' })
             : null;
         const usage = h('div', { hidden: true });
+        // まだ公開していない差し替えがあれば、元の写真（サイトに出ている写真）に戻せる
+        const pending = app.images.get(o.repoPath);
+        const restoreBtn = pending && !pending.isNew
+            ? h('button', { class: 'btn btn--secondary', type: 'button', on: { click: () => {
+                app.dropImage(o.repoPath);
+                m.close();
+                toast('元の写真に戻しました。', { type: 'success' });
+            } } }, icon('undo'), '元の写真に戻す')
+            : null;
 
         const m = modal({
             title: '写真を変更',
@@ -158,7 +167,7 @@
                     photoSlot('いまの写真', current, h('p', { class: 'photo-slot__info', text: fileName(o.repoPath) })),
                     h('span', { class: 'photo-compare__arrow' }, icon('down')),
                     photoSlot('新しい写真', picker.box, picker.info)),
-                h('div', { class: 'photo-pick' }, picker.pick, picker.input,
+                h('div', { class: 'photo-pick' }, picker.pick, picker.input, restoreBtn,
                     h('span', { class: 'photo-pick__hint', text: 'スマホで撮った写真もそのまま使えます（大きい写真は自動で小さくします）。' })),
                 picker.status,
                 usage,
@@ -168,6 +177,7 @@
                 { label: 'やめる' },
                 { label: 'この写真にする', kind: 'primary', onClick: apply }
             ],
+            isDirty: () => picker.busy || !!picker.prepared || !!(altField && altField.control.value.trim() !== o.alt),
             onClose: () => picker.discard()
         });
         const applyBtn = m.button(1);
@@ -231,6 +241,7 @@
                 { label: 'やめる' },
                 { label: '追加する', kind: 'primary', onClick: apply }
             ],
+            isDirty: () => picker.busy || !!picker.prepared || !!title.control.value.trim() || !!desc.control.value.trim(),
             onClose: () => picker.discard()
         });
         const addBtn = m.button(1);
@@ -303,6 +314,7 @@
             title: 'ページ設定',
             kicker: editor.page.label,
             size: 'md',
+            isDirty: () => title.control.value !== meta.title || desc.control.value !== meta.description,
             body: [title.el, desc.el, serp],
             actions: [
                 { label: 'やめる' },
@@ -328,6 +340,13 @@
 
     /* ---------- 共通情報（電話・住所など） ---------- */
     const FORBIDDEN = /[<>"'\\`\r\n]/;
+    // 電話番号・郵便番号: 全角の数字やハイフン（ー・－・‐ など）で入力しても、半角に直してから確かめる
+    const NUMERIC_FIELD = /^(tel|fax|mobile|zip)$/;
+    function cleanValue(key, raw) {
+        const v = String(raw || '').trim();
+        if (!NUMERIC_FIELD.test(key)) return v;
+        return v.normalize('NFKC').replace(/[\u2010-\u2015\u2212\u30fc\uff70\ufe63\uff0d]/g, '-').replace(/\s+/g, '');
+    }
 
     async function globalInfo(app) {
         const m = modal({
@@ -378,22 +397,30 @@
 
         function showForm() {
             const list = app.cfg.globalFields.map((f) => {
-                const input = h('input', { class: 'input', type: f.key === 'email' ? 'email' : 'text', value: rows.has(f.key) ? rows.get(f.key).input.value : values[f.key], autocomplete: 'off', inputmode: /tel|fax|mobile|zip/.test(f.key) ? 'tel' : null });
+                // 電話番号の欄も普通のキーボードにする（iPhone の電話用キーボードには「-」がない）
+                const input = h('input', { class: 'input', type: f.key === 'email' ? 'email' : 'text', value: rows.has(f.key) ? rows.get(f.key).input.value : values[f.key], autocomplete: 'off' });
                 input.id = uid('global');
                 const error = h('p', { class: 'field__error', role: 'alert', hidden: true });
                 const where = countIn(values[f.key]);
+                // いまの値がサイトに見つからない（読み取れなかった）ときは、古い値をもとに書き換えないように止める
+                if (!where.count) {
+                    input.value = values[f.key];
+                    input.disabled = true;
+                }
                 const row = h('div', { class: 'global-row' },
                     h('label', { class: 'global-row__label', for: input.id, text: f.label }),
                     input,
-                    h('span', { class: 'global-row__meta', text: where.count ? 'サイト内 ' + where.count + 'か所（' + where.files + 'ファイル）' : 'サイト内に見つかりません' }),
+                    h('span', { class: 'global-row__meta' + (where.count ? '' : ' is-zero'), text: where.count
+                        ? 'サイト内 ' + where.count + 'か所（' + where.files + 'ファイル）'
+                        : 'いまの値がサイト内に見つからないため、ここでは変更できません（ViFightにご連絡ください）' }),
                     error);
                 input.addEventListener('input', () => {
-                    input.classList.toggle('is-changed', input.value.trim() !== values[f.key]);
+                    input.classList.toggle('is-changed', cleanValue(f.key, input.value) !== values[f.key]);
                     error.hidden = true;
                     input.removeAttribute('aria-invalid');
                     refresh();
                 });
-                input.classList.toggle('is-changed', input.value.trim() !== values[f.key]);
+                input.classList.toggle('is-changed', cleanValue(f.key, input.value) !== values[f.key]);
                 rows.set(f.key, { field: f, input, error });
                 return row;
             });
@@ -408,7 +435,7 @@
         }
 
         function changedRows() {
-            return Array.from(rows.values()).filter((r) => r.input.value.trim() !== values[r.field.key]);
+            return Array.from(rows.values()).filter((r) => !r.input.disabled && cleanValue(r.field.key, r.input.value) !== values[r.field.key]);
         }
 
         function refresh() {
@@ -420,7 +447,8 @@
             const changed = changedRows();
             let ok = true;
             for (const r of changed) {
-                const v = r.input.value.trim();
+                const v = cleanValue(r.field.key, r.input.value);
+                if (v !== r.input.value) r.input.value = v; // 半角に直した値を見せる
                 let msg = '';
                 if (!v) msg = '空にはできません';
                 else if (FORBIDDEN.test(v)) msg = '使えない文字が含まれています（< > " \' \\ ` と改行）';
@@ -433,7 +461,7 @@
                 }
             }
             if (!ok || !changed.length) return;
-            const pairs = changed.map((r) => ({ from: values[r.field.key], to: r.input.value.trim(), key: r.field.key }));
+            const pairs = changed.map((r) => ({ from: values[r.field.key], to: cleanValue(r.field.key, r.input.value), key: r.field.key }));
             let plan;
             try {
                 plan = C.planGlobalReplace(sources, pairs);
@@ -461,7 +489,7 @@
                 h('p', { class: 'modal__text', text: '次の内容で、サイト全体を書き換えて公開します。' }),
                 h('div', { style: { margin: '12px 0 16px' } }, items),
                 files.length
-                    ? noteBox('', 'info', '変わるファイル: ' + files.map((p) => app.describePath(p)).join('、'))
+                    ? noteBox('', 'info', '変わるファイル: ' + app.describePaths(files).join('、'))
                     : noteBox('warn', 'alert', '書き換える場所が見つかりませんでした。'));
             m.setActions([
                 { label: '戻る', keepOpen: true, onClick: showForm },
@@ -509,7 +537,7 @@
             }
             m.setBody(
                 blocked ? h('div', { style: { marginBottom: '14px' } }, noteBox('warn', 'alert', '先に公開するか、元に戻してください。まだ公開していない変更があるあいだは、取り消しはできません。')) : null,
-                h('p', { class: 'modal__text', style: { marginBottom: '12px' }, text: '最近の20件です。取り消すと、その変更の前の状態に戻して公開します。' }),
+                h('p', { class: 'modal__text', style: { marginBottom: '12px' }, text: '最近の20件です。取り消すと、その変更の前の状態に戻して公開します。管理画面で公開した変更だけを取り消せます（サイト管理者の更新は、ここでは取り消せません）。' }),
                 h('ul', { class: 'history' }, commits.map((c, i) => row(c, i === 0))));
         }
 
@@ -519,6 +547,9 @@
             if (c.parents && !c.parents.length) {
                 // いちばん最初の状態には「その前」がないので取り消せない
                 btn = h('span', { class: 'history__note', text: '最初の状態です' });
+            } else if (!isEditorCommit(first)) {
+                // サイト管理者（ViFight）の更新（管理画面そのもの・公開の仕組み・デザインなど）は、ここからは戻さない
+                btn = h('span', { class: 'history__note', text: 'サイト管理者の更新', title: 'サイト管理者（ViFight）による更新は、ここでは取り消せません' });
             } else {
                 btn = h('button', { class: 'btn btn--secondary btn--sm', type: 'button', text: 'この変更を取り消す', disabled: blocked });
                 if (blocked) btn.title = '先に公開するか、元に戻してください';
@@ -550,12 +581,16 @@
                 btn.disabled = false;
                 btn.replaceChildren('この変更を取り消す');
             }
+            if (preview.protectedPaths && preview.protectedPaths.length) {
+                toast(window.CMSGitHub.MESSAGES.protected, { type: 'error' });
+                return;
+            }
             if (preview.noop) {
                 toast('この変更は、すでに元の状態に戻っています。');
                 return;
             }
-            const labels = Array.from(new Set(preview.files.map((f) => app.describePath(f.path))));
-            const later = Array.from(new Set(preview.laterEdited.map((p) => app.describePath(p))));
+            const labels = app.describePaths(preview.files.map((f) => f.path));
+            const later = app.describePaths(preview.laterEdited);
             const body = h('div', null,
                 h('p', { class: 'modal__text', text: '「' + first + '」（' + formatJst(c.date) + '）を取り消して、その前の状態に戻して公開します。' }),
                 h('p', { class: 'modal__text', text: '戻る内容: ' + labels.join('、') }),
@@ -568,6 +603,11 @@
         }
 
         load();
+    }
+
+    // 管理画面から公開した変更（「管理画面から更新:」「管理画面から取り消し:」）か
+    function isEditorCommit(firstLine) {
+        return /^管理画面から/.test(String(firstLine || ''));
     }
 
     /* ---------- 使い方 ---------- */
@@ -586,7 +626,8 @@
                 h('ul', { class: 'intro-tips' },
                     h('li', { text: '赤い点線が出ない部分（価格など）は、ここでは変更できません。' }),
                     h('li', { text: '間違えたときは「元に戻す」。公開した後なら「≡ → 公開の履歴」から取り消せます。' }),
-                    h('li', { text: '電話番号や住所は「≡ → 共通情報」でまとめて変えられます。' }))
+                    h('li', { text: '電話番号や住所は「≡ → 共通情報」でまとめて変えられます。' }),
+                    h('li', { text: 'まだ公開していない変更は、ページを閉じたり読み込み直したりすると消えます（iPhone では確認が出ません）。終わったら「公開する」を押してください。' }))
             ],
             actions: [{ label: 'はじめる', kind: 'primary' }]
         });
@@ -665,5 +706,5 @@
         };
     }
 
-    window.CMSPanels = { imageDialog, addWorkDialog, pageSettings, globalInfo, history: historyPanel, intro, publishConfirm, progress, field };
+    window.CMSPanels = { imageDialog, addWorkDialog, pageSettings, globalInfo, history: historyPanel, intro, publishConfirm, progress, field, isEditorCommit, cleanValue };
 }());

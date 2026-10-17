@@ -170,8 +170,10 @@
     }
 
     /* ---------- ダイアログ ----------
-       modal({ title, kicker, body, actions: [{ label, kind, onClick, keepOpen }], size, dismissible, onClose })
-       onClick が false を返したとき、または keepOpen のときは閉じません。 */
+       modal({ title, kicker, body, actions: [{ label, kind, onClick, keepOpen }], size, dismissible, onClose, isDirty })
+       onClick が false を返したとき、または keepOpen のときは閉じません。
+       isDirty() が true のあいだは、× ・Esc・外側のタップで閉じる前に「入力した内容を破棄しますか？」と確かめます
+       （スマホでは下から出る画面の上の暗い部分を、キーボードを閉じるつもりでタップしやすいため）。 */
     const openModals = [];
     let modalSeq = 0;
 
@@ -196,6 +198,7 @@
 
         let dismissible = o.dismissible;
         let closed = false;
+        let asking = false;
         const ctrl = {
             el: dialog,
             body,
@@ -213,7 +216,22 @@
                 if (o.onClose) o.onClose(result);
             },
             dismiss() {
-                if (dismissible) ctrl.close(undefined);
+                if (!dismissible || closed || asking) return;
+                if (o.isDirty && o.isDirty()) {
+                    asking = true;
+                    confirmDialog({
+                        title: '入力した内容を破棄しますか？',
+                        message: 'この画面で入力・選んだ内容は保存されずに消えます。',
+                        ok: '破棄する',
+                        cancel: '入力を続ける',
+                        danger: true
+                    }).then((ok) => {
+                        asking = false;
+                        if (ok) ctrl.close(undefined);
+                    });
+                    return;
+                }
+                ctrl.close(undefined);
             },
             setDismissible(on) {
                 dismissible = !!on;

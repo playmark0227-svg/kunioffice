@@ -46,17 +46,21 @@
                 <h2 class="login__title">管理画面</h2>
                 <p class="login__lead">KUNI OFFICE・若葉のしずくのホームページを編集します。</p>
                 <form class="login__form" id="loginForm" novalidate>
+                    <!-- iPhone・パソコンの「パスワード」にアクセスキーを保存・自動入力できるように（名前の欄は見えません） -->
+                    <input class="visually-hidden" id="loginName" name="username" type="text" autocomplete="username" value="KUNI OFFICE 管理画面" tabindex="-1" aria-hidden="true">
                     <div class="field">
                         <label class="field__label" for="tokenInput">アクセスキー</label>
                         <div class="input-group">
-                            <input class="input" id="tokenInput" name="accessKey" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" required>
+                            <input class="input" id="tokenInput" name="password" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" required>
                             <button class="input-group__btn" type="button" id="tokenToggle" aria-pressed="false" aria-controls="tokenInput">表示</button>
                         </div>
                         <p class="field__hint">サイト管理者（ViFight）から受け取った文字列を貼り付けてください。</p>
                     </div>
-                    <label class="check"><input type="checkbox" id="rememberInput" checked> このブラウザに記憶する</label>
+                    <label class="check"><input type="checkbox" id="rememberInput"> このブラウザに記憶する</label>
+                    <p class="field__hint login__remember-hint">安全のため、ふだんはオフのままがおすすめです。アクセスキーは iPhone やパソコンの「パスワード」に保存しておくと、次から簡単に入力できます。</p>
                     <p class="form-error" id="loginError" role="alert" hidden></p>
                     <button class="btn btn--primary btn--block btn--lg" type="submit" id="loginBtn">ログイン</button>
+                    <button class="btn btn--secondary btn--block" type="button" id="loginBack" hidden>編集画面に戻る</button>
                 </form>
                 <details class="howto">
                     <summary>アクセスキーの作り方（サイト管理者向け）</summary>
@@ -68,8 +72,10 @@
                         <li><b>Permissions</b>: <b>Contents</b> = <b>Read and write</b>、<b>Actions</b> = <b>Read-only</b></li>
                         <li><b>Expiration</b>: 1年（期限が来たら作り直す）</li>
                         <li><b>Generate token</b> を押す → 表示された文字列を担当者に安全に渡す</li>
+                        <li>担当者の iPhone・パソコンの「パスワード」に保存してもらう（GitHub では二度と表示されません。iPhone の Safari は7日ほど使わないと「記憶する」の内容を消すことがあります）</li>
                     </ol>
                     <p class="howto__note">この文字列があればサイトを書き換えられます。メールやチャットに残さず、直接お渡しください。</p>
+                    <p class="howto__note">このサイトは playmark0227-svg.github.io のほかの GitHub Pages のサイトと同じオリジンにあります。「このブラウザに記憶する」をオンにすると、同じブラウザで開いたそれらのサイトのスクリプトからも読み取れてしまうため、既定ではオフにしています。独自ドメイン（例: kunioffice.jp）で公開すると、この心配はなくなります。</p>
                 </details>
                 <p class="login__foot">管理画面は検索エンジンには表示されません。</p>
             </div>
@@ -91,7 +97,7 @@
                 </div>
             </div>
             <div class="topbar__actions">
-                <span class="deploy-chip" id="deployChip" hidden><span class="spin" aria-hidden="true"></span><span>サイトに反映中</span></span>
+                <span class="deploy-chip" id="deployChip" role="status" title="サイトに反映中" hidden><span class="spin" aria-hidden="true"></span><span class="deploy-chip__long">サイトに反映中</span><span class="deploy-chip__short">反映中</span></span>
                 <span class="change-count" id="changeCount" aria-live="polite">未公開の変更はありません</span>
                 <button class="btn btn--ghost-dark revert-btn" type="button" id="revertBtn" disabled>元に戻す</button>
                 <button class="btn btn--primary publish-btn" type="button" id="publishBtn" disabled><span class="lg">公開する</span><span class="sm">公開</span><span class="badge" id="publishBadge" hidden>0</span></button>

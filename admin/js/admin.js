@@ -22,7 +22,11 @@
     // 共通情報で書き換えるファイル（管理画面・マニュアルなどは除く）
     const TEXT_FILE = /\.(html|js)$/i;
     const IMAGE_TYPES = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', gif: 'image/gif' };
+    const IMAGE_FILE = /\.(jpe?g|png|webp|gif)$/i;
     const SKIP_PATH = /^(admin|manual|\.github|node_modules)\/|(^|\/)node_modules\/|^server\.js$/;
+    // 管理画面が保存・取り消しをしてよいファイル: サイトのページ・写真・共通情報で書き換える .html / .js だけ
+    // （管理画面そのもの・公開の仕組み・デザイン（CSS）などは、サイト管理者だけが変える）
+    const isProtectedPath = (path) => SKIP_PATH.test(path) || !(TEXT_FILE.test(path) || IMAGE_FILE.test(path));
 
     const $ = (id) => document.getElementById(id);
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -83,12 +87,14 @@
         $('bootRetry').onclick = retry;
     }
 
-    function showLogin(message) {
+    // canGoBack: 編集の途中で別のアクセスキーに替えるとき（「編集画面に戻る」を出す）
+    function showLogin(message, canGoBack) {
         setView('login');
         const err = $('loginError');
         err.replaceChildren();
         if (message) err.append(icon('alert'), h('span', { text: message }));
         err.hidden = !message;
+        $('loginBack').hidden = !(canGoBack && app.gh && app.snapshot);
         setTimeout(() => $('tokenInput').focus(), 50);
     }
 
@@ -110,11 +116,11 @@
     }
 
     function makeClient(token) {
-        return new GitHub({ owner: cfg.owner, repo: cfg.repo, branch: cfg.branch, token, workflowName: cfg.workflowName });
+        return new GitHub({ owner: cfg.owner, repo: cfg.repo, branch: cfg.branch, token, workflowName: cfg.workflowName, isProtectedPath });
     }
 
     function loginMessage(err) {
-        if (err && err.code === 'readonly') return 'このアクセスキーでは編集できません（読み取り専用です）';
+        if (err && err.code === 'readonly') return 'このアクセスキーでは編集できません（読み取り専用です）。作り方の「Permissions」で Contents を「Read and write」にしたか、「Repository access」で kunioffice を選んだか確認してください。';
         if (err && err.code === 'unauthorized') return 'アクセスキーが正しくないか、有効期限が切れています';
         if (err && err.code === 'network') return 'インターネットに接続できません';
         if (err && err.code === 'not_found') return 'このアクセスキーでは、このサイトを開けません。作り方の「Repository access」で kunioffice を選んだか確認してください。';
@@ -168,6 +174,11 @@
             }
             login(token, $('rememberInput').checked, false);
         });
+        $('loginBack').addEventListener('click', () => {
+            if (!app.gh || !app.snapshot) return;
+            $('tokenInput').value = '';
+            setView('editor');
+        });
         $('tokenToggle').addEventListener('click', () => {
             const input = $('tokenInput');
             const show = input.type === 'password';
@@ -181,7 +192,12 @@
     function expireSession() {
         clearToken();
         app.gh = null;
-        showLogin('ログインの有効期限が切れたか、アクセスキーが無効になりました。もう一度入力してください。編集中の内容はそのまま残っています。');
+        showLogin('ログインの有効期限が切れたか、アクセスキーが無効になりました。もう一度入力してください。編集中の内容はそのまま残っています。（アクセスキーがお手元にないときは、ViFightにご連絡ください）');
+    }
+
+    // 書き込みの権限がないアクセスキーだったとき: 編集はそのまま、別のアクセスキーを入れられるようにする
+    function switchKey() {
+        showLogin('書き込みができるアクセスキーを入力してください。編集中の内容はそのまま残っています。', true);
     }
 
     function handleAuthError(err) {
@@ -460,6 +476,23 @@
         return path;
     };
 
+    // いくつかのファイルを、読める短い一覧に: 「ホーム、実績、写真 3枚、ほかのファイル 4件」
+    app.describePaths = (paths) => {
+        const pages = [];
+        let photos = 0;
+        let others = 0;
+        for (const path of Array.from(new Set(paths || []))) {
+            const page = pageOf(path);
+            if (page) pages.push(page.label);
+            else if (/\.(jpe?g|png|webp|gif|svg)$/i.test(path)) photos++;
+            else others++;
+        }
+        const out = Array.from(new Set(pages));
+        if (photos) out.push('写真 ' + photos + '枚');
+        if (others) out.push('ほかのファイル ' + others + '件（サイト全体で使う部分）');
+        return out;
+    };
+
     /* ---------- 写真 ---------- */
     app.setImage = (repoPath, prepared, fromPage, isNew) => {
         const old = app.images.get(repoPath);
@@ -542,15 +575,29 @@
             const v = read(key);
             if (v) values[key] = v;
         });
-        const hours = /\d{1,2}:\d{2}\s*[〜～~-]\s*\d{1,2}:\d{2}/.exec(read('hours') || '');
-        if (hours) values.hours = hours[0];
+        // 営業時間: 「平日 8:30〜17:30」の「平日」のあと全部（「9時〜18時」のような書き方に変えても読み取れるように）
+        const hoursRaw = (read('hours') || '').trim();
+        if (hoursRaw) {
+            const m = /^([^\s\d０-９]+)[ \u3000]+(\S.*)$/.exec(hoursRaw);
+            values.hours = m ? m[2].trim() : hoursRaw;
+        }
         const address = /^〒?\s*(\d{3}-\d{4})\s*(.+)$/.exec(read('address') || '');
         if (address) {
             values.zip = address[1];
             values.address = address[2].trim();
         }
-        const mobile = /0[789]0-\d{4}-\d{4}/.exec(sources.get('company.html') || '');
-        if (mobile) values.mobile = mobile[0];
+        // 携帯: 「携帯」の後の電話番号（入力欄と同じ形: 090-…・050-… など）。見つからなければ 090/080/070 の番号
+        const phone = '([0-9]{2,5}-[0-9]{1,4}-[0-9]{3,4})';
+        for (const path of ['company.html', 'contact.html', 'index.html']) {
+            const text = sources.get(path) || '';
+            const labeled = new RegExp('携帯(?:\\s*<\\/(?:strong|b|span|th|dt)>)?\\s*[:：]?\\s*(?:<[^>]+>\\s*)?' + phone).exec(text);
+            const any = /0[789]0-\d{4}-\d{4}/.exec(text);
+            const found = labeled ? labeled[1] : any ? any[0] : null;
+            if (found && found !== values.tel && found !== values.fax) {
+                values.mobile = found;
+                break;
+            }
+        }
         return values;
     };
 
@@ -569,35 +616,86 @@
         return first + '\n\n' + body.join('\n');
     }
 
-    function buildPlan() {
+    // 差し替えた写真（同じファイル名のまま上書き）を使っているページの <img src> に「?v=日時」を付ける。
+    // ブラウザや GitHub Pages は写真を最大10分ほど覚えているので、そのままだと「公開しました」の後も
+    // サイトに古い写真が出てしまう。→ Map(pagePath → { src, doc, attrs: { id: { src } } })
+    async function photoVersions(stamp) {
+        const replaced = new Set(Array.from(app.images.entries()).filter(([, img]) => !img.isNew).map(([path]) => path));
+        const out = new Map();
+        if (!replaced.size) return out;
+        const paths = sitePaths((p) => /\.html?$/i.test(p));
+        const readyEditor = (p) => {
+            const ed = app.editors.get(p);
+            return ed && ed.ready ? ed : null;
+        };
+        const sources = await loadSources(paths.filter((p) => !readyEditor(p)));
+        for (const path of paths) {
+            const ed = readyEditor(path);
+            const src = ed ? ed.src : sources.get(path);
+            const doc = ed ? ed.doc : C.parse(src);
+            const attrs = {};
+            for (const nd of doc.nodes) {
+                // <img src> と、サイトのスクリプトが写真を切り替えるときに使う data-gallery-src / data-src
+                for (const name of nd.tag === 'img' ? ['src', 'data-src'] : ['data-gallery-src', 'data-src']) {
+                    const value = C.getAttr(nd, name);
+                    const repoPath = value ? C.resolvePath(path, value) : null;
+                    if (!repoPath || !replaced.has(repoPath)) continue;
+                    (attrs[nd.id] || (attrs[nd.id] = {}))[name] = value.replace(/[?#].*$/, '') + '?v=' + stamp;
+                }
+            }
+            if (Object.keys(attrs).length) out.set(path, { src, doc, attrs, editor: ed });
+        }
+        return out;
+    }
+
+    async function buildPlan() {
         const pages = [];
         const changes = [];
+        const versions = await photoVersions(UI.jstStamp(new Date()));
         for (const page of cfg.pages) {
             const ed = app.editors.get(page.path);
             if (!ed || !ed.ready) continue;
             const sum = ed.summary();
             if (!sum.total) continue;
-            const text = ed.buildSource();
+            const v = versions.get(page.path);
+            versions.delete(page.path);
+            const text = ed.buildSource(v && v.attrs);
             pages.push({ path: page.path, label: page.label, parts: ed.describe(sum) });
             if (text !== ed.src) changes.push({ path: page.path, text });
+        }
+        // 写真を差し替えただけのページ（写真の印だけが変わる）
+        const versioned = [];
+        for (const [path, v] of versions) {
+            const text = v.editor ? v.editor.buildSource(v.attrs) : C.applyEdits(v.src, v.doc, { attrs: v.attrs });
+            if (text === v.src) continue;
+            changes.push({ path, text });
+            versioned.push(path);
         }
         const imageLines = [];
         for (const [path, img] of app.images) {
             changes.push({ path, base64: img.base64 });
             imageLines.push('- 写真: ' + path);
         }
-        return { pages, changes, message: commitMessage(pages, imageLines), firstPath: pages.length ? pages[0].path : app.current };
+        if (versioned.length) imageLines.push('- 写真の更新に合わせて表示を更新: ' + versioned.join(', '));
+        const firstPath = pages.length ? pages[0].path : app.current;
+        return { pages, changes, message: commitMessage(pages, imageLines), firstPath };
     }
 
     async function publish() {
         if (app.busy) return;
         for (const ed of app.editors.values()) ed.stopEditing();
         let plan;
+        app.busy = true; // まとめているあいだに二度押しされないように
+        refreshChrome();
         try {
-            plan = buildPlan();
+            plan = await buildPlan();
         } catch (err) {
+            if (handleAuthError(err)) return;
             toast('変更の内容をまとめられませんでした。' + (err && err.message ? '（' + err.message + '）' : ''), { type: 'error' });
             return;
+        } finally {
+            app.busy = false;
+            refreshChrome();
         }
         if (!plan.changes.length) {
             toast('公開する変更はありません。');
@@ -740,7 +838,22 @@
             pg.result('error', '通信に失敗しました', '通信に失敗しました。もう一度「公開する」を押してください。（変更はそのまま残っています）');
             return;
         }
-        pg.result('error', '公開できませんでした', errorMessage(err) + '（変更はそのまま残っています）');
+        if (err && err.code === 'protected') {
+            pg.result('error', '取り消せませんでした', err.message);
+            return;
+        }
+        if (err && (err.code === 'forbidden' || err.code === 'not_found')) {
+            // 読み取り専用のアクセスキーなど。ViFightが権限を直せば、同じアクセスキーのまま「公開する」をもう一度押せばよい
+            pg.result('error', '公開できませんでした',
+                'このアクセスキーには、サイトを書き換える権限がありません。ViFightに、アクセスキーの「Contents」を「Read and write」にしてもらってから、もう一度「公開する」を押してください。新しいアクセスキーをもらったときは「別のアクセスキーを入力する」から入れてください。（変更はそのまま残っています）', [
+                    { label: '閉じる' },
+                    { label: '別のアクセスキーを入力する', kind: 'primary', onClick: () => { switchKey(); } }
+                ]);
+            return;
+        }
+        // ブランチの保護など思いがけない理由のときは、ViFightが調べられるよう GitHub の説明も出す
+        const detail = err && err.detail && err.code === 'bad_response' ? '（GitHub: ' + err.detail + '）' : '';
+        pg.result('error', '公開できませんでした', errorMessage(err) + '（変更はそのまま残っています）' + detail);
     }
 
     // GitHub Pages への反映を 5秒ごとに確認（最大5分）
@@ -753,11 +866,14 @@
         pg.allowClose();
         const started = Date.now();
         let state = { state: 'pending' };
+        let lastUrl = null;
         for (;;) {
             state = app.gh ? await app.gh.deployStatus(sha) : { state: 'unknown' };
+            if (state.url) lastUrl = state.url;
+            // 'retry'（電波が一瞬切れた・GitHub の一時的なエラー）は、次の確認まで待ってもう一度
             if (state.state === 'success' || state.state === 'failure' || state.state === 'unknown') break;
             if (Date.now() - started > DEPLOY_MAX_MS) {
-                state = { state: 'unknown', url: state.url };
+                state = { state: 'unknown', url: lastUrl };
                 break;
             }
             await sleep(DEPLOY_POLL_MS);
