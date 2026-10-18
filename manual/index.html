@@ -218,7 +218,7 @@
 
         pre .hl { background: #ffe066; color: #1a1a1a; border-radius: 3px; padding: 0 2px; }
 
-        pre, pre .hl, .flag, h2, .rules li::before, .legend .n, .btnlike, .part { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        pre, pre .hl, .flag, h2, .rules li::before, .legend .n, .btnlike, .part, .mk, figure.homeicon { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
         pre .tag { color: #8fc1ff; }
 
@@ -315,6 +315,42 @@
 
         .legend--cols li { break-inside: avoid; }
 
+        .rules__sub { display: block; font-weight: 400; font-size: 0.9em; color: var(--soft); }
+
+        /* 画面写真の番号（文中） */
+        .mk {
+            display: inline-block;
+            width: 1.45em;
+            height: 1.45em;
+            border-radius: 50%;
+            background: var(--mark);
+            color: #111;
+            font-weight: 900;
+            font-size: 0.82em;
+            line-height: 1.45em;
+            text-align: center;
+            box-shadow: 0 0 0 1.5px #111;
+            vertical-align: 0.08em;
+            margin-right: 2px;
+        }
+
+        /* ホーム画面のアイコン */
+        .side--icon { grid-template-columns: minmax(0, 1fr) 150px; }
+
+        figure.homeicon {
+            margin: 0;
+            padding: 18px 10px 12px;
+            border-radius: 14px;
+            background: linear-gradient(160deg, #46617d, #1f2d3b);
+            text-align: center;
+        }
+
+        figure.homeicon img { display: block; width: 76px; height: 76px; margin: 0 auto; border-radius: 17px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35); }
+
+        figure.homeicon figcaption { margin-top: 6px; color: #fff; font-size: 0.82rem; font-weight: 500; line-height: 1.4; }
+
+        .shot--setup { max-width: 640px; }
+
         footer.end { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--soft); font-size: 0.9rem; }
 
         @media (max-width: 640px) {
@@ -322,6 +358,8 @@
             .two { grid-template-columns: 1fr; }
             .side, .side--wide { grid-template-columns: 1fr; }
             .side > figure.shot { max-width: 280px; }
+            .side--icon { gap: 4px; }
+            .side--icon > figure.homeicon { width: 120px; }
             .side--wide > figure.shot { max-width: 360px; }
             .shots > figure.shot { flex-basis: calc(50% - 9px); }
             .shots--dialogs > figure.shot { flex-basis: 100%; }
@@ -356,6 +394,8 @@
             .shots--dialogs > figure.shot { flex: 1 1 190px; }
             figure.shot img { box-shadow: none; }
             .shot--wide { max-width: 88%; }
+            .shot--setup { max-width: 66%; margin-left: auto; margin-right: auto; }
+            .side--icon { grid-template-columns: minmax(0, 1fr) 120px; }
             a { color: var(--ink); text-decoration: none; }
             a.url { color: var(--red); }
             pre { white-space: pre-wrap; word-break: break-all; }
@@ -374,7 +414,7 @@
 <div class="box box--rule">
     <h4>ホームページの直し方は、この3ステップだけです</h4>
     <ol class="rules">
-        <li>iPhone やパソコンで<strong>管理画面</strong>を開き、アクセスキーでログインする<br><a class="url" href="https://playmark0227-svg.github.io/kunioffice/admin/">https://playmark0227-svg.github.io/kunioffice/admin/</a></li>
+        <li>iPhone のホーム画面の<strong>「KUNI管理」アイコン</strong>を押して、管理画面を開く<br><span class="rules__sub">ログインはいりません（はじめての1回だけ、アクセスキーを貼り付けます → <a href="#c1-1">1-1</a>）</span></li>
         <li>直したい<strong>文字や写真をタップ</strong>して、その場で書き換える</li>
         <li><strong>「公開する」</strong>を押す　→　約1分でホームページに反映されます</li>
     </ol>
@@ -386,8 +426,8 @@
 <ol class="toc">
     <li><a href="#c1">管理画面で編集する（いちばん簡単）</a>
         <ul class="toc-sub">
-            <li><a href="#c1-1">1-1 管理画面を開く</a></li>
-            <li><a href="#c1-2">1-2 ログインする</a></li>
+            <li><a href="#c1-1">1-1 はじめての設定（1回だけ）</a></li>
+            <li><a href="#c1-2">1-2 ふだんはアイコンを押すだけ</a></li>
             <li><a href="#c1-3">1-3 画面の見方</a></li>
             <li><a href="#c1-4">1-4 文章を直す</a></li>
             <li><a href="#c1-5">1-5 写真を差し替える</a></li>
@@ -423,7 +463,7 @@
     <h4>用意するもの</h4>
     <ul class="list">
         <li>iPhone（Safari）、またはパソコン（Chrome・Edge・Safari など）</li>
-        <li>ViFight から受け取った<strong>アクセスキー</strong>（<code>github_pat_</code> で始まる長い文字列）</li>
+        <li>ViFight から受け取る<strong>アクセスキー</strong>（<code>github_pat_</code> で始まる長い文字列。はじめての設定で1回だけ使います）</li>
     </ul>
 </div>
 <div class="box box--warn">
@@ -434,49 +474,67 @@
     </ul>
 </div>
 
-<h3 id="c1-1"><span class="sub">1-1</span>管理画面を開く</h3>
-<p>管理画面のアドレス（URL）：<br><a class="url" href="https://playmark0227-svg.github.io/kunioffice/admin/">https://playmark0227-svg.github.io/kunioffice/admin/</a></p>
-<p>すぐ開けるように、最初に1回だけ登録しておくと便利です。</p>
-<div class="two">
-    <div class="box">
-        <h4>iPhone：ホーム画面に追加</h4>
-        <ol class="steps">
-            <li>Safari で上のアドレスを開きます。</li>
-            <li>共有ボタン（四角から上向きの矢印が出ているマーク。見当たらないときは「…」を押すと出てきます）を押します。</li>
-            <li>「ホーム画面に追加」→「追加」を押します。</li>
-        </ol>
-        <p>ホーム画面にアイコンができ、次からはそれを押すだけで開けます。</p>
-    </div>
-    <div class="box">
-        <h4>パソコン：ブックマーク</h4>
-        <p>管理画面を開いた状態で <span class="kbd">Ctrl</span> + <span class="kbd">D</span>（Mac は <span class="kbd">⌘</span> + <span class="kbd">D</span>）を押すと、ブックマーク（お気に入り）に登録できます。</p>
-    </div>
-</div>
-<p class="note">管理画面は検索しても出てきません（検索エンジンに載らないようにしてあります）。ホームページのメニューにもリンクはありません。このマニュアルも iPhone で見られます：<a href="https://playmark0227-svg.github.io/kunioffice/manual/">https://playmark0227-svg.github.io/kunioffice/manual/</a></p>
+<h3 id="c1-1"><span class="sub">1-1</span>はじめての設定（iPhone で1回だけ）</h3>
+<p>管理画面を iPhone で使えるようにする設定です。<strong>最初に1回だけ</strong>行えば、次からはアイコンを押すだけで開けます（ログインはいりません）。ViFight（久保）と一緒に設定してもかまいません。</p>
 
-<h3 id="c1-2"><span class="sub">1-2</span>ログインする</h3>
-<div class="side">
-    <figure class="shot shot--phone"><img src="img/admin-login-iphone.jpg" width="585" height="1266" alt="iPhone で開いた管理画面のログイン画面。アクセスキーの欄と「ログイン」ボタン"><figcaption>ログイン画面（iPhone）</figcaption></figure>
+<h4 class="minor">① ホーム画面にアイコンを作る</h4>
+<div class="side side--icon">
     <div>
         <ol class="steps">
-            <li>「アクセスキー」の欄を押し、ViFight から受け取ったアクセスキーを入力（貼り付け）します。「表示」を押すと、入力した文字を確かめられます。</li>
-            <li>「ログイン」を押します。</li>
-            <li>はじめてのときは「使い方」が出ます。読んだら「はじめる」を押します（あとから「≡」→「使い方」でいつでも見られます）。</li>
+            <li>iPhone の <strong>Safari</strong> で、管理画面のアドレスを開きます。<br><a class="url" href="https://playmark0227-svg.github.io/kunioffice/admin/">https://playmark0227-svg.github.io/kunioffice/admin/</a><br><span class="note">ViFight から LINE などでこのアドレスが届いていれば、それを押して開いてもかまいません（アドレスにアクセスキーは入っていません）。</span></li>
+            <li>共有ボタン（四角から上向きの矢印が出ているマーク。見当たらないときは「…」を押すと出てきます）を押し、「<strong>ホーム画面に追加</strong>」→「追加」を押します。「Webアプリとして開く」が出たら、オンのままにします。</li>
+            <li>ホーム画面に<strong>「KUNI管理」</strong>のアイコンができます。</li>
         </ol>
-        <div class="box box--ok">
-            <h4>アクセスキーは iPhone に覚えさせるのがおすすめ</h4>
-            <p>ログインしたときに「パスワードを保存しますか？」と聞かれたら<strong>「保存」</strong>を押してください。次からは、アクセスキーの欄を押すとキーボードの上に候補が出て、選ぶだけで入力できます。</p>
-            <p>「このブラウザに記憶する」は、安全のため<strong>オフのまま</strong>がおすすめです。</p>
+    </div>
+    <figure class="homeicon"><img src="../admin/apple-touch-icon.png" width="180" height="180" alt="KUNI管理のアイコン（黒地に Kuni OFFICE の文字）"><figcaption>KUNI管理</figcaption></figure>
+</div>
+
+<h4 class="minor">② アイコンから開いて、アクセスキーを1回だけ貼り付ける</h4>
+<div class="side">
+    <figure class="shot shot--phone"><img src="img/admin-login-iphone.jpg" width="585" height="1266" alt="iPhone で開いた「この端末で管理画面を使えるようにする」の画面。アクセスキーの欄、「この端末に記憶する（次からは入力不要）」のチェック、「管理画面を開く」ボタン"><figcaption>はじめての設定の画面（iPhone）</figcaption></figure>
+    <div>
+        <ol class="steps">
+            <li>Safari ではなく、ホーム画面の<strong>「KUNI管理」アイコン</strong>から開きます。「この端末で管理画面を使えるようにする」と出ます。</li>
+            <li><span class="mk">1</span> 「アクセスキー」の欄を押し、ViFight から受け取ったアクセスキーを貼り付けます。「表示」を押すと、入れた文字を確かめられます。</li>
+            <li><span class="mk">2</span> 「この端末に記憶する（次からは入力不要）」に<strong>チェックが入っている</strong>ことを確かめます（はじめから入っています）。</li>
+            <li><span class="mk">3</span> 「<strong>管理画面を開く</strong>」を押します。はじめてのときは「使い方」が出るので、読んだら「はじめる」を押します（あとから「≡」→「使い方」でいつでも見られます）。</li>
+        </ol>
+        <div class="box box--warn">
+            <h4>貼り付けるのは、アイコンから開いた画面で</h4>
+            <p>ホーム画面のアイコンから開いた管理画面は、Safari とは別にアクセスキーを記憶します。Safari の画面で貼り付けるより、記憶が消えにくくなります。</p>
         </div>
+        <p class="note">「パスワードを保存しますか？」と聞かれたら「保存」を押しておくと安心です。もしまたアクセスキーを聞かれたときも、キーボードの上の候補から選ぶだけで入れられます。</p>
+    </div>
+</div>
+
+<h3 id="c1-2"><span class="sub">1-2</span>ふだんはアイコンを押すだけ</h3>
+<p>次からは、ホーム画面の<strong>「KUNI管理」アイコンを押すだけ</strong>です。ログインやアクセスキーの入力はいりません。すぐに編集の画面（<a href="#c1-3">1-3</a>）が開きます。</p>
+<div class="box">
+    <h4>パソコンでも使うとき</h4>
+    <p>パソコンのブラウザで管理画面のアドレスを開き、同じアクセスキーを1回だけ貼り付けて「管理画面を開く」を押します。<span class="kbd">Ctrl</span> + <span class="kbd">D</span>（Mac は <span class="kbd">⌘</span> + <span class="kbd">D</span>）でブックマークしておくと、次からはそれを開くだけです。ほかの人も使う共用のパソコンでは「この端末に記憶する」のチェックを外し、使い終わったら「≡」→「ログアウト」を押してください。</p>
+</div>
+<p class="note">「≡」→「ログアウト」は、ふだんは使いません。押すとその端末の記憶が消え、次に開くときにアクセスキーがもう一度必要になります（iPhone を人に譲る・修理に出すときなどに使います）。</p>
+<p class="note">管理画面は、検索しても、ホームページのメニューからも出てきません。このマニュアルも iPhone で見られます：<a href="https://playmark0227-svg.github.io/kunioffice/manual/">https://playmark0227-svg.github.io/kunioffice/manual/</a></p>
+
+<h4 class="minor">1年に1回：アクセスキーの期限が切れたら</h4>
+<div class="side">
+    <figure class="shot shot--phone"><img src="img/admin-expired-iphone.jpg" width="585" height="915" alt="「アクセスキーの期限が切れたか、無効になりました。ViFightに新しいキーをもらってください。」と赤く表示された画面"><figcaption>期限が切れたときの画面</figcaption></figure>
+    <div>
+        <p>アクセスキーの期限は<strong>1年</strong>です。期限が切れると、アイコンから開いたときに「<strong>アクセスキーの期限が切れたか、無効になりました。ViFightに新しいキーをもらってください。</strong>」と出ます。</p>
+        <ol class="steps">
+            <li>ViFight に連絡して、新しいアクセスキーをもらいます。</li>
+            <li>この画面のアクセスキーの欄に新しいキーを貼り付けて、「管理画面を開く」を押します。これで、また1年使えます。</li>
+        </ol>
+        <p>編集の途中でこの画面になったときも、管理画面を<strong>閉じずに</strong>新しいキーを入れれば、編集した内容はそのまま公開できます。</p>
         <div class="box box--warn">
             <h4>アクセスキーは「お店の鍵」と同じです</h4>
-            <p>この文字列があれば、だれでもホームページを書き換えられます。人に見せたり、メールや LINE で送ったりしないでください。iPhone をなくしたときは、すぐに ViFight へご連絡ください（そのアクセスキーを使えなくします）。</p>
+            <p>この文字列があれば、だれでもホームページを書き換えられます。人に見せたり、メールや LINE で送ったりしないでください。アクセスキーは iPhone の中に記憶されるので、iPhone には<strong>画面ロック（パスコード・Face ID）</strong>をかけておいてください。iPhone をなくしたときは、すぐに ViFight へご連絡ください（そのアクセスキーを使えなくします）。</p>
         </div>
     </div>
 </div>
 
 <h3 id="c1-3"><span class="sub">1-3</span>画面の見方</h3>
-<p>ログインすると、ホームページがそのままの見た目で表示されます。いちばん上の黒い帯で、ページの切り替えや公開をします。</p>
+<p>管理画面を開くと、ホームページがそのままの見た目で表示されます。いちばん上の黒い帯で、ページの切り替えや公開をします。</p>
 <figure class="shot shot--wide"><img src="img/admin-overview-pc.jpg" width="1600" height="690" alt="パソコンで開いた管理画面。上の黒い帯に、ページ選択・未公開の変更・元に戻す・公開する・メニューが並ぶ"><figcaption>パソコンの画面（「事業内容」ページを編集中。まだ公開していない変更が2件あります）</figcaption></figure>
 <ol class="legend legend--cols">
     <li><span class="n">1</span><strong>ページ選択</strong>：編集するページを選びます。KUNI OFFICE の5ページと、ショップ（若葉のしずく）の4ページを選べます。まだ公開していない変更があるページには「●」が付きます。</li>
@@ -676,9 +734,10 @@
 <h3 id="c1-12"><span class="sub">1-12</span>困ったとき</h3>
 <table>
     <tr><th style="width:38%">こんなとき</th><th>どうするか</th></tr>
-    <tr><td>「アクセスキーが正しくないか、有効期限が切れています」と出てログインできない</td><td>アクセスキーを最後まで正しく貼り付けたか（前後に空白が入っていないか）確かめます。それでもだめなときは、アクセスキーの有効期限（1年）が切れています。ViFight に新しいアクセスキーをもらってください。</td></tr>
-    <tr><td>編集の途中でログイン画面に戻った（「ログインの有効期限が切れたか、アクセスキーが無効になりました」）</td><td>管理画面のページは<strong>閉じずに</strong>、新しいアクセスキーを入れてください。編集中の内容はそのまま続けられます。新しいアクセスキーは ViFight からもらいます。</td></tr>
-    <tr><td>「このアクセスキーでは編集できません」「公開できませんでした（権限がありません）」</td><td>アクセスキーの設定の問題です。ViFight にご連絡ください。新しいアクセスキーをもらったら「別のアクセスキーを入力する」から入れれば、変更は消えません。</td></tr>
+    <tr><td>「アクセスキーの期限が切れたか、無効になりました。ViFightに新しいキーをもらってください。」</td><td>アクセスキーの期限（1年）が切れたか、ViFight がそのキーを止めました。ViFight に新しいアクセスキーをもらい、同じ画面に貼り付けて「管理画面を開く」を押します（<a href="#c1-2">1-2</a>）。編集の途中で出たときは、管理画面を<strong>閉じずに</strong>入れれば、編集中の内容はそのまま残ります。</td></tr>
+    <tr><td>アクセスキーを貼り付けたら「アクセスキーが正しくないか、有効期限が切れています」と出た</td><td>アクセスキーを最後まで貼り付けたか確かめて、もう一度貼り付けます。それでもだめなときは、ViFight に新しいアクセスキーをもらってください。</td></tr>
+    <tr><td>アイコンから開いたのに、またアクセスキーを聞かれた</td><td>「ログアウト」を押した、iPhone の設定で Web サイトのデータを消した、などで記憶が消えています。受け取ったアクセスキーをもう一度貼り付けてください（「パスワード」に保存していれば、キーボードの上の候補から選べます）。手元にないときは ViFight にご連絡ください。</td></tr>
+    <tr><td>「このアクセスキーでは編集できません」「kunioffice 以外のサイトも操作できてしまうため、使えません」「古い形式のキーです」「公開できませんでした（権限がありません）」</td><td>アクセスキーの設定の問題です。ViFight にご連絡ください。開くときに出て<strong>「もう一度確かめる」</strong>ボタンがあるときは、ViFight がキーの設定を直したあとに押せば、そのまま使えます。新しいアクセスキーをもらったときは「別のアクセスキーを入れる（入力する）」から入れれば、編集中の変更は消えません。</td></tr>
     <tr><td>「インターネットに接続できません」「通信に失敗しました」</td><td>電波のよい場所（Wi-Fi など）で、もう一度「公開する」を押してください。<strong>変更はそのまま残っています</strong>。上に「インターネットに接続されていません」と出ているあいだも、編集は続けられます。</td></tr>
     <tr><td>「ほかの場所で同じページが更新されました」</td><td>同じページを、ViFight やほかの端末（パソコンと iPhone など）が先に更新したときに出ます。「読み込み直す」を押すと最新の内容が表示されますが、<strong>まだ公開していなかった変更は消えます</strong>。直した内容をメモしてから読み込み直し、もう一度直して公開してください。</td></tr>
     <tr><td>「アクセスが集中しています」</td><td>しばらく（数分〜1時間ほど）待ってから、もう一度試してください。</td></tr>
@@ -691,39 +750,52 @@
 <p>わからないことは、ViFight（久保）までご連絡ください。</p>
 
 <!-- ================================================== -->
-<h2 id="c2"><span class="num">2</span>サイト管理者（ViFight）向け：アクセスキーの用意</h2>
+<h2 id="c2" class="newpage"><span class="num">2</span>サイト管理者（ViFight）向け：アクセスキーの用意</h2>
 <p class="note">この章はサイト管理者（ViFight）向けです。高桑様は読み飛ばしてかまいません。</p>
+<p>アクセスキー（GitHub の Fine-grained personal access token）は、リポジトリの持ち主が GitHub にログインした画面でしか作れません。<strong>作る・確かめる・渡す</strong>を1ページにまとめた「アクセスキーの用意」ページを、パソコンで GitHub にログインした状態で開いてください（約3分）。</p>
+<p><a class="url" href="https://playmark0227-svg.github.io/kunioffice/admin/setup.html">https://playmark0227-svg.github.io/kunioffice/admin/setup.html</a><br><span class="note">管理画面の最初の画面にある「サイト管理者の方：アクセスキーの用意」からも開けます。</span></p>
+<figure class="shot shot--setup"><img src="img/admin-setup-pc.jpg" width="1200" height="1058" alt="「アクセスキーの用意」ページの上の部分。01 GitHub でアクセスキーを作る のボタンと、開いた画面で操作する4つのこと"><figcaption>「アクセスキーの用意」ページの上の部分（この下に ②・③ が続きます）</figcaption></figure>
 
-<h3>アクセスキーの作り方（GitHub の Fine-grained token）</h3>
+<h3>① GitHub でアクセスキーを作る</h3>
 <ol class="steps">
-    <li><code>playmark0227-svg/kunioffice</code> を持っている GitHub アカウントでログインし、右上のアイコン →「<strong>Settings</strong>」を開きます。</li>
-    <li>左メニューのいちばん下「<strong>Developer settings</strong>」→「<strong>Personal access tokens</strong>」→「<strong>Fine-grained tokens</strong>」→「<strong>Generate new token</strong>」。</li>
-    <li><strong>Token name</strong>：だれのどの端末用かわかる名前（例：<code>kunioffice 管理画面 高桑 iPhone</code>）。<strong>Resource owner</strong>：<code>playmark0227-svg</code>。</li>
-    <li><strong>Expiration</strong>：<strong>1年</strong>（Custom で1年後の日付）。更新日をカレンダーに入れておきます。</li>
-    <li><strong>Repository access</strong>：<strong>Only select repositories</strong> → <code>kunioffice</code> だけを選びます。</li>
-    <li><strong>Permissions</strong>（Repository permissions）：<strong>Contents = Read and write</strong>、<strong>Actions = Read-only</strong>。Metadata（Read-only）は自動で付きます。ほかは No access のままにします。</li>
-    <li>「<strong>Generate token</strong>」を押し、表示された <code>github_pat_…</code> の文字列をコピーします（この画面を閉じると二度と表示されません）。</li>
+    <li>「<strong>GitHubでアクセスキーを作る</strong>」を押します。GitHub のキーを作る画面が、<strong>名前・説明・Resource owner（<code>playmark0227-svg</code>）・期限（366日）・権限（Contents = Read and write、Actions = Read-only）が入った状態</strong>で開きます。</li>
+    <li>「<strong>Repository access</strong>」で <strong>Only select repositories</strong> を選び、<strong>kunioffice だけ</strong>を選びます（ここだけは GitHub の仕様で入れておけません）。</li>
+    <li>いちばん下の「<strong>Generate token</strong>」を押し（確認が出たらもう一度「Generate token」）、表示された <code>github_pat_…</code> をコピーします。<strong>キーはこのとき一度しか表示されません。</strong>渡し終わるまで、GitHub の画面は閉じないでください。</li>
 </ol>
-<div class="box">
-    <h4>権限が足りないとき</h4>
-    <p>Contents が Read-only だと、ログイン時に「このアクセスキーでは編集できません（読み取り専用です）」と出ます。Actions を付けないと公開はできますが、「サイトに反映しています」の進み具合が出ず、「1〜2分後にサイトに反映されます」とだけ表示されます。</p>
-</div>
+<p class="note">名前が使われている、というエラーが出たときは、前のキーが残っています。Token name の後ろに年を付けて（例：<code>KUNI OFFICE 管理画面 2027</code>）作ってください。</p>
 
-<h3>安全な渡し方</h3>
-<ul class="list">
-    <li>いちばん安全なのは、<strong>直接会って</strong>高桑様の iPhone で管理画面にログインし、Safari の「パスワードを保存」で iPhone に保存してもらう方法です。</li>
-    <li>メール・LINE・チャット・紙には残さないでください。離れて渡すときは、AirDrop や iPhone の「パスワード」アプリの共有など、相手の端末に直接届く方法を使います。</li>
-    <li>1人（1台）につき1つのアクセスキーを作ると、なくしたときにその1つだけを止められます。</li>
-</ul>
+<h3>② キーを確認する</h3>
+<p>コピーしたキーを「コピーしたキー」の欄に貼り付けて「<strong>確認する</strong>」を押します。GitHub に問い合わせて、このサイトを編集・公開できるか、<strong>kunioffice だけ</strong>を操作できるキーかを確かめます。キーはどこにも保存されず、確認できると欄は空になります。</p>
+<table>
+    <tr><th style="width:36%">出たメッセージ</th><th>どうするか</th></tr>
+    <tr><td>OK！このキーで使えます</td><td>③に進みます。</td></tr>
+    <tr><td>kunioffice が選ばれていません</td><td>GitHub のキーの設定で「Repository access」→「Only select repositories」→「kunioffice」を選んで保存（Update）し、もう一度「確認する」を押します。</td></tr>
+    <tr><td>書き込みの権限がありません</td><td>「Repository access」を kunioffice にし、「Permissions」の「Contents」を「Read and write」にして保存し、もう一度「確認する」を押します。</td></tr>
+    <tr><td>kunioffice 以外も操作できるキーです</td><td>「All repositories」になっています。「Only select repositories」で kunioffice だけを選んで保存し、もう一度「確認する」を押します。</td></tr>
+    <tr><td>キーが正しくありません</td><td>コピーし損ねたか、期限切れ・削除済みのキーです。GitHub に表示された文字列をもう一度コピーして貼り付けます。</td></tr>
+    <tr><td>古い形式のキーです</td><td><code>ghp_</code> などで始まる Classic のキーは、ほかのリポジトリも操作できてしまうので使えません。①のボタンから作り直します。</td></tr>
+</table>
+<p class="note">Actions の権限を外すと、公開はできますが「サイトに反映しています」の進み具合が出ず、「1〜2分後にサイトに反映されます」とだけ表示されます。</p>
 
-<h3>期限が切れたとき・端末をなくしたとき</h3>
+<h3>③ 高桑様の iPhone に入れる（1回だけ）</h3>
+<figure class="shot shot--setup"><img src="img/admin-setup-ok-pc.jpg" width="1200" height="1280" alt="「OK！このキーで使えます」と表示され、03 高桑様の iPhone に入れる の手順、キーの渡し方、なくしたとき、期限の日付が表示されている"><figcaption>確認できると、高桑様の iPhone に入れる手順と、期限の日付が出ます</figcaption></figure>
+<ol class="steps">
+    <li>高桑様の iPhone の Safari で管理画面（<code>https://playmark0227-svg.github.io/kunioffice/admin/</code>）を開き、共有 →「ホーム画面に追加」を押します。このアドレスにはキーが入っていないので、LINE やメールで送ってもかまいません。</li>
+    <li>ホーム画面の「<strong>KUNI管理</strong>」アイコンから開き、アクセスキーを1回だけ貼り付けて「管理画面を開く」を押します（「この端末に記憶する」はオンのまま）。くわしくは<a href="#c1-1">1-1</a>。</li>
+    <li>次からは、高桑様はアイコンを押すだけで使えます。</li>
+</ol>
+
+<h3>安全な渡し方・期限・なくしたとき</h3>
 <ul class="list">
-    <li>期限が近づくと GitHub からメールが届きます。期限が切れると管理画面にログインできなくなる（「アクセスキーが正しくないか、有効期限が切れています」）ので、同じ手順で作り直して渡します。トークンの画面の「<strong>Regenerate token</strong>」でも作り直せます（古い文字列は使えなくなります）。</li>
-    <li>iPhone やパソコンをなくした、アクセスキーが漏れたかもしれないときは、すぐに「Fine-grained tokens」でそのトークンを開き、<strong>「Delete」</strong>で取り消します。そのあと新しいアクセスキーを作って渡します。</li>
+    <li><strong>直接会って</strong>、高桑様の iPhone に貼り付けるのがいちばん安全です。離れているときは、AirDrop か iPhone の「パスワード」の共有で、相手の端末に直接届けます。メール・LINE・チャット・紙には残さないでください。キーを URL や QR コードに入れて送ることもしないでください。</li>
+    <li><strong>期限は1年</strong>です（期限の日付は③に出ます）。期限が近づくと GitHub からメールが届きます。切れると高桑様の管理画面に「アクセスキーの期限が切れたか、無効になりました。ViFightに新しいキーをもらってください。」と出るので、「アクセスキーの用意」ページでもう一度作って、同じように入れ直します。GitHub のキーの画面の「<strong>Regenerate token</strong>」で作り直してもかまいません（古い文字列はすぐに使えなくなります。②で確かめてから渡します）。</li>
+    <li>iPhone をなくした、キーが漏れたかもしれないときは、すぐに GitHub の <a href="https://github.com/settings/personal-access-tokens">Fine-grained tokens</a>（<code>https://github.com/settings/personal-access-tokens</code>）でそのキーを削除（Revoke）します。記憶していた端末でもすぐに使えなくなります。そのあと「アクセスキーの用意」ページで作り直して渡します。</li>
+    <li>パソコンでも使うときは、同じキーを管理画面に貼り付けるだけです。なくしたときに1台だけ止めたいなら、端末ごとに別のキーを作ります。</li>
 </ul>
 
 <h3>管理画面の仕組み（知っておくこと）</h3>
 <ul class="list">
+    <li>アクセスキーは、「この端末に記憶する」をオンにした端末のブラウザ（<code>localStorage</code>。オフのときは <code>sessionStorage</code>）にだけ置かれ、<code>https://api.github.com</code> にだけ送られます。<code>playmark0227-svg.github.io</code> のほかの GitHub Pages のサイトとは保存領域が共通なので、そちらに外部のスクリプトを入れるときは気をつけてください（独自ドメインにすると分けられます）。</li>
     <li>管理画面で「公開する」を押すと、GitHub の <code>main</code> ブランチに<strong>直接コミット</strong>されます（メッセージは「管理画面から更新: …」、取り消しは「管理画面から取り消し: …」）。GitHub Actions（Deploy to GitHub Pages）が約1分で公開します。</li>
     <li><strong>ローカルで作業する前は、必ず <code>git pull</code> で最新の <code>main</code> を取り込んでください。</strong>古いファイルのまま push すると、管理画面で公開された変更を上書きしてしまいます。（同じページが先に更新されていた場合、管理画面のほうは上書きせずに「ほかの場所で同じページが更新されました」で止まります。）</li>
     <li><code>main</code> にブランチ保護（プルリクエスト必須など）をかけると、管理画面から公開できなくなります。</li>

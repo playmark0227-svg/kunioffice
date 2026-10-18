@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="referrer" content="same-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' blob: data:; media-src 'self' blob:; connect-src https://api.github.com; frame-src 'self' about: blob: https://www.google.com/maps/; base-uri 'self'; form-action 'none'; object-src 'none'">
+    <meta name="theme-color" content="#0b0b0b">
+    <title>アクセスキーの用意 | KUNI OFFICE 管理画面</title>
+    <link rel="icon" type="image/png" href="apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/setup.css">
+</head>
+<body class="setup-page">
+    <!--
+        サイト管理者（ViFight）用: 高桑様の端末で管理画面を使えるようにするための3ステップ。
+        アクセスキーは入力欄と GitHub への確認の通信にだけ使い、保存しません（URL・ファイル・ログにも出しません）。
+    -->
+    <header class="setup-top">
+        <img class="setup-top__logo" src="../images/logo-white.png" alt="KUNI OFFICE">
+        <span class="setup-top__name">管理画面</span>
+    </header>
+
+    <main class="setup">
+        <div class="setup__head">
+            <p class="kicker">For site admin</p>
+            <h1 class="setup__title">アクセスキーの用意</h1>
+            <p class="setup__lead">高桑様の iPhone で管理画面を使えるようにする、サイト管理者（ViFight）用のページです。パソコンで GitHub にログインした状態で、上から順に進めてください（約3分）。</p>
+        </div>
+
+        <ol class="ks-steps">
+            <!-- ① 作る -->
+            <li class="ks-step" id="step1">
+                <span class="ks-step__num" aria-hidden="true">01</span>
+                <div class="ks-step__body">
+                    <h2 class="ks-step__title">GitHub でアクセスキーを作る</h2>
+                    <p class="ks-step__text">名前・説明・期限（1年）・権限が入力済みの画面が開きます。</p>
+                    <a class="btn btn--primary btn--lg ks-step__cta" id="createKeyLink" target="_blank" rel="noopener noreferrer" href="https://github.com/settings/personal-access-tokens/new?name=KUNI%20OFFICE%20%E7%AE%A1%E7%90%86%E7%94%BB%E9%9D%A2&amp;description=KUNI%20OFFICE%20%E3%83%9B%E3%83%BC%E3%83%A0%E3%83%9A%E3%83%BC%E3%82%B8%E7%AE%A1%E7%90%86%E7%94%BB%E9%9D%A2%EF%BC%88%E9%AB%98%E6%A1%91%E6%A7%98%E7%94%A8%EF%BC%89&amp;target_name=playmark0227-svg&amp;expires_in=366&amp;contents=write&amp;actions=read">
+                        <span>GitHubでアクセスキーを作る</span>
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg>
+                    </a>
+                    <p class="ks-step__sub">開いた画面で、この4つだけ操作してください。</p>
+                    <ol class="ks-todo">
+                        <li>「Repository access」で <b>Only select repositories</b> を選ぶ</li>
+                        <li>「Select repositories」で <b>kunioffice</b> を選ぶ</li>
+                        <li>いちばん下の <b>Generate token</b> を押す<span class="ks-todo__sub">確認が出たら、もう一度 <b>Generate token</b></span></li>
+                        <li>表示された <code class="ks-code">github_pat_…</code> をコピーする</li>
+                    </ol>
+                    <p class="ks-note ks-note--warn">キーは GitHub で<b>一度しか表示されません</b>。高桑様に渡し終わるまで、GitHub の画面は閉じないでください。</p>
+                    <details class="ks-prefill">
+                        <summary>入力済みの内容を確かめる</summary>
+                        <dl class="ks-prefill__list">
+                            <div><dt>Token name</dt><dd>KUNI OFFICE 管理画面</dd></div>
+                            <div><dt>Resource owner</dt><dd id="ownerName">playmark0227-svg</dd></div>
+                            <div><dt>Expiration</dt><dd>366 days（<span data-expiry>1年後</span> まで）</dd></div>
+                            <div><dt>Permissions</dt><dd>Contents：Read and write<br>Actions：Read-only<br>Metadata：Read-only（自動）</dd></div>
+                        </dl>
+                    </details>
+                </div>
+            </li>
+
+            <!-- ② 確かめる -->
+            <li class="ks-step" id="step2">
+                <span class="ks-step__num" aria-hidden="true">02</span>
+                <div class="ks-step__body">
+                    <h2 class="ks-step__title">キーを確認する</h2>
+                    <form class="ks-check-form" id="checkForm" novalidate>
+                        <div class="field">
+                            <label class="field__label" for="keyInput">コピーしたキー</label>
+                            <div class="input-group">
+                                <input class="input" id="keyInput" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="github_pat_…" data-1p-ignore data-lpignore="true">
+                                <button class="input-group__btn" type="button" id="keyToggle" aria-pressed="false" aria-controls="keyInput">表示</button>
+                            </div>
+                            <p class="field__hint">このサイトを編集できるキーか、GitHub に問い合わせるだけです。キーはどこにも保存しません。</p>
+                        </div>
+                        <button class="btn btn--dark btn--lg ks-check-form__btn" type="submit" id="checkBtn">確認する</button>
+                    </form>
+                    <div class="ks-result" id="checkResult" role="status" aria-live="polite" hidden></div>
+                </div>
+            </li>
+
+            <!-- ③ 渡す -->
+            <li class="ks-step is-locked" id="step3">
+                <span class="ks-step__num" aria-hidden="true">03</span>
+                <div class="ks-step__body">
+                    <h2 class="ks-step__title" id="step3Title" tabindex="-1">高桑様の iPhone に入れる<span class="ks-nowrap">（1回だけ）</span></h2>
+                    <p class="ks-step__locked" id="step3Locked">②で確認できると、ここに手順が表示されます。</p>
+                    <div class="ks-handover" id="handover" hidden>
+                        <ol class="ks-todo ks-todo--big">
+                            <li>
+                                iPhone の <b>Safari</b> で、このURLを開く
+                                <div class="ks-url-box">
+                                    <span class="ks-url-box__text" id="adminUrl">https://playmark0227-svg.github.io/kunioffice/admin/</span>
+                                    <button class="btn btn--secondary btn--sm ks-url-box__btn" type="button" id="copyUrlBtn">URLをコピー</button>
+                                </div>
+                                <span class="ks-todo__sub">このURLは LINE やメールで送っても大丈夫です（キーは入っていません）。</span>
+                            </li>
+                            <li>
+                                共有ボタン（□に↑）→「<b>ホーム画面に追加</b>」→「追加」
+                                <span class="ks-todo__sub">共有ボタンが見当たらないときは「…」の中にあります。「Webアプリとして開く」が出たら、オンのまま。</span>
+                            </li>
+                            <li>
+                                ホーム画面の「<b>KUNI管理</b>」アイコンから開く
+                                <span class="ks-todo__sub">Safari の画面ではなく、アイコンから開いた画面で入れてください（そのほうがキーが消えにくくなります）。</span>
+                            </li>
+                            <li>
+                                アクセスキーを<b>1回だけ</b>貼り付けて「管理画面を開く」
+                                <span class="ks-todo__sub">「この端末に記憶する」はオンのまま。</span>
+                            </li>
+                            <li>次からは、<b>アイコンを押すだけ</b>で使えます。</li>
+                        </ol>
+                        <div class="ks-tips">
+                            <section class="ks-tip">
+                                <h3 class="ks-tip__title">キーの渡し方</h3>
+                                <p>直接会って入力するのがいちばん安全です。離れているときは AirDrop か、iPhone の「パスワード」の共有で。LINE・メールなどのチャットには残さないでください。</p>
+                            </section>
+                            <section class="ks-tip">
+                                <h3 class="ks-tip__title">なくしたとき・漏れたかもしれないとき</h3>
+                                <p>GitHub の <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener noreferrer">Fine-grained tokens</a> でこのキーを削除（Revoke）して、このページで作り直してください。</p>
+                            </section>
+                            <section class="ks-tip">
+                                <h3 class="ks-tip__title">期限は1年</h3>
+                                <p><b data-expiry>1年後</b> ごろに切れます。切れると管理画面に「期限が切れたか、無効になりました」と出るので、このページでもう一度作って、同じように入れ直してください。</p>
+                            </section>
+                        </div>
+                        <p class="ks-note">パソコンでも使うときは、管理画面を開いて同じキーを貼り付けるだけです。</p>
+                    </div>
+                </div>
+            </li>
+        </ol>
+
+        <div class="setup__foot">
+            <button class="btn btn--secondary" type="button" id="restartBtn" hidden>最初からやり直す</button>
+            <a class="setup__back" href="./">管理画面へ</a>
+        </div>
+        <p class="setup__memo">メモ：記憶したキーは、その端末のこのサイト用の保存領域に入ります。playmark0227-svg.github.io のほかの GitHub Pages のサイトとは保存領域が共通なので、そちらに外部のスクリプトを入れるときは気をつけてください（独自ドメインにすると分けられます）。</p>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/github.js"></script>
+    <script src="js/setup.js"></script>
+</body>
+</html>

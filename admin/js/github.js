@@ -23,6 +23,13 @@
     const UPLOAD_TIMEOUT_MS = 5 * 60 * 1000; // 写真の送受信は回線が遅いと時間がかかる
     // ログイン時の書き込み確認で作る小さなファイル（どこからも使われず、GitHub が後で片付ける）
     const WRITE_CHECK_CONTENT = 'kunioffice admin: write access check\n';
+    // キーの範囲の確認で、一覧に出たほかのリポジトリのうち、書き込めるかを試す数
+    const SCOPE_PROBES = 3;
+    // 古い形式（Classic など）のキー。持ち主のすべてのリポジトリを操作できてしまうので使わない
+    const CLASSIC_KEY = /^gh[pousr]_/;
+    const FULL_NAME = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/;
+    // キーの範囲の確認を続けられないエラー（通信の失敗・GitHub の一時的なエラー・使いすぎ・キーが無効）
+    const SCOPE_STOP = new Set(['network', 'server', 'rate_limited', 'unauthorized']);
     // 管理画面からは保存も取り消しもしないファイル（公開の仕組み・管理画面そのもの）
     const DEFAULT_PROTECTED = /^(\.github|admin)\//;
 
@@ -291,6 +298,31 @@
                 throw err;
             }
             return { canPush: true, fullName };
+        }
+
+        // このアクセスキーが、このサイト（リポジトリ）のほかにも書き込めるかどうか（verify のあとに使う）。
+        // 細かい権限のキーでは、/user/repos には「キーで選ばれたリポジトリ」だけが出る（「All repositories」なら全部）。
+        // 一覧がキーで絞られていない場合にまちがって断らないよう、ほかのリポジトリには、どこからも使われない小さな
+        // ファイルを実際に作れるかで確かめる（選ばれていなければ 403・404、空のリポジトリは 409）。
+        // → { onlyThisRepo: true, others: [] } | { onlyThisRepo: false, others: ['owner/name', …] }
+        async checkScope() {
+            const { data } = await this._request('GET', '/user/repos?affiliation=owner&sort=pushed&per_page=100');
+            if (!Array.isArray(data)) throw badResponse('repositories');
+            const self = (this.owner + '/' + this.repo).toLowerCase();
+            const others = data.filter((item) => item && typeof item.full_name === 'string' &&
+                FULL_NAME.test(item.full_name) && item.full_name.toLowerCase() !== self);
+            const candidates = others.filter((item) => !item.archived && !item.disabled).slice(0, SCOPE_PROBES);
+            for (const item of candidates) {
+                try {
+                    await this._request('POST', '/repos/' + encodePath(item.full_name) + '/git/blobs',
+                        { content: WRITE_CHECK_CONTENT, encoding: 'utf-8' });
+                } catch (err) {
+                    if (SCOPE_STOP.has(err.code)) throw err;
+                    continue; // このリポジトリには書き込めない
+                }
+                return { onlyThisRepo: false, others: others.map((other) => other.full_name) };
+            }
+            return { onlyThisRepo: true, others: [] };
         }
 
         async getHead() {
@@ -610,6 +642,7 @@
     CMSGitHub.MESSAGES = MESSAGES;
     CMSGitHub.API_BASE = API_BASE;
     CMSGitHub.WRITE_CHECK_CONTENT = WRITE_CHECK_CONTENT;
+    CMSGitHub.isClassicKey = (token) => CLASSIC_KEY.test(String(token || '').trim());
     CMSGitHub.base64ToBytes = base64ToBytes;
     CMSGitHub.bytesToBase64 = bytesToBase64;
     return CMSGitHub;

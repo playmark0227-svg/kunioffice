@@ -6,6 +6,7 @@
 - 公開URL: https://playmark0227-svg.github.io/kunioffice/
 - オンラインショップ: https://playmark0227-svg.github.io/kunioffice/wakaba/
 - **管理画面（見たまま編集）: https://playmark0227-svg.github.io/kunioffice/admin/** （→ [管理画面（/admin/）](#管理画面admin)）
+  - アクセスキーの用意（サイト管理者用）: https://playmark0227-svg.github.io/kunioffice/admin/setup.html
 - **編集マニュアル（管理画面の使い方・ファイルで直す方法）: [`manual/index.html`](manual/index.html)**
   （公開URL: https://playmark0227-svg.github.io/kunioffice/manual/ ）
 
@@ -25,7 +26,7 @@ GitHub Actions（`.github/workflows/pages.yml`）が自動で GitHub Pages に�
 | `css/style.css` | デザイン |
 | `js/main.js` | メニュー・実績の絞り込み・お問い合わせフォームなど |
 | `wakaba/` | 若葉のしずく オンラインショップ一式（詳細は [`wakaba/README.md`](wakaba/README.md)） |
-| `admin/` | 管理画面（見たまま編集）。ブラウザから GitHub API で `main` に直接コミットする（[下記](#管理画面admin)） |
+| `admin/` | 管理画面（見たまま編集）。ブラウザから GitHub API で `main` に直接コミットする（[下記](#管理画面admin)）。`admin/setup.html` はアクセスキーの用意（サイト管理者用）、`admin/apple-touch-icon.png` はホーム画面のアイコン |
 | `images/works/` | 管理画面の「実績を追加」で追加した実績の写真（`work-YYYYMMDD-HHmmss.jpg`） |
 | `manual/` | 編集マニュアル（サイト担当者向け。`manual/img/` は管理画面の画面写真） |
 | `shop.html` / `success.html` | 旧ショップURLから `wakaba/` への転送用 |
@@ -39,12 +40,23 @@ https://playmark0227-svg.github.io/kunioffice/admin/
 「公開する」で反映するための管理画面です。ビルド不要の静的ファイル（`admin/index.html` ほか）で、データベースはありません。
 ページの HTML がそのまま保存先で、変更は元の HTML への最小限の書き換えとして保存されます（触っていない部分は1バイトも変わりません）。
 
-- **ログイン**: GitHub の Fine-grained personal access token（画面上の呼び名は「アクセスキー」）を入力する。
-  - Repository access: **Only select repositories → `kunioffice`**
-  - Permissions: **Contents = Read and write**、**Actions = Read-only**（Metadata = Read-only は自動）
-  - Expiration: 1年（期限が来たら作り直す。端末をなくしたら Delete で取り消す）
-  - 作り方・渡し方の手順はマニュアル2章、管理画面のログイン画面の「アクセスキーの作り方（サイト管理者向け）」にもある。
-  - アクセスキーはその端末のブラウザ（既定では sessionStorage）にだけ保存され、`https://api.github.com` にだけ送られる。
+- **アクセスキー（端末ごとに1回だけ）**: GitHub の Fine-grained personal access token（画面上の呼び名は「アクセスキー」）を、
+  各端末で最初の1回だけ貼り付ける。「この端末に記憶する（次からは入力不要）」が既定でオンなので、2回目からはログイン不要
+  （iPhone はホーム画面の「KUNI管理」アイコンを押すだけ）。共用のパソコンではオフにする。ログアウトはメニュー（≡）から。
+  - **作り方は `admin/setup.html`（アクセスキーの用意）**: 持ち主（`playmark0227-svg`）が GitHub にログインしたパソコンで開き、
+    ①「GitHubでアクセスキーを作る」で名前・説明・Resource owner・期限（366日）・権限が入った GitHub の作成画面を開く →
+    Repository access で **Only select repositories → `kunioffice`** だけを選んで Generate（ここだけは事前に入れられない）→
+    ② 貼り付けて「確認する」（書き込みできるか・kunioffice だけを操作できるキーかを GitHub に問い合わせる）→
+    ③ 表示される手順で高桑様の iPhone に入れる。キーはこのページでは保存しない。
+  - 権限: **Contents = Read and write**、**Actions = Read-only**（Metadata = Read-only は自動）。Classic のキー（`ghp_` など）と、
+    kunioffice 以外のリポジトリも操作できるキーは、管理画面・setup.html ともに受け付けない。
+  - 期限は1年。切れると管理画面に「アクセスキーの期限が切れたか、無効になりました。ViFightに新しいキーをもらってください。」と出る
+    （編集中の変更は残る）ので、setup.html で作り直して渡す。端末をなくしたら https://github.com/settings/personal-access-tokens で削除（Revoke）。
+  - 渡すのは直接会って、または AirDrop・iPhone の「パスワード」の共有で。**キーを URL・QR コード・リンク・ファイル・コミット・ログに入れないこと。**
+  - キーは記憶をオンにした端末のブラウザ（`localStorage`。オフなら `sessionStorage`）にだけ置かれ、`https://api.github.com` にだけ送られる。
+    `playmark0227-svg.github.io` のほかの GitHub Pages サイトとは保存領域（オリジン）が共通なので、そちらに外部スクリプトを入れるときは注意
+    （独自ドメインにすると分けられる）。
+  - 手順の詳細はマニュアル1-1（高桑様の初回設定）と2章（サイト管理者）。
 - **公開 = `main` への直接コミット**: 「公開する」で GitHub API（git data API）から `main` にコミットし、
   `pages.yml` が約1分で公開する。コミットメッセージは `管理画面から更新: …`、公開の履歴からの取り消しは `管理画面から取り消し: …`。
   - **ローカルで作業する前に必ず `git pull` で `main` を取り込むこと。** 古いファイルのまま push すると、管理画面で公開された変更を上書きしてしまう。
@@ -73,6 +85,8 @@ python3 -m http.server 8000
 
 ## 変更履歴（主なもの）
 
+- 2026-10: アクセスキーの用意ページ（`admin/setup.html`）を追加（GitHub の作成画面を入力済みで開き、貼り付けたキーを確認できる）。
+  管理画面はアクセスキーを端末ごとに1回だけ入力し、既定で記憶する（2回目からはログイン不要）。iPhone のホーム画面用アイコンを追加。
 - 2026-10: 見たまま編集できる管理画面（`admin/`）を追加。GitHub のアクセスキー（Fine-grained token）でログインし、
   「公開する」で `main` に直接コミットする。各ページに `data-cms-lock` / `data-cms-list="works"` の印を追加。
   スマホでメニューが画面外にはみ出し、ページが縮小表示になる問題を修正。編集マニュアルを管理画面中心に改訂（画面写真つき）。

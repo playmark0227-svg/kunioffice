@@ -1,6 +1,7 @@
 /* ============================================================
    KUNI OFFICE 管理画面 — 全体の流れ
-   ログイン → サイトの読み込み → ページの切り替え → 公開
+   アクセスキーの確認 → サイトの読み込み → ページの切り替え → 公開
+   （アクセスキーは最初の1回だけ入力し、既定で「この端末に記憶する」。作り方は setup.html）
    （保存は GitHub の main への保存。約1分でサイトに反映されます）
    ============================================================ */
 (function () {
@@ -15,6 +16,10 @@
     const { h, icon, toast, confirmDialog, store } = UI;
 
     const TOKEN_KEY = 'kunioffice-admin-key';
+    // 記憶していたアクセスキー（または編集中のアクセスキー）が GitHub に断られたとき
+    const EXPIRED_MESSAGE = 'アクセスキーの期限が切れたか、無効になりました。ViFightに新しいキーをもらってください。';
+    // 古い形式（ghp_ など）のキーは、持ち主のすべてのリポジトリを操作できてしまうので、送らず・記憶せずに断る
+    const CLASSIC_MESSAGE = '古い形式のキーです。ViFightに「github_pat_」で始まるキーをもらってください。';
     const PREFS_KEY = 'kunioffice-admin-prefs';
     const DEPLOY_POLL_MS = 5000;
     const DEPLOY_MAX_MS = 5 * 60 * 1000;
@@ -79,12 +84,18 @@
         $('bootText').textContent = text;
     }
 
-    function showBootError(text, retry) {
+    // opts.retryLabel: 「もう一度読み込む」の代わりの文言
+    // opts.otherKey: 「別のアクセスキーを入れる」も出す（記憶したキーは、新しいキーが使えるまで消さない）
+    function showBootError(text, retry, opts) {
+        const o = opts || {};
         setView('boot');
         $('bootStatus').hidden = true;
         $('bootError').hidden = false;
         $('bootErrorText').textContent = text;
+        $('bootRetry').textContent = o.retryLabel || 'もう一度読み込む';
         $('bootRetry').onclick = retry;
+        $('bootOtherKey').hidden = !o.otherKey;
+        $('bootOtherKey').onclick = o.otherKey ? () => showLogin('') : null;
     }
 
     // canGoBack: 編集の途中で別のアクセスキーに替えるとき（「編集画面に戻る」を出す）
@@ -99,7 +110,7 @@
     }
 
     /* ============================================================
-       ログイン
+       アクセスキー（この端末で使えるようにする）
        ============================================================ */
     function readToken() {
         return store.get(TOKEN_KEY, 'local') || store.get(TOKEN_KEY, 'session');
@@ -120,11 +131,19 @@
     }
 
     function loginMessage(err) {
-        if (err && err.code === 'readonly') return 'このアクセスキーでは編集できません（読み取り専用です）。作り方の「Permissions」で Contents を「Read and write」にしたか、「Repository access」で kunioffice を選んだか確認してください。';
+        if (err && err.code === 'readonly') return 'このアクセスキーでは編集できません（読み取り専用です）。ViFightに、キーの「Repository access」で kunioffice を選び、「Contents」を「Read and write」にしてもらってください。';
+        if (err && err.code === 'too_broad') return 'このアクセスキーは kunioffice 以外のサイトも操作できてしまうため、使えません。ViFightに、「Repository access」で kunioffice だけを選んだキーをもらってください。';
+        if (err && err.code === 'classic') return CLASSIC_MESSAGE;
+        if (err && err.code === 'forbidden') return 'このアクセスキーでは、このサイトを開けません（権限がありません）。ViFightに、キーの設定を確かめてもらってください。';
         if (err && err.code === 'unauthorized') return 'アクセスキーが正しくないか、有効期限が切れています';
         if (err && err.code === 'network') return 'インターネットに接続できません';
-        if (err && err.code === 'not_found') return 'このアクセスキーでは、このサイトを開けません。作り方の「Repository access」で kunioffice を選んだか確認してください。';
+        if (err && err.code === 'not_found') return 'このアクセスキーでは、このサイトを開けません。ViFightに、キーの「Repository access」で kunioffice を選んでもらってください。';
         return errorMessage(err);
+    }
+
+    // 貼り付けたときに入りがちな空白・改行は取り除く（アクセスキーに空白は含まれない）
+    function cleanKey(value) {
+        return String(value || '').replace(/\s+/g, '');
     }
 
     async function login(token, remember, auto) {
@@ -133,41 +152,51 @@
         btn.classList.add('is-busy');
         btn.replaceChildren(UI.spinner(), '確認しています…');
         try {
+            if (GitHub.isClassicKey(token)) throw Object.assign(new Error('classic'), { code: 'classic' });
             const gh = makeClient(token);
             const result = await gh.verify();
             if (!result.canPush) throw Object.assign(new Error('readonly'), { code: 'readonly' });
+            // 入力されたキーは、記憶する前に「kunioffice だけを操作できるキーか」を確かめる
+            // （自動では確かめられなかったときは、そのまま進める。確認済みのキーで締め出さないため）
+            if (!auto) {
+                const scope = await gh.checkScope().catch(() => null);
+                if (scope && !scope.onlyThisRepo) throw Object.assign(new Error('too_broad'), { code: 'too_broad' });
+            }
             app.gh = gh;
             saveToken(token, remember);
             $('tokenInput').value = '';
             if (app.snapshot) {
                 // 期限切れからの再ログイン: 編集中の内容はそのまま続ける
                 setView('editor');
-                toast('ログインしました。編集を続けられます。', { type: 'success' });
+                toast('アクセスキーを確認しました。編集を続けられます。', { type: 'success' });
             } else {
                 await startSession();
             }
         } catch (err) {
-            if (auto && err.code !== 'unauthorized' && err.code !== 'readonly' && err.code !== 'not_found') {
-                // 記憶したキーはそのまま。つながったら「もう一度読み込む」で続けられる
-                showBootError(loginMessage(err), () => {
-                    showBoot('ログインしています…');
+            if (auto && err.code !== 'unauthorized' && err.code !== 'classic') {
+                // 記憶したキーはそのまま（消すのは、GitHub に「キーが無効」と言われたときだけ）。
+                // つながらない → 「もう一度読み込む」。キーの設定の問題（kunioffice が選ばれていない・読み取り専用など）
+                // → ViFightが GitHub で同じキーの設定を直せば、「もう一度確かめる」でそのまま使える
+                const keyProblem = err.code === 'readonly' || err.code === 'not_found' || err.code === 'forbidden';
+                showBootError(loginMessage(err) + (keyProblem ? '直してもらったら「もう一度確かめる」を押してください。' : ''), () => {
+                    showBoot('管理画面を開いています…');
                     login(token, remember, true);
-                });
+                }, keyProblem ? { retryLabel: 'もう一度確かめる', otherKey: true } : null);
                 return;
             }
             if (auto) clearToken();
-            showLogin(loginMessage(err));
+            showLogin(auto && err.code === 'unauthorized' ? EXPIRED_MESSAGE : loginMessage(err));
         } finally {
             btn.disabled = false;
             btn.classList.remove('is-busy');
-            btn.replaceChildren('ログイン');
+            btn.replaceChildren('管理画面を開く');
         }
     }
 
     function bindLogin() {
         $('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const token = $('tokenInput').value.trim();
+            const token = cleanKey($('tokenInput').value);
             if (!token) {
                 showLogin('アクセスキーを入力してください');
                 return;
@@ -192,7 +221,7 @@
     function expireSession() {
         clearToken();
         app.gh = null;
-        showLogin('ログインの有効期限が切れたか、アクセスキーが無効になりました。もう一度入力してください。編集中の内容はそのまま残っています。（アクセスキーがお手元にないときは、ViFightにご連絡ください）');
+        showLogin(EXPIRED_MESSAGE + '編集中の内容はそのまま残っています。新しいキーを入れると、続きから公開できます。');
     }
 
     // 書き込みの権限がないアクセスキーだったとき: 編集はそのまま、別のアクセスキーを入れられるようにする
@@ -218,22 +247,22 @@
         return err.message || 'エラーが発生しました。';
     }
 
+    // 記憶したキーは、この端末にある唯一のキーのことが多い。消す前に、必ず確かめる
     function logout() {
-        const run = () => {
+        const n = totalChanges();
+        confirmDialog({
+            title: 'ログアウトしますか？',
+            message: h('div', null,
+                h('p', { class: 'modal__text', text: 'ログアウトすると、次に開くときアクセスキーがもう一度必要です（ViFightにもらいます）。' }),
+                n > 0 ? h('p', { class: 'modal__text', text: 'まだ公開していない変更（' + n + '件）は消えます。' }) : null),
+            ok: 'ログアウトする',
+            danger: true
+        }).then((ok) => {
+            if (!ok) return;
             clearToken();
             app.leaving = true;
             location.reload();
-        };
-        if (totalChanges() > 0) {
-            confirmDialog({
-                title: 'ログアウトしますか？',
-                message: 'まだ公開していない変更（' + totalChanges() + '件）は消えます。',
-                ok: 'ログアウトする',
-                danger: true
-            }).then((ok) => ok && run());
-        } else {
-            run();
-        }
+        });
     }
 
     /* ============================================================
@@ -1049,11 +1078,6 @@
             P.addWorkDialog(app, ed, ed.collections.keys().next().value);
         });
         document.querySelectorAll('.segmented [data-device]').forEach((b) => b.addEventListener('click', () => setDevice(b.dataset.device)));
-        $('bootLogout').addEventListener('click', () => {
-            clearToken();
-            app.leaving = true;
-            location.reload();
-        });
         buildMenu();
         setHint(false);
 
@@ -1088,8 +1112,12 @@
         setDevice(prefs.device || 'pc');
         updateOnline();
         const token = readToken();
-        if (token) {
-            showBoot('ログインしています…');
+        if (token && GitHub.isClassicKey(token)) {
+            // 以前に記憶された古い形式のキー: 使わずに消す
+            clearToken();
+            showLogin(CLASSIC_MESSAGE);
+        } else if (token) {
+            showBoot('管理画面を開いています…');
             login(token, !!store.get(TOKEN_KEY, 'local'), true);
         } else {
             showLogin('');

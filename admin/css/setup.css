@@ -1,0 +1,501 @@
+/* ============================================================
+   KUNI OFFICE 管理画面 — アクセスキーの用意（setup.html）
+   色・ボタン・入力欄は admin.css を使い、ここではページの並びだけを決めます。
+   ============================================================ */
+.setup-page {
+    background: var(--paper);
+}
+
+/* 行末に1〜2文字だけ残らないように（対応ブラウザだけ） */
+.setup__lead,
+.ks-step__text,
+.ks-todo__sub,
+.ks-note,
+.ks-tip p,
+.ks-result__text,
+.setup__memo {
+    text-wrap: pretty;
+}
+
+/* ---------- 上の黒い帯 ---------- */
+.setup-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 60px;
+    padding: 0 max(20px, env(safe-area-inset-left, 0px));
+    background: var(--black);
+    color: var(--white);
+    border-bottom: 3px solid var(--red);
+}
+
+.setup-top__logo {
+    height: 20px;
+    width: auto;
+}
+
+.setup-top__name {
+    padding-left: 14px;
+    border-left: 1px solid rgba(255, 255, 255, 0.24);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+}
+
+/* ---------- 本文 ---------- */
+.setup {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 44px 24px calc(64px + var(--safe-b));
+}
+
+.setup__title {
+    margin: 10px 0 10px;
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.35;
+    letter-spacing: 0.04em;
+}
+
+.setup__lead {
+    max-width: 640px;
+    color: var(--ink-2);
+    font-size: 15px;
+}
+
+.ks-steps {
+    list-style: none;
+    margin: 34px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 18px;
+}
+
+.ks-step {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 4px 20px;
+    padding: 28px 30px 30px 24px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--white);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+}
+
+.ks-step__num {
+    font-family: var(--font-display);
+    font-size: 40px;
+    line-height: 1;
+    color: var(--red);
+    letter-spacing: 0.02em;
+    padding-top: 2px;
+}
+
+.ks-step__body {
+    min-width: 0;
+}
+
+.ks-step__title {
+    font-size: 21px;
+    font-weight: 900;
+    line-height: 1.45;
+    letter-spacing: 0.03em;
+}
+
+.ks-nowrap {
+    white-space: nowrap;
+}
+
+.ks-step__title:focus {
+    outline: none;
+}
+
+.ks-step__text {
+    margin-top: 6px;
+    color: var(--soft);
+    font-size: 14px;
+}
+
+.ks-step__cta {
+    margin-top: 18px;
+    padding: 0 26px;
+}
+
+.ks-step__cta .ico {
+    width: 17px;
+    height: 17px;
+}
+
+.ks-step__sub {
+    margin-top: 24px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.ks-step__locked {
+    margin-top: 8px;
+    color: var(--mute);
+    font-size: 14px;
+}
+
+.ks-step.is-locked {
+    background: transparent;
+    border-style: dashed;
+    border-color: var(--line-2);
+    box-shadow: none;
+}
+
+.ks-step.is-locked .ks-step__num,
+.ks-step.is-locked .ks-step__title {
+    color: var(--mute);
+}
+
+/* ---------- 手順の箇条書き ---------- */
+.ks-todo {
+    counter-reset: todo;
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+    font-size: 14.5px;
+}
+
+.ks-todo > li {
+    counter-increment: todo;
+    position: relative;
+    padding-left: 36px;
+    min-height: 26px;
+    line-height: 1.7;
+}
+
+.ks-todo > li::before {
+    content: counter(todo);
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--black);
+    color: var(--white);
+    font-size: 12.5px;
+    font-weight: 700;
+    line-height: 24px;
+    text-align: center;
+}
+
+.ks-todo b {
+    font-weight: 700;
+}
+
+.ks-todo__sub {
+    display: block;
+    color: var(--soft);
+    font-size: 13px;
+    line-height: 1.65;
+    margin-top: 2px;
+}
+
+.ks-todo--big {
+    gap: 16px;
+    margin-top: 16px;
+    font-size: 15px;
+}
+
+.ks-code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: var(--paper-2);
+}
+
+.ks-note {
+    margin-top: 18px;
+    color: var(--ink-2);
+    font-size: 13.5px;
+}
+
+.ks-note--warn {
+    padding: 10px 14px;
+    border-left: 4px solid var(--yellow);
+    background: var(--yellow-soft);
+}
+
+/* ---------- 入力済みの内容 ---------- */
+.ks-prefill {
+    margin-top: 16px;
+    border-top: 1px solid var(--line);
+}
+
+.ks-prefill summary {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--ink-2);
+    cursor: pointer;
+    list-style: none;
+}
+
+.ks-prefill summary::-webkit-details-marker {
+    display: none;
+}
+
+.ks-prefill summary::after {
+    content: '+';
+    margin-left: auto;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--red);
+}
+
+.ks-prefill[open] summary::after {
+    content: '−';
+}
+
+.ks-prefill__list {
+    margin: 2px 0 4px;
+    display: grid;
+    gap: 6px;
+    font-size: 13.5px;
+}
+
+.ks-prefill__list > div {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 12px;
+}
+
+.ks-prefill__list dt {
+    color: var(--soft);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    padding-top: 1px;
+}
+
+.ks-prefill__list dd {
+    margin: 0;
+    font-weight: 500;
+}
+
+/* ---------- ② 確認 ---------- */
+.ks-check-form {
+    margin-top: 14px;
+    display: grid;
+    gap: 16px;
+}
+
+.ks-check-form__btn {
+    justify-self: start;
+    min-width: 180px;
+}
+
+.ks-result {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    border-left: 4px solid;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.ks-result > .ico {
+    width: 22px;
+    height: 22px;
+    margin-top: 1px;
+}
+
+.ks-result--ok {
+    border-color: var(--green);
+    background: var(--green-soft);
+    color: var(--green);
+}
+
+.ks-result--error {
+    border-color: var(--red);
+    background: var(--red-soft);
+    color: var(--red-dark);
+}
+
+.ks-result--warn {
+    border-color: var(--yellow);
+    background: var(--yellow-soft);
+    color: var(--ink);
+}
+
+.ks-result__body {
+    min-width: 0;
+}
+
+.ks-result__title {
+    font-weight: 900;
+    font-size: 16px;
+}
+
+.ks-result__text {
+    margin-top: 2px;
+    color: var(--ink-2);
+}
+
+.ks-result__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    margin-top: 2px;
+    font-weight: 700;
+    color: var(--red-dark);
+    text-underline-offset: 3px;
+}
+
+.ks-result__link .ico {
+    width: 15px;
+    height: 15px;
+}
+
+/* ---------- ③ 渡す ---------- */
+.ks-url-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0 4px;
+    padding: 8px 8px 8px 14px;
+    border: 1.5px solid var(--line-2);
+    border-radius: var(--radius);
+    background: var(--paper);
+}
+
+.ks-url-box__text {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13.5px;
+    overflow-wrap: anywhere;
+    user-select: all;
+    -webkit-user-select: all;
+}
+
+.ks-url-box__btn {
+    flex: none;
+}
+
+.ks-tips {
+    display: grid;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.ks-tip {
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    background: var(--paper);
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-2);
+}
+
+.ks-tip__title {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--ink);
+}
+
+.ks-tip a {
+    color: var(--red-dark);
+    font-weight: 700;
+    text-underline-offset: 2px;
+}
+
+/* ---------- 下 ---------- */
+.setup__foot {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 22px;
+    margin-top: 26px;
+}
+
+.setup__back {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ink-2);
+    text-underline-offset: 3px;
+}
+
+.setup__memo {
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--mute);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* ---------- スマホ ---------- */
+@media (max-width: 600px) {
+    .setup {
+        padding: 28px 16px calc(48px + var(--safe-b));
+    }
+
+    .setup__title {
+        font-size: 26px;
+    }
+
+    .setup__lead {
+        font-size: 14px;
+    }
+
+    .ks-steps {
+        margin-top: 24px;
+        gap: 14px;
+    }
+
+    .ks-step {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+        padding: 22px 18px 24px;
+    }
+
+    .ks-step__num {
+        font-size: 30px;
+        margin-bottom: 6px;
+    }
+
+    .ks-step__title {
+        font-size: 18px;
+    }
+
+    .ks-step__cta,
+    .ks-check-form__btn {
+        width: 100%;
+        justify-self: stretch;
+    }
+
+    .ks-step__cta {
+        white-space: normal;
+        text-align: center;
+    }
+
+    .ks-prefill__list > div {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .ks-url-box {
+        flex-wrap: wrap;
+    }
+
+    .ks-url-box__btn {
+        width: 100%;
+        min-height: 44px;
+    }
+}

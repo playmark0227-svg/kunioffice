@@ -6,7 +6,11 @@
     <meta name="robots" content="noindex,nofollow">
     <meta name="referrer" content="same-origin">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' blob: data:; media-src 'self' blob:; connect-src https://api.github.com; frame-src 'self' about: blob: https://www.google.com/maps/; base-uri 'self'; form-action 'none'; object-src 'none'">
+    <meta name="theme-color" content="#0b0b0b">
+    <meta name="apple-mobile-web-app-title" content="KUNI管理">
     <title>管理画面 | KUNI OFFICE</title>
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -21,7 +25,7 @@
             <p id="bootErrorText"></p>
             <div class="boot__actions">
                 <button class="btn btn--primary" type="button" id="bootRetry">もう一度読み込む</button>
-                <button class="btn btn--ghost-dark" type="button" id="bootLogout">ログアウト</button>
+                <button class="btn btn--ghost-dark" type="button" id="bootOtherKey" hidden>別のアクセスキーを入れる</button>
             </div>
         </div>
     </section>
@@ -42,41 +46,29 @@
         </div>
         <div class="login__main">
             <div class="login__card">
-                <p class="kicker">Admin</p>
-                <h2 class="login__title">管理画面</h2>
-                <p class="login__lead">KUNI OFFICE・若葉のしずくのホームページを編集します。</p>
+                <p class="kicker">First setup</p>
+                <h2 class="login__title">この端末で管理画面を<br>使えるようにする</h2>
+                <p class="login__lead">ViFightから受け取ったアクセスキーを、1回だけ貼り付けてください。次からは入力なしで開けます。</p>
                 <form class="login__form" id="loginForm" novalidate>
-                    <!-- iPhone・パソコンの「パスワード」にアクセスキーを保存・自動入力できるように（名前の欄は見えません） -->
+                    <!-- iPhone・パソコンの「パスワード」にもアクセスキーを保存できるように（名前の欄は見えません） -->
                     <input class="visually-hidden" id="loginName" name="username" type="text" autocomplete="username" value="KUNI OFFICE 管理画面" tabindex="-1" aria-hidden="true">
                     <div class="field">
                         <label class="field__label" for="tokenInput">アクセスキー</label>
                         <div class="input-group">
-                            <input class="input" id="tokenInput" name="password" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" required>
+                            <input class="input" id="tokenInput" name="password" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="github_pat_…" required>
                             <button class="input-group__btn" type="button" id="tokenToggle" aria-pressed="false" aria-controls="tokenInput">表示</button>
                         </div>
-                        <p class="field__hint">サイト管理者（ViFight）から受け取った文字列を貼り付けてください。</p>
                     </div>
-                    <label class="check"><input type="checkbox" id="rememberInput"> このブラウザに記憶する</label>
-                    <p class="field__hint login__remember-hint">安全のため、ふだんはオフのままがおすすめです。アクセスキーは iPhone やパソコンの「パスワード」に保存しておくと、次から簡単に入力できます。</p>
+                    <label class="check"><input type="checkbox" id="rememberInput" checked> この端末に記憶する（次からは入力不要）</label>
+                    <p class="field__hint login__remember-hint">共用のパソコンでは、オフにしてください。</p>
                     <p class="form-error" id="loginError" role="alert" hidden></p>
-                    <button class="btn btn--primary btn--block btn--lg" type="submit" id="loginBtn">ログイン</button>
+                    <button class="btn btn--primary btn--block btn--lg" type="submit" id="loginBtn">管理画面を開く</button>
                     <button class="btn btn--secondary btn--block" type="button" id="loginBack" hidden>編集画面に戻る</button>
                 </form>
-                <details class="howto">
-                    <summary>アクセスキーの作り方（サイト管理者向け）</summary>
-                    <ol>
-                        <li>GitHub にログインし、右上のアイコン → <b>Settings</b> を開く</li>
-                        <li>左メニューの一番下 <b>Developer settings</b> → <b>Personal access tokens</b> → <b>Fine-grained tokens</b></li>
-                        <li><b>Generate new token</b> を押す</li>
-                        <li><b>Repository access</b>: <b>Only select repositories</b> → <code>kunioffice</code> を選ぶ</li>
-                        <li><b>Permissions</b>: <b>Contents</b> = <b>Read and write</b>、<b>Actions</b> = <b>Read-only</b></li>
-                        <li><b>Expiration</b>: 1年（期限が来たら作り直す）</li>
-                        <li><b>Generate token</b> を押す → 表示された文字列を担当者に安全に渡す</li>
-                        <li>担当者の iPhone・パソコンの「パスワード」に保存してもらう（GitHub では二度と表示されません。iPhone の Safari は7日ほど使わないと「記憶する」の内容を消すことがあります）</li>
-                    </ol>
-                    <p class="howto__note">この文字列があればサイトを書き換えられます。メールやチャットに残さず、直接お渡しください。</p>
-                    <p class="howto__note">このサイトは playmark0227-svg.github.io のほかの GitHub Pages のサイトと同じオリジンにあります。「このブラウザに記憶する」をオンにすると、同じブラウザで開いたそれらのサイトのスクリプトからも読み取れてしまうため、既定ではオフにしています。独自ドメイン（例: kunioffice.jp）で公開すると、この心配はなくなります。</p>
-                </details>
+                <a class="login__setup" id="setupLink" href="setup.html" target="_blank" rel="noopener">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg>
+                    <span>サイト管理者の方：アクセスキーの用意</span>
+                </a>
                 <p class="login__foot">管理画面は検索エンジンには表示されません。</p>
             </div>
         </div>
