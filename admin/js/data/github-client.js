@@ -8,11 +8,11 @@
 (function (root, factory) {
     'use strict';
     if (typeof module === 'object' && module.exports) {
-        module.exports = factory();
+        module.exports = factory(require('./path-policy.js'));
     } else {
-        root.CMSGitHub = factory();
+        root.CMSGitHub = factory(root.CMSPathPolicy);
     }
-}(typeof self !== 'undefined' ? self : this, function () {
+}(typeof self !== 'undefined' ? self : this, function (PathPolicy) {
     'use strict';
 
     const API_BASE = 'https://api.github.com';
@@ -31,7 +31,7 @@
     // キーの範囲の確認を続けられないエラー（通信の失敗・GitHub の一時的なエラー・使いすぎ・キーが無効）
     const SCOPE_STOP = new Set(['network', 'server', 'rate_limited', 'unauthorized']);
     // 管理画面からは保存も取り消しもしないファイル（公開の仕組み・管理画面そのもの）
-    const DEFAULT_PROTECTED = /^(\.github|admin)\//;
+    const isProtectedPath = PathPolicy.isProtectedPath;
 
     // エラーコードごとの既定メッセージ（そのまま画面に出せる文言）
     const MESSAGES = {
@@ -195,8 +195,8 @@
             this.workflowName = opts.workflowName || '';
             // 保存・取り消しをしないファイル（path → true なら守る）
             this._isProtected = typeof opts.isProtectedPath === 'function'
-                ? (path) => DEFAULT_PROTECTED.test(path) || !!opts.isProtectedPath(path)
-                : (path) => DEFAULT_PROTECTED.test(path);
+                ? (path) => isProtectedPath(path) || !!opts.isProtectedPath(path)
+                : (path) => isProtectedPath(path);
             this._fetch = opts.fetch || ((url, init) => fetch(url, init));
             // console などに出にくいよう、列挙されないプロパティに入れる
             Object.defineProperty(this, '_token', { value: String(opts.token || '').trim(), writable: true });
