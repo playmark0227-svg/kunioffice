@@ -3,7 +3,7 @@
    カートの計算に使う価格・送料・定期便の条件と、決済方法の設定です。
    価格などを変えたときは、ページに書いてある金額（index.html・guide.html・
    tokushoho.html・KUNI OFFICE トップの index.html）も同じ値に直してください。
-   カード決済で server.js を使う場合は、その CATALOG も同じ値にそろえます。
+   カード決済で server.js を使う場合は、server/checkout/catalog.js の CATALOG も同じ値にそろえます。
    ============================================================ */
 window.WAKABA = {
     shop: {

@@ -30,7 +30,7 @@ KUNI OFFICE サイトと同じ GitHub Pages で公開されます。
 
 1. `js/config.js` の `products` / `shipping` / `subscription` を変更
 2. 画面に直接書いてある価格（`index.html` のプラン・FAQ、`guide.html`、`tokushoho.html`）も同じ値に
-3. オンライン決済サーバーを使う場合は `../server.js` の `CATALOG` / `SHIPPING` も同じ値に
+3. オンライン決済サーバーを使う場合は `../server/checkout/catalog.js` の `CATALOG` / `SHIPPING` も同じ値に
 
 ## 決済方法（`js/config.js` の `checkout.mode`）
 
@@ -49,7 +49,7 @@ KUNI OFFICE サイトと同じ GitHub Pages で公開されます。
    - カート内が1種類の商品のときに Stripe へ進みます。複数種類の場合はメール注文に切り替わります。
 
 ### 3. `endpoint`（`server.js` で Stripe Checkout・カートをまとめて決済）
-1. リポジトリ直下の `server.js` を Render / Railway / Fly.io などにデプロイ
+1. リポジトリ一式を Render / Railway / Fly.io などへ配置し、`npm start`（入口は `server.js`、本体は `server/checkout/`）で起動
 2. 環境変数を設定（値は `.env.example` 参照。**シークレットキーは絶対に公開しない**）
 3. `checkout.endpoint` にデプロイ先の `https://…/api/checkout` を入れ、`mode: 'endpoint'` に変更
 

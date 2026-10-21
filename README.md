@@ -13,6 +13,32 @@
 ビルド不要の静的サイト（HTML / CSS / JavaScript）です。`main` ブランチに変更が入ると、
 GitHub Actions（`.github/workflows/pages.yml`）が自動で GitHub Pages に公開します（1〜2分）。
 
+## 開発者・サーバー実装担当の方へ
+
+最初に **[エンジニア引き継ぎ](docs/ENGINEER_HANDOFF.md)** を読んでください。
+[管理画面と保存先のAPI契約](docs/ADMIN_API.md)と[サーバーの起動・構成](server/README.md)もまとめています。
+管理画面APIはこれから実装する部分です。現在の保存先は引き続きGitHubで、`npm start` はショップ決済サーバーを起動します。
+
+```bash
+npm ci --ignore-scripts
+npm test
+npm run build:static
+npm run preview
+# http://localhost:8000/ （公開用ファイルの確認）
+```
+
+| 置き場所 | 役割 |
+|---|---|
+| `admin/js/app/` | 起動・認証・編集状態・公開の進行 |
+| `admin/js/data/` | 保存先の8メソッド、GitHub接続、変更対象パスのルール |
+| `admin/js/editor/` | ページの編集・HTML差分・画像処理 |
+| `admin/js/ui/` | 表示部品・ダイアログ |
+| `server/checkout/` | 既存のStripe決済サーバー |
+| `docs/` / `tests/` / `scripts/` | 引き継ぎ・自動テスト・静的ファイルの取り出し |
+
+GitHub Pagesでは `dist/` の公開ページ・アセットだけを配信します。サーバーコード・開発資料・環境変数は含めません。
+新しい公開ページは `scripts/build-static.mjs` の許可リストにも追加してください。
+
 ## 構成
 
 | パス | 内容 |
@@ -26,11 +52,11 @@ GitHub Actions（`.github/workflows/pages.yml`）が自動で GitHub Pages に�
 | `css/style.css` | デザイン |
 | `js/main.js` | メニュー・実績の絞り込み・お問い合わせフォームなど |
 | `wakaba/` | 若葉のしずく オンラインショップ一式（詳細は [`wakaba/README.md`](wakaba/README.md)） |
-| `admin/` | 管理画面（見たまま編集）。ブラウザから GitHub API で `main` に直接コミットする（[下記](#管理画面admin)）。`admin/setup.html` はアクセスキーの用意（サイト管理者用）、`admin/apple-touch-icon.png` はホーム画面のアイコン |
+| `admin/` | 管理画面（見たまま編集）。`js/app` → `js/data` の順で GitHub API から `main` に直接コミットする（[下記](#管理画面admin)）。`admin/setup.html` はアクセスキーの用意（サイト管理者用）、`admin/apple-touch-icon.png` はホーム画面のアイコン |
 | `images/works/` | 管理画面の「実績を追加」で追加した実績の写真（`work-YYYYMMDD-HHmmss.jpg`） |
 | `manual/` | 編集マニュアル（サイト担当者向け。`manual/img/` は管理画面の画面写真） |
 | `shop.html` / `success.html` | 旧ショップURLから `wakaba/` への転送用 |
-| `server.js` / `package.json` / `.env.example` / `STRIPE_SETUP.md` | ショップでカード決済を使う場合の決済サーバー（任意） |
+| `server/checkout/` / `server.js` / `package.json` / `.env.example` / `STRIPE_SETUP.md` | ショップでカード決済を使う場合の決済サーバー（任意） |
 
 ## 管理画面（/admin/）
 
