@@ -14,5 +14,7 @@
 4. Stripe の Webhook を使う場合は、エンドポイント `https://<デプロイ先>/webhook` を登録し
    `STRIPE_WEBHOOK_SECRET` を設定
 
-価格・送料は `server.js` 内の `CATALOG` / `SHIPPING` で計算します（ブラウザから届いた金額は使いません）。
+価格・送料は `server/checkout/catalog.js` の `CATALOG` / `SHIPPING` で計算します（ブラウザから届いた金額は使いません）。
 `wakaba/js/config.js` と同じ値にそろえてください。
+
+コードの役割と起動方法は [server/README.md](server/README.md) を参照してください。

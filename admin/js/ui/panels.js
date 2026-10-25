@@ -521,7 +521,7 @@
             m.setBody(skeletons());
             let commits;
             try {
-                commits = await app.gh.listCommits(20);
+                commits = await app.content.listCommits(20);
             } catch (err) {
                 if (app.handleAuthError(err)) {
                     m.close();
@@ -569,7 +569,7 @@
             btn.replaceChildren(spinner(), '確認中…');
             let preview;
             try {
-                preview = await app.gh.revertPreview(c.sha);
+                preview = await app.content.revertPreview(c.sha);
             } catch (err) {
                 if (app.handleAuthError(err)) {
                     m.close();
@@ -582,7 +582,7 @@
                 btn.replaceChildren('この変更を取り消す');
             }
             if (preview.protectedPaths && preview.protectedPaths.length) {
-                toast(window.CMSGitHub.MESSAGES.protected, { type: 'error' });
+                toast(window.CMSContentClient.protectedMessage, { type: 'error' });
                 return;
             }
             if (preview.noop) {

@@ -10,6 +10,8 @@
     const cfg = window.CMS_CONFIG;
     const C = window.CMSCore;
     const GitHub = window.CMSGitHub;
+    const ContentClient = window.CMSContentClient;
+    const PathPolicy = window.CMSPathPolicy;
     const UI = window.CMSUI;
     const P = window.CMSPanels;
     const { PageEditor } = window.CMSEditor;
@@ -25,13 +27,11 @@
     const DEPLOY_MAX_MS = 5 * 60 * 1000;
     const LOAD_CONCURRENCY = 6;
     // 共通情報で書き換えるファイル（管理画面・マニュアルなどは除く）
-    const TEXT_FILE = /\.(html|js)$/i;
     const IMAGE_TYPES = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', gif: 'image/gif' };
-    const IMAGE_FILE = /\.(jpe?g|png|webp|gif)$/i;
-    const SKIP_PATH = /^(admin|manual|\.github|node_modules)\/|(^|\/)node_modules\/|^server\.js$/;
+    const isInternalPath = PathPolicy.isInternalPath;
     // 管理画面が保存・取り消しをしてよいファイル: サイトのページ・写真・共通情報で書き換える .html / .js だけ
     // （管理画面そのもの・公開の仕組み・デザイン（CSS）などは、サイト管理者だけが変える）
-    const isProtectedPath = (path) => SKIP_PATH.test(path) || !(TEXT_FILE.test(path) || IMAGE_FILE.test(path));
+    const isProtectedPath = PathPolicy.isProtectedPath;
 
     const $ = (id) => document.getElementById(id);
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -54,7 +54,7 @@
     const app = {
         cfg,
         siteBase: new URL('../', location.href).href,
-        gh: null,
+        content: null,       // data/content-client.js の8メソッドだけを使う
         snapshot: null,
         editors: new Map(),   // path → PageEditor（開いたページは閉じずに残す）
         current: null,
@@ -105,7 +105,7 @@
         err.replaceChildren();
         if (message) err.append(icon('alert'), h('span', { text: message }));
         err.hidden = !message;
-        $('loginBack').hidden = !(canGoBack && app.gh && app.snapshot);
+        $('loginBack').hidden = !(canGoBack && app.content && app.snapshot);
         setTimeout(() => $('tokenInput').focus(), 50);
     }
 
@@ -126,7 +126,7 @@
         store.remove(TOKEN_KEY, 'session');
     }
 
-    function makeClient(token) {
+    function makeGitHubClient(token) {
         return new GitHub({ owner: cfg.owner, repo: cfg.repo, branch: cfg.branch, token, workflowName: cfg.workflowName, isProtectedPath });
     }
 
@@ -153,7 +153,7 @@
         btn.replaceChildren(UI.spinner(), '確認しています…');
         try {
             if (GitHub.isClassicKey(token)) throw Object.assign(new Error('classic'), { code: 'classic' });
-            const gh = makeClient(token);
+            const gh = makeGitHubClient(token);
             const result = await gh.verify();
             if (!result.canPush) throw Object.assign(new Error('readonly'), { code: 'readonly' });
             // 入力されたキーは、記憶する前に「kunioffice だけを操作できるキーか」を確かめる
@@ -162,7 +162,7 @@
                 const scope = await gh.checkScope().catch(() => null);
                 if (scope && !scope.onlyThisRepo) throw Object.assign(new Error('too_broad'), { code: 'too_broad' });
             }
-            app.gh = gh;
+            app.content = ContentClient.from(gh);
             saveToken(token, remember);
             $('tokenInput').value = '';
             if (app.snapshot) {
@@ -204,7 +204,7 @@
             login(token, $('rememberInput').checked, false);
         });
         $('loginBack').addEventListener('click', () => {
-            if (!app.gh || !app.snapshot) return;
+            if (!app.content || !app.snapshot) return;
             $('tokenInput').value = '';
             setView('editor');
         });
@@ -220,7 +220,7 @@
     // 編集の途中でアクセスキーが使えなくなったとき（編集中の内容はメモリに残す）
     function expireSession() {
         clearToken();
-        app.gh = null;
+        app.content = null;
         showLogin(EXPIRED_MESSAGE + '編集中の内容はそのまま残っています。新しいキーを入れると、続きから公開できます。');
     }
 
@@ -271,7 +271,7 @@
     async function startSession() {
         showBoot('サイトの内容を読み込んでいます…');
         try {
-            app.snapshot = await app.gh.snapshot();
+            app.snapshot = await app.content.snapshot();
         } catch (err) {
             if (handleAuthError(err)) return;
             showBootError('サイトの内容を読み込めませんでした。' + errorMessage(err), () => startSession());
@@ -328,7 +328,7 @@
         try {
             const entry = app.snapshot.files.get(path);
             if (!entry) throw new Error('このページのファイルが見つかりません（' + path + '）。');
-            const src = await app.gh.getBlobText(entry.sha);
+            const src = await app.content.getBlobText(entry.sha);
             if (app.editors.has(path)) return; // 読み込み中に二重に開かれた
             ed = new PageEditor(app, page, src, entry.sha);
             ed.visible = app.current === path;
@@ -355,14 +355,14 @@
     // 最新の状態を読み直し、変わったページを作り直す（resetPaths は変更を捨てて作り直す）
     async function refreshSnapshot(resetPaths) {
         const reset = new Set(resetPaths || []);
-        const snap = await app.gh.snapshot();
+        const snap = await app.content.snapshot();
         app.snapshot = snap;
         for (const ed of Array.from(app.editors.values())) {
             const entry = snap.files.get(ed.path);
             if (!entry) continue;
             if (entry.sha !== ed.blobSha) {
                 if (!reset.has(ed.path) && ed.hasChanges()) continue; // 編集中の内容は消さない
-                replaceEditor(ed.path, await app.gh.getBlobText(entry.sha), entry.sha);
+                replaceEditor(ed.path, await app.content.getBlobText(entry.sha), entry.sha);
             } else if (reset.has(ed.path)) {
                 ed.reload();
                 if (ed.visible) setStage('loading', '最新の内容を表示しています…');
@@ -382,7 +382,7 @@
         refreshChrome();
         setStage('loading', '最新の内容を読み込んでいます…');
         try {
-            app.snapshot = await app.gh.snapshot();
+            app.snapshot = await app.content.snapshot();
         } catch (err) {
             if (handleAuthError(err)) return;
             setStage('error', '最新の内容を読み込めませんでした。', errorMessage(err), () => reloadAll());
@@ -572,7 +572,7 @@
         const worker = async () => {
             while (queue.length) {
                 const path = queue.shift();
-                out.set(path, await app.gh.getBlobText(app.snapshot.files.get(path).sha));
+                out.set(path, await app.content.getBlobText(app.snapshot.files.get(path).sha));
             }
         };
         await Promise.all(Array.from({ length: Math.min(LOAD_CONCURRENCY, queue.length) }, worker));
@@ -580,10 +580,10 @@
     }
 
     function sitePaths(test) {
-        return Array.from(app.snapshot.files.keys()).filter((p) => test(p) && !SKIP_PATH.test(p)).sort();
+        return Array.from(app.snapshot.files.keys()).filter((p) => test(p) && !isInternalPath(p)).sort();
     }
 
-    app.loadTextSources = () => loadSources(sitePaths((p) => TEXT_FILE.test(p)));
+    app.loadTextSources = () => loadSources(sitePaths(PathPolicy.isSiteTextPath));
 
     app.findImageUsages = async (repoPath) => {
         const sources = await loadSources(sitePaths((p) => /\.html?$/i.test(p)));
@@ -735,7 +735,7 @@
         await runCommit({
             title: '公開しています',
             sitePath: plan.firstPath,
-            commit: () => app.gh.commitChanges({ baseCommitSha: app.snapshot.commitSha, changes: plan.changes, message: plan.message }),
+            commit: () => app.content.commitChanges({ baseCommitSha: app.snapshot.commitSha, changes: plan.changes, message: plan.message }),
             afterCommit: async (result) => {
                 // 公開した写真は、サイトに反映されるまでプレビューで新しいものを見せ続ける（未公開の印は外す）
                 for (const [path, img] of app.images) {
@@ -757,7 +757,7 @@
             title: '共通情報を公開しています',
             doneTitle: '共通情報の公開',
             sitePath: app.current,
-            commit: () => app.gh.commitChanges({ baseCommitSha: app.snapshot.commitSha, changes, message }),
+            commit: () => app.content.commitChanges({ baseCommitSha: app.snapshot.commitSha, changes, message }),
             afterCommit: (result) => refreshSnapshot(result.changedPaths)
         });
     };
@@ -767,7 +767,7 @@
         doneTitle: '取り消し',
         saving: '取り消しを保存しています…',
         sitePath: app.current,
-        commit: () => app.gh.revertCommit(sha),
+        commit: () => app.content.revertCommit(sha),
         afterCommit: async (result) => {
             await refreshSnapshot(result.changedPaths);
             await showRevertedImages(result.changedPaths, result.commitSha);
@@ -788,7 +788,7 @@
             let url = null;
             if (entry) {
                 try {
-                    url = URL.createObjectURL(new Blob([await app.gh.getBlobBytes(entry.sha)], { type }));
+                    url = URL.createObjectURL(new Blob([await app.content.getBlobBytes(entry.sha)], { type }));
                     app.recent.set(path, url);
                     app.recentSha.set(path, sha);
                 } catch (err) {
@@ -897,7 +897,7 @@
         let state = { state: 'pending' };
         let lastUrl = null;
         for (;;) {
-            state = app.gh ? await app.gh.deployStatus(sha) : { state: 'unknown' };
+            state = app.content ? await app.content.deployStatus(sha) : { state: 'unknown' };
             if (state.url) lastUrl = state.url;
             // 'retry'（電波が一瞬切れた・GitHub の一時的なエラー）は、次の確認まで待ってもう一度
             if (state.state === 'success' || state.state === 'failure' || state.state === 'unknown') break;
@@ -1103,7 +1103,7 @@
        起動
        ============================================================ */
     function boot() {
-        if (!cfg || !C || !GitHub) {
+        if (!cfg || !C || !GitHub || !ContentClient || !PathPolicy) {
             showBootError('管理画面のファイルが読み込めませんでした。ページを読み込み直してください。', () => location.reload());
             return;
         }
