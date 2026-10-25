@@ -3,6 +3,13 @@
 この資料の前半は **実装済みのJavaScriptの契約**。後半のHTTP APIは **サーバー実装時の設計案**で、まだ動作しない。
 全体像・認証切替・未実装作業は [ENGINEER_HANDOFF.md](ENGINEER_HANDOFF.md) を参照。
 
+## サーバー版の必須要件
+
+**全端末・全対応ブラウザで初回から、利用者がGitHubキーを作成・受領・入力・貼り付け・端末保存しなくても使えること。**
+通常の管理者認証は必要。GitHub用認証情報はサーバーだけで管理し、ブラウザは管理APIのセッションでアクセスする。
+サーバー版APIは、利用者のリクエストからGitHubキーを受け取らず、応答にも返さない。
+キー入りのURLや配布用QRコード、端末へのGitHubキー自動埋め込みは採用しない。
+
 ## 実装済みの境界
 
 `admin/js/data/content-client.js` の `CMSContentClient.from(adapter)` は以下の8メソッドを持つアダプターを受け取る。
@@ -59,7 +66,7 @@ DeployState = 'pending' | 'running' | 'success' | 'failure'
 
 | code | 意味・画面の扱い |
 |---|---|
-| `unauthorized` | 認証切れ。再ログインに進む（編集中の内容は保持） |
+| `unauthorized` | 現行版はGitHubキーの認証切れ。サーバー版では管理者セッション切れに限り、通常の再ログインへ進む（編集中の内容は保持） |
 | `forbidden` / `readonly` | 閲覧・編集権限がない |
 | `not_found` | 対象・版が見つからない |
 | `conflict` | 基準版以降に同じファイルが変わった。`paths` を返し、上書きしない |
@@ -89,6 +96,15 @@ DeployState = 'pending' | 'running' | 'success' | 'failure'
 | `GET /api/admin/publications/:sha/deployment` | `deployStatus()` |
 
 認証の開始方法（パスワード・SSO等）は未選定。ログイン開始/コールバックのAPIは、その方式に合わせて設計する。
+
+### セッションとGitHub接続の障害を分ける
+
+- `GET /api/admin/session` はブラウザに保存したGitHubキーの有無を調べない。サーバーの管理者セッションを確認する。
+- 管理者セッションがない・期限切れならHTTP 401 / `unauthorized`。画面は通常ログインを表示し、旧キー入力画面へ戻さない。
+- サーバー側のGitHub認証情報の失効・権限不足は、運用者が直す接続障害として扱う。
+  上流GitHubの401をそのまま利用者へ転送せず、例えばHTTP 502 / `server` とする。GitHubキーの入力や発行・配布を利用者へ求めない。
+- 管理APIが利用できない場合は再試行・障害案内を出す。ブラウザからGitHubへ直接接続する方式へ自動フォールバックしない。
+- ログアウトはサーバーでセッションを失効させる。別端末・別ブラウザは通常ログインすれば使え、GitHubキーを引き継ぐ作業はない。
 
 ### JSONとの変換
 
